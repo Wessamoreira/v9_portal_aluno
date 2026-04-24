@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions" xmlns:otm2="http://www.otimize-ti.com.br" xmlns:otm="http://java.sun.com/jsf/composite/otm">
+
+<composite:interface>
+    <composite:attribute name="id" required="true"/>
+    <composite:attribute name="render" required="false"/>
+    <composite:attribute name="bean" required="false"/>
+    <composite:attribute name="consultarParceiros" required="false" method-signature="void action()"/>
+    <composite:attribute name="marcarParceiro" required="false" method-signature="void action()"/>
+</composite:interface>
+
+<composite:implementation>
+    <rich:popupPanel id="panel" styleClass="modalMaximizado" shadowOpacity="true" width="600" height="350">
+        <f:facet name="header">
+            <h:panelGroup>
+                <h:outputText value="Selecionar Parceiro"/>
+            </h:panelGroup>
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="#{resource['imagens/close.png']}" styleClass="icon-close-modal" style="cursor:pointer" id="hide#{cc.clientId}">
+                    <rich:componentControl target="panel" operation="hide" event="click"/>
+                </h:graphicImage>
+            </h:panelGroup>
+        </f:facet>
+        <h:form id="#{cc.clientId}form">
+            <h:panelGroup columns="1" width="100%" style="text-align: left;">
+                <h:panelGroup id="#{cc.clientId}_parceiros" style="height:485px;width:99%">
+                    <h:panelGroup layout="block" style="width:48%;float:left;height:485px;overflow:auto">
+                        <h:outputText styleClass="tituloSelecionar" value="Não Selecionados"/>
+                        <rich:dataTable align="left" id="#{cc.clientId}_table" width="100%" var="parceiroItens" value="#{cc.attrs.bean.parceiroVOs}">
+                            <rich:column filterType="custom" filter="#{FilterFactory.filter('#{cc.clientId}_filtrosParceiro', 'nome', 'TEXTO')}">
+                                <f:facet name="header">
+                                    <h:panelGroup layout="block" styleClass="col-md-12 pn">
+                                        <h:inputText styleClass="form-control campos" size="20" value="#{FilterFactory.filter('#{cc.clientId}_filtrosParceiro', 'nome', 'TEXTO').filtro}">
+                                            <a4j:ajax event="change" execute="@this" render="#{cc.clientId}_parceiros, #{cc.attrs.render}"/>
+                                        </h:inputText>
+                                        <span class="append-icon right">
+                                            <otm:commandIcon render="#{cc.clientId}_parceiros, #{cc.attrs.render}" icon="#{msg_botoes.btn_icon_limpar_embutido}" action="#{FilterFactory.limparFiltro('#{cc.clientId}_filtrosParceiro')}" tooltip="Limpar"/>
+                                        </span>
+                                    </h:panelGroup>
+                                </f:facet>
+                                <h:outputText value="#{parceiroItens.nome}"/>
+                            </rich:column>
+                            <rich:column filterType="custom" filterExpression="#{!parceiroItens.filtrarParceiro}">
+                                <f:facet name="header">
+                                    <a4j:commandLink execute="@form" render="#{cc.clientId}_parceiros, #{cc.attrs.render}" action="#{cc.attrs.marcarParceiro}">
+                                        <f:param name="marcarTodosParceiros" value="true"/>
+                                        <span class="#{msg_botoes.btn_icon_setaRightDupla_embutido}"/>
+                                        <f:setPropertyActionListener value="true" target="#{cc.attrs.marcarTodosParceiros}"/>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                <a4j:commandLink style="border:none;margin:0px" execute="@form" render="#{cc.clientId}_parceiros, #{cc.attrs.render}" action="#{cc.attrs.consultarParceiros}">
+                                    <span class="#{msg_botoes.btn_icon_setaRight_embutido}"/>
+                                    <f:setPropertyActionListener value="true" target="#{parceiroItens.filtrarParceiro}"/>
+                                </a4j:commandLink>
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" style="width:48%;float:right;height:485px;overflow:auto">
+                        <h:outputText styleClass="tituloSelecionar" value="Selecionados"/>
+                        <rich:dataTable align="left" id="filtrosUnidadeEnsino2" width="100%" var="parceiroItens" value="#{cc.attrs.bean.parceiroVOs}">
+                            <rich:column filterType="custom" filterExpression="#{parceiroItens.filtrarParceiro}">
+                                <f:facet name="header">
+                                    <a4j:commandLink render="#{cc.clientId}_parceiros, #{cc.attrs.render}" action="#{cc.attrs.marcarParceiro}">
+                                        <f:param name="marcarTodosParceiros" value="false"/>
+                                        <span class="#{msg_botoes.btn_icon_setaLeftDupla_embutido}"/>
+                                        <f:setPropertyActionListener value="false" target="#{cc.attrs.marcarTodosParceiros}"/>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                <a4j:commandLink render="#{cc.clientId}_parceiros, #{cc.attrs.render}" action="#{cc.attrs.consultarParceiros}">
+                                    <span class="#{msg_botoes.btn_icon_setaLeft_embutido}"/>
+                                    <f:setPropertyActionListener value="false" target="#{parceiroItens.filtrarParceiro}"/>
+                                </a4j:commandLink>
+                            </rich:column>
+                            <rich:column filterType="custom" filter="#{FilterFactory.filter('#{cc.clientId}_filtrosUnidadeEnsino2', 'nome', 'TEXTO')}">
+                                <f:facet name="header">
+                                    <h:panelGroup layout="block" styleClass="col-md-12 pn">
+                                        <h:inputText styleClass="form-control campos" size="20" value="#{FilterFactory.filter('#{cc.clientId}_filtrosUnidadeEnsino2', 'nome', 'TEXTO').filtro}">
+                                            <a4j:ajax event="change" execute="@this" render="#{cc.clientId}_parceiros, #{cc.attrs.render}"/>
+                                        </h:inputText>
+                                        <span class="append-icon right">
+                                            <otm:commandIcon render="#{cc.clientId}_parceiros, #{cc.attrs.render}" icon="#{msg_botoes.btn_icon_limpar_embutido}" action="#{FilterFactory.limparFiltro('#{cc.clientId}_filtrosUnidadeEnsino2')}" tooltip="Limpar"/>
+                                        </span>
+                                    </h:panelGroup>
+                                </f:facet>
+                                <h:outputText value="#{parceiroItens.nome}"/>
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+    </rich:popupPanel>
+</composite:implementation>
+
+
+</html>
