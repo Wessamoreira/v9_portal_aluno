@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+	<h:panelGroup id="calendarioAlunoInclude" layout="block" styleClass="w-100">
+		<otm2:dashpanel id="dashboardCalendario" styleClass="p-0" cols="12">
+			<ui:define name="header">
+				<p:commandLink id="iconeCalendario" action="#{VisaoAlunoControle.realizarInicializacaoPessoaGsuiteAlterarSenha}" oncomplete="PF('panelAlterarSenhaContaGsuite').show();">
+					<i  class="#{VisaoAlunoControle.dashboardCalendario.icone} mr-2 fonteHeaderDashboard"></i>
+				</p:commandLink>
+				<p:tooltip for="iconeCalendario" followMouse="true" target="iconeCalendario" showDelay="500">
+					<h:panelGroup columns="1" columnClasses="colunaEsquerda, tituloCamposReduzidos">
+						<h:panelGroup layout="block">
+							<h:outputText value="#{VisaoAlunoControle.calendarioDataEventoRsVO.listaPessoaGsuiteVO_ApresentarHtml}" escape="false" />	
+						</h:panelGroup>
+					</h:panelGroup>
+				</p:tooltip>
+				<h:outputText value="#{VisaoAlunoControle.dashboardCalendario.titulo}" styleClass="fonteHeaderDashboard" />
+				<p:commandLink action="#{VisaoAlunoControle.persistirDashboard(VisaoAlunoControle.dashboardCalendario)}" rendered="#{!VisaoAlunoControle.dashboardCalendario.maximizado}" styleClass="float-right p-0" update="panelGeral">
+					<i class="fas fa-angle-down text-center fonteHeaderDashboard mr-2" />
+					<f:setPropertyActionListener value="true" target="#{VisaoAlunoControle.dashboardCalendario.maximizado}"></f:setPropertyActionListener>
+				</p:commandLink>
+				<p:commandLink action="#{VisaoAlunoControle.persistirDashboard(VisaoAlunoControle.dashboardCalendario)}" rendered="#{VisaoAlunoControle.dashboardCalendario.maximizado}" styleClass="float-right p-0" update="panelGeral">
+					<i class="fas fa-angle-up text-center fonteHeaderDashboard mr-2" />
+					<f:setPropertyActionListener value="false" target="#{VisaoAlunoControle.dashboardCalendario.maximizado}"></f:setPropertyActionListener>
+				</p:commandLink>
+				<p:commandLink id="ocultarCalendario" action="#{VisaoAlunoControle.persistirDashboard(VisaoAlunoControle.dashboardCalendario)}" update="menuTopo, panelGeral" styleClass="border-0 bg-transparent float-right p-0" title="Ocultar Gráfico">
+					<i class="fas fa-compress-arrows-alt text-center fonteHeaderDashboard mr-2" />
+					<f:setPropertyActionListener value="true" target="#{VisaoAlunoControle.dashboardCalendario.ocultar}"></f:setPropertyActionListener>
+				</p:commandLink>
+			</ui:define>
+			<ui:define name="body">
+				<h:panelGroup id="dadosMiniCalendario" rendered="#{VisaoAlunoControle.dashboardCalendario.maximizado}" layout="block" styleClass="w-100 p-2" style="overflow:auto;max-height:600px;min-height:300px">
+					<h:panelGroup layout="block" styleClass="w-100">
+						<h:panelGroup layout="block" styleClass="row">
+							<h:panelGroup styleClass="text-center" style="width:33%;float:left" layout="block">
+								<p:commandButton styleClass="botoesMiniCalendario" style="font-size:10px !important" update="dadosMiniCalendario" action="#{VisaoAlunoControle.visualizarCalendarioAnteriorMes}" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.mesAnoAnteriorAbreviado}" />
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:33%;float:left" layout="block">
+								<h:outputText id="tituloScroll" style="font-weight: 900 !important;font-size:12px !important" styleClass="diaMiniCalendario " value="#{VisaoAlunoControle.calendarioDataEventoRsVO.tituloCalendarioAbreviado}" />
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:33%;float:left" layout="block">
+								<p:commandButton styleClass="botoesMiniCalendario" style="font-size:10px !important" update="dadosMiniCalendario" action="#{VisaoAlunoControle.visualizarCalendarioProximoMes}" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.mesPosteriorAbreviado}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="row">
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="D" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaDomingo}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''} ">
+										<p:commandLink update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass}" value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="S" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaSegunda}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="T" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaTerca}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="Q" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaQuarta}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink  update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="Q" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaQuinta}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink  update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="S" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaSexta}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink  update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+							<h:panelGroup styleClass="text-center" style="width:14.27%;float:left" layout="block">
+								<h:panelGroup layout="block" styleClass="w-100 text-center headerMiniCalendario">
+									<h:outputText value="S" />
+								</h:panelGroup>
+								<ui:repeat type="definitions" value="#{VisaoAlunoControle.calendarioDataEventoRsVO.calendarioHorarioAulaSabado}" var="diaAgendaItens">
+									<h:panelGroup layout="block" style="line-height:30px" styleClass="w-100 border-bottom text-center #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : ''}">
+										<p:commandLink update="form" action="#{VisaoAlunoControle.selecionarDiaCalendario}" disabled="#{diaAgendaItens.desabilitarDia}" title="#{diaAgendaItens.titleDia}">
+											<h:outputText styleClass="diaMiniCalendario  #{diaAgendaItens.styleClass eq 'colunaOutroMes' ? 'bg-gray-100' : diaAgendaItens.styleClass} " value="#{diaAgendaItens.data}">
+												<f:convertDateTime pattern="dd" />
+											</h:outputText>
+										</p:commandLink>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row border-top border-bottom pt-2 pb-2">
+<!-- 						<h:panelGroup layout="block" style="width:24.99%;float:left;" styleClass="text-center"> -->
+<!-- 							<span class="legendaColunaHorarioLivre" /> -->
+<!-- 							<h:outputText value="Dia Livre" /> -->
+<!-- 						</h:panelGroup> -->
+						<h:panelGroup layout="block" style="width:24.99%;float:left;" styleClass="text-center">
+							<span class="legendaColunaHorarioSelecionada" />
+							<h:outputText styleClass="fs10" value="Dia Selecionado" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width:24.99%;float:left;" styleClass="text-center">
+							<span class="legendaHorarioRegistroLancado" />
+							<h:outputText styleClass="fs10" value="Possui Evento" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width:24.99%;float:left;" styleClass="text-center">
+							<span class="legendaFeriado" />
+							<h:outputText styleClass="fs10" value="Feriado" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width:24.99%;float:left;" styleClass="text-center">
+							<span class="legendaEventoCalendario" />
+							<h:outputText styleClass="fs10" value="Evento Acadêmico" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row mt-5 " rendered="#{empty VisaoAlunoControle.dataEventosRSVO.agendaAlunoRSVOs}">
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+							<h:outputText styleClass="fs16" value="#{VisaoAlunoControle.dataEventosRSVO.nenhumEventoRegistrado}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="w-100 mt-2 " rendered="#{!empty VisaoAlunoControle.dataEventosRSVO.agendaAlunoRSVOs}">
+						<h:panelGroup layout="block" styleClass="row">
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+								<h:outputText styleClass="text-dark font-900" value="Eventos do dia "/>
+								<h:outputText styleClass="text-dark font-900" value="#{VisaoAlunoControle.dataEventosRSVO.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+								</h:outputText>
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:repeat id="agendaAlunoRSVOs" value="#{VisaoAlunoControle.dataEventosRSVO.agendaAlunoRSVOs}" rendered="#{!empty VisaoAlunoControle.dataEventosRSVO.agendaAlunoRSVOs}" var="agendaAlunoRSVOItem">
+							<h:panelGroup layout="block" styleClass="row border-bottom pb-2 pt-2">
+							<h:panelGroup layout="block" styleClass="col-md-12">
+								<otm:commandIcon action="#{VisaoAlunoControle.realizarNavegacaoParaEventoCalendario}" oncomplete="#{VisaoAlunoControle.modalCalendario}" disabled="#{!agendaAlunoRSVOItem.mostrarLinkEvento}"  update="formMensagemGoogleMeet"
+								style="cursor:pointer;border:none;padding:0px;margin:0px;width: 10px;    height: 10px;    position: relative;    top: 1px;" tooltip="#{agendaAlunoRSVOItem.titleCalendarioApresentar}" icon="#{agendaAlunoRSVOItem.iconeCalendarioApresentar}"  />
+								<h:outputText value="#{agendaAlunoRSVOItem.cabecarioApresentar}" styleClass="ml5 fs10 font-900" />
+							</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{agendaAlunoRSVOItem.mostarPeriodoRealizacao}" styleClass="col-md-12">
+									<i class="fas fa-clock  mr5 fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.periodoRealizacaoApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{!agendaAlunoRSVOItem.origemAgendaAluno.feriado and !agendaAlunoRSVOItem.origemAgendaAluno.eventoCalendarioAcademico}" styleClass="col-md-12">
+									<i class="fas fa-book mr5  fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.disciplinaApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{!agendaAlunoRSVOItem.origemAgendaAluno.feriado and !agendaAlunoRSVOItem.origemAgendaAluno.eventoCalendarioAcademico}" styleClass="col-md-12">
+									<i class="fas fa-users mr5  fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.turmaApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{agendaAlunoRSVOItem.origemAgendaAluno.eventoCalendarioAcademico}" styleClass="col-md-12">
+									<i class="fas fa-thumbtack mr5 fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.eventoAcademicoApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{!agendaAlunoRSVOItem.origemAgendaAluno.feriado and agendaAlunoRSVOItem.horarioAlunoDiaItemVO.professor.codigo ne 0}" styleClass="col-md-12">
+									<i class="fas fa-user mr5  fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.horarioAlunoDiaItemVO.professor.nome}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{!agendaAlunoRSVOItem.origemAgendaAluno.feriado and agendaAlunoRSVOItem.professorApresentar ne ''}" styleClass="col-md-12">
+									<i class="fas fa-user mr5  fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.professorApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{!agendaAlunoRSVOItem.origemAgendaAluno.feriado and agendaAlunoRSVOItem.horarioAlunoDiaItemVO.sala.codigo ne 0}" styleClass="col-md-12">
+									<i class="fas fa-map  mr5  fs10" />
+									<h:outputText styleClass="fields control-label tituloCampos fs10" value="#{agendaAlunoRSVOItem.horarioAlunoDiaItemVO.sala.localSala}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block"  styleClass="col-md-12" rendered="#{agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravadoHtml}">
+									<h:outputText styleClass="fields control-label tituloCampos fs10" escape="false" value="#{agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravado}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="row">									
+									<h:panelGroup layout="block" styleClass="col-md-12 text-right" style="line-height: 32px;">
+										<h:panelGroup layout="block" rendered="#{agendaAlunoRSVOItem.mostrarLinkEvento}" >
+											<i class="fas fa-link mr5  mt-1 fs10"></i>									
+											<p:commandLink styleClass="fields control-label tituloCampos fs10" action="#{VisaoAlunoControle.realizarNavegacaoParaEventoCalendario}" oncomplete="#{VisaoAlunoControle.modalCalendario}" update="formMensagemGoogleMeet" title="#{agendaAlunoRSVOItem.titleCalendarioApresentar}"  >
+												<h:outputText value="#{agendaAlunoRSVOItem.tituloLinkEvento}" />
+											</p:commandLink>
+											<otm:spacer width="10"></otm:spacer>
+										</h:panelGroup>										
+										<h:panelGroup layout="block" rendered="#{!empty agendaAlunoRSVOItem.googleMeetVO.classroomGoogleVO.linkClassroom}" >
+											<otm:commandImage tooltip="Entrar Classroom #{VisaoAlunoControle.calendarioDataEventoRsVO.listaPessoaGsuiteVO_ApresentarHtml}" id="btnEntrarClassRoom" image="#{resource['/imagens/classroom.png']}" styleClass="btn pn" action="#{VisaoAlunoControle.realizarNavegacaoClassroomPorAgenda}" oncomplete="navegacaoGoogleMeet('#{agendaAlunoRSVOItem.googleMeetVO.classroomGoogleVO.linkClassroom}')"  />											
+											<otm:spacer width="10"></otm:spacer>
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{!empty agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeet and empty agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravado}" >
+											<otm:commandImage tooltip="Entrar Meet #{VisaoAlunoControle.calendarioDataEventoRsVO.listaPessoaGsuiteVO_ApresentarHtml}" id="btnEntrarGoogleMeet" styleClass="btn pn" image="#{resource['/imagens/iconeGooglemeet.png']}" onclick="navegacaoGoogleMeet('#{agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeet}')" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{LoginControle.apresentarLinkVisoesBlackboard and agendaAlunoRSVOItem.salaAulaBlackboardVO.codigo != 0}">
+											<otm:commandImage id="btnLinkSalaAula" tooltip="Realizar Navegação Sala Aula Blackboard" styleClass="btn pn" image="#{resource['/imagens/blackboard_logo.png']}" action="#{LoginControle.realizarNavegacaoSalaAulaBlackboardPorAgendaAluno}" oncomplete="#{LoginControle.oncompleteModal}" render="form" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{!empty agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravado}" >
+											<otm:commandImage id="btnEntrarGoogleMeetGravado" rendered="#{!empty agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravado}" image="#{resource['/imagens/iconeGooglemeet.png']}" onclick="navegacaoGoogleMeet('#{agendaAlunoRSVOItem.googleMeetVO.linkGoogleMeetGravado}')"  styleClass="mr-3"/>											
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</ui:repeat>
+					</h:panelGroup>
+				</h:panelGroup>
+			</ui:define>
+		</otm2:dashpanel>
+	</h:panelGroup>
+</ui:composition>

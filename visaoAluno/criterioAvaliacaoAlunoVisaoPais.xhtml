@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_menu.Menu_criterioAvaliacao_visaoAlunoPais}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="pgPrincipal" layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="row" style="margin-top: 15px">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="criterioAvaliacaoAlunoVOs" width="100%" headerClass="consulta" style="background-color: transparent; width: 100%"  value="#{CriterioAvaliacaoAlunoControle.criterioAvaliacaoVOs}" var="criterioAvaliacaoItens" rendered="#{!empty CriterioAvaliacaoAlunoControle.criterioAvaliacaoVOs}">
+							<p:column style="text-align: center !important; width: 20%">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_AbonoFalta_matricula}" />
+								</f:facet>
+								<h:outputText value="#{criterioAvaliacaoItens.matriculaVO.matricula}" />
+							</p:column>
+							<p:column style="text-align: center !important; width: 20%">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Prospects_nome}" />
+								</f:facet>
+								<h:outputText value="#{criterioAvaliacaoItens.matriculaVO.aluno.nome}" />
+							</p:column>
+							<p:column style="text-align: center !important; width: 20%">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_RelatorioExemplarPorCurso_periodoLetivo}" />
+								</f:facet>
+								<h:outputText value="#{criterioAvaliacaoItens.matriculaPeriodoVO.peridoLetivo.descricao}" />
+							</p:column>
+							<p:column style="text-align: center !important; width: 20%">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_CursoInteresse_dataCadastro}" />
+								</f:facet>
+								<h:outputText value="#{criterioAvaliacaoItens.matriculaPeriodoVO.ano}" />
+							</p:column>
+							<p:column style="text-align: center !important; width: 20%">
+								<f:facet name="header">
+									<h:outputText value="Visualizar" />
+								</f:facet>
+								<otm:commandIcon id="imprimir" icon="#{msg_botoes.btn_icon_imprimir} iconePequeno" oncomplete="#{CriterioAvaliacaoAlunoControle.download}" action="#{CriterioAvaliacaoAlunoControle.imprimirRelatorioVisaoPais}" tooltip="Gerar Relatório (PDF)" title="#{msg_botoes.btn_Imprimir}" accesskey="6" update="form" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row">
+					<otm:mensagem bean="#{CriterioAvaliacaoAlunoControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText rendered="#{VisaoAlunoControle.ambienteVisaoAluno}" value="Atividade Discursiva" />
+		<h:outputText rendered="#{!VisaoAlunoControle.ambienteVisaoAluno}" value="Atividade Discursiva - #{ListaExercicioControle.matriculaPeriodoTurmaDisciplinaVO.disciplina.nome}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<style type="text/css">
+.rich-dtascroller-table {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.rich-datascr-button {
+	border: none;
+}
+
+.rich-datascr-button-dsbld {
+	background-color: transparent;
+}
+</style>
+		<!-- 		<ui:include src="./richPanelImagem.xhtml" /> -->
+		<h:form prependId="false" id="form">
+			<p:commandLink action="#{AtividadeDiscursivaControle.liberarBackingBeanMemoria}" id="idLiberarBackingBeanMemoria" style="display: none" />
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<h:outputText rendered="#{VisaoAlunoControle.isApresentarCampoAno and VisaoAlunoControle.isApresentarCampoSemestre}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_MatriculaPeriodo_anoSemestre}" />
+					<h:outputText rendered="#{VisaoAlunoControle.isApresentarCampoAno and !VisaoAlunoControle.isApresentarCampoSemestre}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_MatriculaPeriodo_ano}" />
+					<h:selectOneMenu id="selectItemAnoSemestre1" rendered="#{VisaoAlunoControle.isApresentarCampoAno or VisaoAlunoControle.isApresentarCampoSemestre}" styleClass="form-control campos" value="#{AtividadeDiscursivaControle.filterAnoSemestre}">
+						<f:selectItems value="#{AtividadeDiscursivaControle.listaSelectItemAnoSemestre}" />
+						<p:ajax event="change" update="form, items" listener="#{AtividadeDiscursivaControle.consultarAtividadesDiscursivasVisaoAluno}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<!-- 				<h:panelGroup layout="block" styleClass="row-table"> -->
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="items" headerClass="consulta" rowKeyVar="row" value="#{AtividadeDiscursivaControle.controleConsultaOtimizado.listaConsulta}" rows="10" var="atividadeItens" rendered="#{!empty AtividadeDiscursivaControle.controleConsultaOtimizado.listaConsulta}">
+					<p:column style="text-align: center !important" filterBy="#{atividadeItens.atividadeDiscursivaVO.codigo}" filter="#{FilterFactory.filter('itemsCodigo', 'atividadeDiscursivaVO.codigo', 'INTEIRO').filtro}" filterFunction="#{FilterFactory.filter('itemsCodigo', 'atividadeDiscursivaVO.codigo', 'INTEIRO').accept}">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_AtividadeDiscursiva_codigo}" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}">
+							<h:outputText value="#{atividadeItens.atividadeDiscursivaVO.codigo}" />
+						</p:commandLink>
+					</p:column>
+					<p:column style="text-align: center !important" width="40%" filterBy="#{atividadeItens.atividadeDiscursivaVO.enunciado}" filterValue="#{FilterFactory.filter('items', 'atividadeDiscursivaVO.enunciado', 'TEXTO').filtro}" filterFunction="#{FilterFactory.filter('items', 'atividadeDiscursivaVO.enunciado', 'TEXTO').accept}">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Questao_enunciado}" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}">
+							<h:panelGroup layout="block" style="max-width:400px; max-height:100px;overflow:auto;text-align: left">
+								<h:outputText value="#{atividadeItens.atividadeDiscursivaVO.enunciado}" />
+							</h:panelGroup>
+						</p:commandLink>
+					</p:column>
+					<p:column style="text-align: center !important" filterBy="#{atividadeItens.atividadeDiscursivaVO.turmaVO.identificadorTurma}" filterValue="#{FilterFactory.filter('items2', 'atividadeDiscursivaVO.turmaVO.identificadorTurma', 'TEXTO').filtro}" filterFunction="#{FilterFactory.filter('items2', 'atividadeDiscursivaVO.turmaVO.identificadorTurma', 'TEXTO').accept}">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_AtividadeDiscursiva_turma}" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}" value="#{atividadeItens.atividadeDiscursivaVO.turmaVO.identificadorTurma}" />
+					</p:column>
+					<p:column style="text-align: center !important" filterBy="#{atividadeItens.atividadeDiscursivaVO.disciplinaVO.nome}" filterValue="#{FilterFactory.filter('items3', 'atividadeDiscursivaVO.disciplinaVO.nome', 'TEXTO').filtro}" filterFunction="#{FilterFactory.filter('items3', 'atividadeDiscursivaVO.disciplinaVO.nome', 'TEXTO').accept}">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_AtividadeDiscursiva_disciplina}" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}" value="#{atividadeItens.atividadeDiscursivaVO.disciplinaVO.nome}" />
+					</p:column>
+					<p:column style="text-align: center !important" field="date" filterBy="#{atividadeItens.atividadeDiscursivaVO.dataLimiteEntrega}" filterValue="#{FilterFactory.filter('dataLimite', 'atividadeDiscursivaVO.dataLimiteEntregaApresentar', 'TEXTO').filtro}" filterFunction="#{FilterFactory.filter('dataLimite', 'atividadeDiscursivaVO.dataLimiteEntregaApresentar', 'TEXTO').accept}">
+						<f:facet name="header">
+							<h:outputText value="Data Limite" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:datePicker styleClass="ui-custom-filter" onchange="PF('items').filter()" selectionMode="range" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}">
+							<h:outputText value="#{atividadeItens.atividadeDiscursivaVO.dataLimiteEntrega}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
+						</p:commandLink>
+					</p:column>
+					<p:column style="text-align: center !important" filterBy="#{atividadeItens.situacaoRespostaAtividadeDiscursiva_Apresentar}" filterValue="#{FilterFactory.filter('items4', 'situacaoRespostaAtividadeDiscursiva_Apresentar', 'TEXTO').filtro}" filterFunction="#{FilterFactory.filter('items4', 'situacaoRespostaAtividadeDiscursiva_Apresentar', 'TEXTO').accept}">
+						<f:facet name="header">
+							<h:outputText value="Situação" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}" value="#{atividadeItens.situacaoRespostaAtividadeDiscursiva_Apresentar}" />
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="Nova Interação" />
+						</f:facet>
+						<p:commandLink update="panelGridMensagens" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" title="#{msg_botoes.btn_editar}" value="#{atividadeItens.interacao}" />
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_botoes.btn_opcoes}  " />
+						</f:facet>
+						<otm:commandIcon icon="#{msg_botoes.btn_icon_editar} iconePequeno" action="#{AtividadeDiscursivaControle.editarAtvidadeDiscursivaRespostaAluno}" tooltip="Editar Atvidade Discursiva Resposta Aluno" update="panelGridMensagens" rendered="#{atividadeItens.situacaoRespostaAtividadeDiscursiva.responder}" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important">
+						</div>
+					</f:facet>
+				</p:dataTable>
+				<!-- 				</h:panelGroup> -->
+			</h:panelGroup>
+			<h:panelGroup id="panelGridMensagens" layout="block" styleClass="row">
+				<otm:mensagem bean="#{AtividadeDiscursivaControle}"></otm:mensagem>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

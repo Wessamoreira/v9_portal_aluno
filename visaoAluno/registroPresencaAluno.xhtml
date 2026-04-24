@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Registro Presença Aluno" />
+	</ui:define>
+	<ui:define name="conteudo">
+	
+<style>
+	#html5-qrcode-button-file-selection {
+	}
+	#html5-qrcode-button-camera-start, #html5-qrcode-button-camera-stop, #html5-qrcode-button-file-selection, #html5-qrcode-button-camera-permission {
+	  display: inline-block;
+	  font-weight: 400;
+	  color: #212529;
+	  text-align: center;
+	  vertical-align: middle;
+	  -webkit-user-select: none;
+	  -moz-user-select: none;
+	  -ms-user-select: none;
+	  user-select: none;
+	  background-color: transparent;
+	  border: 1px solid transparent;
+	  padding: 0.375rem 0.75rem;
+	  font-size: 1rem;
+	  line-height: 1.5;
+	  border-radius: 0.25rem;
+	  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;	
+      color: #fff;
+  	  background-color: #343a40;
+  	  border-color: #343a40;
+	}
+</style>
+	
+	<h:form id="form">
+	
+		<a4j:jsFunction name="atualizarLatitude">
+			<a4j:param name="nameLatitude" assignTo="#{VisaoAlunoControle.latitudeQRCode}"></a4j:param>
+		</a4j:jsFunction>
+		<a4j:jsFunction name="atualizarLongitude">
+			<a4j:param name="nameLongitude" assignTo="#{VisaoAlunoControle.longitudeQRCode}"></a4j:param>
+		</a4j:jsFunction>
+
+		<script>
+			$(document).ready(function() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(mostrarLocalizacao);
+				}});
+			function mostrarLocalizacao(posicao) {
+				let lat = posicao.coords.latitude;
+				let longi = posicao.coords.longitude;
+				atualizarLatitude(lat);
+				atualizarLongitude(longi);
+			}			
+		</script>	
+		
+		<a4j:commandButton id="atualizarQRCodeFrequencia" execute="form:result" style="display:none" />
+		<a4j:commandButton id="atualizarColarTextoQRCode" execute="form:resultColarQRCode" render="form:resultColarQRCode" style="display:none" />
+		<h:inputHidden id="result" value="#{VisaoAlunoControle.uuidQrCodeFrequencia}" />
+		<h:inputHidden id="latitude" value="#{VisaoAlunoControle.latitudeQRCode}" />
+		<h:inputHidden id="longitude" value="#{VisaoAlunoControle.longitudeQRCode}" />		
+		
+		<h:panelGroup layout="block" styleClass="row text-center" style="margin-bottom: 10px" rendered="#{!VisaoAlunoControle.abrirPanelLerQRCode and !VisaoAlunoControle.abrirPanelColarCodigo and !VisaoAlunoControle.abrirPanelListarFrequencias}">
+			<h3>Selecione uma Forma de Registro de Presença</h3>
+		</h:panelGroup>
+		
+		<h:panelGroup id="panelInicial" layout="block" styleClass="row text-center">
+			<otm:commandButton render="form" execute="form" style="margin-right: 10px; margin-bottom: 10px;" id="lerQRCODE" action="#{VisaoAlunoControle.selecionarLerQrCode}" styleClass="#{VisaoAlunoControle.abrirPanelLerQRCode ? 'btn btn-primary' : 'btn btn-dark'}" oncomplete="fecharCameraQRCode(); ativarLeitorQRCode()" accesskey="2" value="Ler QR Code Frequência" icon="fa fa-qrcode" />
+			<otm:commandButton render="form" execute="form" style="margin-right: 10px; margin-bottom: 10px;" id="colarCodigo" action="#{VisaoAlunoControle.selecionarCopiaColaQrCode}" styleClass="#{VisaoAlunoControle.abrirPanelColarCodigo ? 'btn btn-primary' : 'btn btn-dark'}" oncomplete="fecharCameraQRCode();" accesskey="2" value="Copia e Cola Frequência" icon="fa fa-paste" />
+			<otm:commandButton render="form" execute="form" style="margin-right: 10px; margin-bottom: 10px;" id="listarFrequencias" action="#{VisaoAlunoControle.selecionarListarFrequencias}" styleClass="#{VisaoAlunoControle.abrirPanelListarFrequencias? 'btn btn-primary' : 'btn btn-dark'}" oncomplete="fecharCameraQRCode();" accesskey="2" value="Listar Frequências" icon="fa fa-list"/>
+		</h:panelGroup>
+	
+		<a4j:jsFunction name="processarQRCodeFrequencia" action="#{VisaoAlunoControle.processarQrCodeFrequencia('LEITURA')}" render="form" execute="form"/>
+			<h:panelGroup id="panelLerQRCode" layout="block" styleClass="row mn rounded-top mt5 pb5" rendered="#{VisaoAlunoControle.abrirPanelLerQRCode}">	
+				<h:panelGroup id="registroPresencaAluno" layout="block" styleClass="row text-center">
+					<div id="reader" width="200px"></div>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			
+			<h:panelGroup id="panelColarCodigo" layout="block" rendered="#{VisaoAlunoControle.abrirPanelColarCodigo}">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="tituloCampos" value="Código"/>
+					<h:inputText id="resultColarQRCode" value="#{VisaoAlunoControle.codigoColarQRCodeFrequencia}" styleClass="form-control campos" />
+				</h:panelGroup>										
+				<h:panelGroup layout="block" styleClass="row text-center">
+					<otm:commandButton render="form" execute="form" style="margin-top: 10px; margin-right: 10px" id="colarCodigoClipBoard" onclick="colarTextoClipBoard()" styleClass="btn btn-dark" accesskey="2" value="colar QrCode" icon="fa fa-paste" />
+					<otm:commandButton render="form" execute="form" style="margin-top: 10px; margin-right: 10px" id="processarColar" action="#{VisaoAlunoControle.processarQrCodeFrequencia('COLAR')}" styleClass="btn btn-dark" accesskey="2" value="Registrar Presença" icon="far fa-save"/>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup id="panelListaFrequencias" layout="block" rendered="#{VisaoAlunoControle.abrirPanelListarFrequencias}">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup style="margin-top: 20px;" layout="block" styleClass="row text-center" rendered="#{empty VisaoAlunoControle.qrCodeFrequenciaVOs}">
+						<h5>Não Foram Localizadas Frequências Pendente de Registro</h5>
+					</h:panelGroup>
+					
+					<a4j:repeat id="items" rowKeyVar="row" value="#{VisaoAlunoControle.qrCodeFrequenciaVOs}" var="qrCodeFrequenciaVOItem">
+						<otm2:panel name="panelQrCode_#{row+1}" styleClassBody="p5" styleClassHeader="row mn p10 bg-gray" stylePanel=" " styleClassFooter="dn" renderedControl="#{!empty VisaoAlunoControle.qrCodeFrequenciaVOs}">
+							<ui:define name="header">
+								<h:panelGrid layout="block" styleClass="col-md-12" columns="2">
+									<h:outputText id="data" readonly="true" size="10" maxlength="10" styleClass="field control-label tituloCampos" value="#{qrCodeFrequenciaVOItem.horarioProfessorDiaVO.data}" >
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</h:panelGrid>									
+							</ui:define>
+							<ui:define name="body">
+								<h:panelGrid style="margin-bottom: 10px" layout="block" styleClass="col-md-3 text-center" columns="1">
+									<h:outputText styleClass="field control-label tituloCampos" value="Turma: " />
+									<h:outputText id="turma" readonly="true" size="10" maxlength="10" styleClass="field control-label tituloCampos" value="#{qrCodeFrequenciaVOItem.turma.identificadorTurma}" />
+								</h:panelGrid>
+								<h:panelGrid style="margin-bottom: 10px" layout="block" styleClass="col-md-3 text-center" columns="1">
+									<h:outputText styleClass="field control-label tituloCampos" value="Disciplina: " />
+									<h:outputText id="disciplina" readonly="true" size="10" maxlength="10" styleClass="field control-label tituloCampos" value="#{qrCodeFrequenciaVOItem.turma.identificadorTurma}" />
+								</h:panelGrid>
+								<h:panelGrid style="margin-bottom: 10px" layout="block" styleClass="col-md-3 text-center" columns="1">
+									<h:outputText styleClass="field control-label tituloCampos" value="Professor: " />
+									<h:outputText id="professor" readonly="true" size="10" maxlength="10" styleClass="field control-label tituloCampos" value="#{qrCodeFrequenciaVOItem.professor.nome}" />
+								</h:panelGrid>
+								<h:panelGrid style="margin-bottom: 10px" layout="block" styleClass="col-md-3 text-center" columns="1">
+									<otm:commandButton id="registrarPresencaListaFrequencia" styleClass="btn btn-dark" accesskey="2" value="Registrar Presença" icon="far fa-save" render="form" action="#{VisaoAlunoControle.processarQrCodeFrequencia('LISTA')}"/>
+								</h:panelGrid>								
+							</ui:define>
+						</otm2:panel>
+					</a4j:repeat>					
+					<rich:dataScroller align="center" for="items" maxPages="10" boundaryControls="auto" stepControls="auto" fastControls="hide" id="scListaFrequencias" />						
+				</h:panelGroup>										
+			</h:panelGroup>
+
+			<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>			
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

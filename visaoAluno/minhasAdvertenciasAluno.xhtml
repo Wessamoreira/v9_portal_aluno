@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_aplic.prt_MinhasAdvertencias}" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form prependId="false" id="form">
+			<h:panelGroup layout="block" styleClass="col-md-8">
+				<h:outputText styleClass="field control-label tituloCampos" value="Tipo Ocorrência" />
+				<h:selectOneMenu id="tipoOco" styleClass="form-control campos" value="#{VisaoAlunoControle.filtroTipoOcorrencia}">
+					<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTipoAdvertencia}" />
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="col-md-4 pn">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Tarefa_periodo}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-5">
+					<otm:calendar id="dataInOc" value="#{VisaoAlunoControle.advertenciaVOs.dataIni}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-1 text-center">
+					<h:outputText styleClass="field control-label tituloCampos " value="#{msg_aplic.prt_Tarefa_periodo_ate}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-6">
+					<otm:calendar id="dataFInOc" value="#{VisaoAlunoControle.advertenciaVOs.dataFim}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="col-md-12 mt10 text-center">
+				<otm:commandButton id="consultarOco" update="form" action="#{VisaoAlunoControle.consultarMinhaAdvertenciaAluno}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" />
+				<otm:commandButton style="margin-left: 5px" rendered="#{!empty VisaoAlunoControle.advertenciaVOs.listaConsulta}" id="imprimirOc" update="form" oncomplete="#{VisaoAlunoControle.download}" action="#{VisaoAlunoControle.imprimirAdvertencias}" value="#{msg_botoes.btn_Imprimir}" styleClass="btn btn-danger" icon="#{msg_botoes.btn_icon_pdf_embutido}" />
+			</h:panelGroup>
+			<h:panelGroup id="aluno_semAdi" layout="block" styleClass="col-md-12 border rounded mt10" rendered="#{empty VisaoAlunoControle.advertenciaVOs.listaConsulta}">
+				<i class="far fa-comment fs15 mr5" />
+				<h:outputText value="Olá! O aluno #{VisaoAlunoControle.matricula.aluno.nome} não tem ocorrências cadastradas com os filtros informados !" style="font-family: emoji; font-size: 15px; font-weight: 600;" />
+			</h:panelGroup>
+			<h:panelGroup id="pgPrincipal" layout="block" styleClass="row mn" style="margin-top: 15px !important" rendered="#{!empty VisaoAlunoControle.advertenciaVOs.listaConsulta}">
+				<ui:repeat id="advertencias" rowKeyVar="row" value="#{VisaoAlunoControle.advertenciaVOs.listaConsulta}" var="advertenciaItens">
+					<otm2:panel name="adv#{row}" styleClassFooter="dn" styleClassClose="ml10 fs15" styleClassOpen="ml10 fs15">
+						<ui:define name="header">
+							<h:panelGroup layout="block" styleClass="#{VisaoAlunoControle.isExibirBimestre and advertenciaItens.bimestre ne 'NAO_CONTROLA' ? 'col-md-9' : 'col-md-10'}">
+								<h:panelGroup styleClass="fas fa-exclamation-triangle mr5" />
+								<h:outputText styleClass="tituloCampos" value="#{advertenciaItens.tipoAdvertenciaVO.descricao}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="#{VisaoAlunoControle.isExibirBimestre and advertenciaItens.bimestre ne 'NAO_CONTROLA' ? 'col-md-3' : 'col-md-2'} text-center">
+								<h:outputText styleClass="tituloCampos" value="#{advertenciaItens.dataAdvertencia}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<h:outputText styleClass="tituloCampos ml5" rendered="#{VisaoAlunoControle.isExibirBimestre and advertenciaItens.bimestre ne 'NAO_CONTROLA'}" id="bimestre" value=" - #{advertenciaItens.bimestre.valorApresentar}" />
+							</h:panelGroup>
+						</ui:define>
+						<ui:define name="control">
+							<otm:commandIcon id="imprimirOcInd" update="form" oncomplete="#{VisaoAlunoControle.download}" action="#{VisaoAlunoControle.imprimirAdvertenciaEspecifica(advertenciaItens)}" tooltip="#{msg_botoes.btn_Imprimir}" icon="#{msg_botoes.btn_icon_pdf_embutido}" styleIcon="font-size: 15px" />
+						</ui:define>
+						<ui:define name="body">
+							<h:panelGroup layout="block" styleClass="col-md-12" rendered="#{advertenciaItens.professor.codigo ne 0}">
+								<h:outputText styleClass="field control-label tituloCampos font-weight-bolder" value="Professor/Responsável: " />
+								<h:outputText styleClass="field control-label tituloCampos" value="#{advertenciaItens.professor.pessoa.nome}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 mt10 mb10" rendered="#{advertenciaItens.professor.codigo eq 0}">
+								<h:outputText styleClass="field control-label tituloCampos" value="Professor/Responsável: " />
+								<h:outputText styleClass="field control-label tituloCampos" value="#{advertenciaItens.responsavel.nome}"></h:outputText>
+							</h:panelGroup>
+							<h:panelGroup layout="block" rendered="#{!empty advertenciaItens.observacao}" styleClass="col-md-12">
+								<h:outputText styleClass="field control-label tituloCampos" value="Observação: #{advertenciaItens.observacao}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 border-top pt5 pb5 mt10">
+								<h:outputText styleClass="tituloCampos" value="#{advertenciaItens.advertencia}" />
+							</h:panelGroup>
+						</ui:define>
+					</otm2:panel>
+				</ui:repeat>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:form id="form">
+	<h:panelGroup id="aluno_semEst" layout="block" styleClass="col-md-12 border rounded" rendered="#{empty VisaoAlunoControle.listaEstagioAluno}">
+		<h:panelGroup layout="block" styleClass="col-md-1">
+			<i class="fas fa-headset fs80 mb50 mt25 ml10"/>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-1">
+			<i class="far fa-comment fs50 mt10"/>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-10">
+			<h:outputText styleClass="float-left mt10" value="''Ola! O aluno '#{LoginControle.usuarioLogado.nome}' não tem estágio cadastrado no sistema !'' " style="font-family: emoji; font-size: 17px; font-weight: 600;"/>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="row" rendered="#{!empty VisaoAlunoControle.listaEstagioAluno}">
+		<h:panelGroup id="horasCursadasPendentes" layout="block" styleClass="row mt20">
+			<otm2:dashpanel id="panelMoniPros" cols="12">
+				<ui:define name="header">
+					<h:outputText value="Horas Estagio Cursadas"></h:outputText>
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<h:panelGroup layout="block" styleClass="col-md-4 text-center">
+							<h:outputText styleClass="title btn-block" value="#{msg_aplic.prt_Estagio_horasObrigatorias}" style="font-size: 12px !important;"></h:outputText>
+							<h:outputText styleClass="title" value="#{VisaoAlunoControle.estagioVO.horasObrigatorias}" style="font-size: 18px !important; border: none;"/>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4 text-center">
+							<h:outputText styleClass="title btn-block" value="#{msg_aplic.prt_Estagio_horasCumpridas}" style="font-size: 12px !important;"></h:outputText>
+							<h:outputText styleClass="title" value="#{VisaoAlunoControle.estagioVO.horasCumpridas}" style="font-size: 18px !important; border: none;"/>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4 text-center">
+							<h:outputText styleClass="title btn-block" value="#{msg_aplic.prt_Estagio_horasRestantes}" style="font-size: 12px !important;"></h:outputText>
+							<h:outputText styleClass="title" value="#{VisaoAlunoControle.estagioVO.horasRestantes}" style="font-size: 18px !important; border: none;"/>
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:dashpanel>
+		</h:panelGroup>
+		<h:panelGroup id="pgPrincipal">
+			<h:panelGroup layout="block" styleClass="col-md-12 ">
+				<p:dataTable width="100%" headerClass="consulta" columnClasses="colunaAlinhamento" id="items" value="#{VisaoAlunoControle.listaEstagioAluno}" rendered="#{!empty VisaoAlunoControle.listaEstagioAluno}" rows="10" var="estagioItens">
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="Estágio"/>
+						</f:facet>
+						<h:outputText id="empresa" rendered="#{estagioItens.empresa != ''}" value="#{estagioItens.empresa}"/>
+						<h:outputText id="empresaEstagio" rendered="#{estagioItens.empresa == ''}" value="#{estagioItens.empresaEstagio.nome}"/>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Estagio_ano}"/>
+						</f:facet>
+						<h:outputText id="ano" value="#{estagioItens.ano}"/>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Estagio_semestre}"/>
+						</f:facet>
+						<h:outputText id="semetre" value="#{estagioItens.semestre}"/>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Estagio_horas}"/>
+						</f:facet>
+						<h:outputText id="horas" value="#{estagioItens.cargaHoraria}"/>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Estagio_arquivo}"/>
+						</f:facet>
+						<otm:commandIcon tooltip="Download" icon="#{msg_botoes.btn_icon_download} iconePequeno" target="_blank" rendered="#{estagioItens.arquivo.apresentarNomeArquivo}" action="#{VisaoAlunoControle.caminhoServidorDownloadEstagio}"/>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="row">
+			<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+		</h:panelGroup>
+	</h:panelGroup>
+</h:form>
+</html>

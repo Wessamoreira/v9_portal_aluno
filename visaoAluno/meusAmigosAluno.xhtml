@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText  value="Meus Amigos" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<!-- 	     <p:ajaxStatus -->
+		<!-- 	         id="statusCarregandoModalTopo"  -->
+		<!-- 	         onstart="Richfaces.showModalPanel('panelStatusCarregandoTopo')"  -->
+		<!-- 	         onstop="Richfaces.hideModalPanel('panelStatusCarregandoTopo')" />  -->
+		<!-- 	     <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado"  -->
+		<!-- 	         id="panelStatusCarregandoTopo"  -->
+		<!-- 	         autosized="true">  -->
+		<!-- 	         <h:panelGrid columns="2">  -->
+		<!-- 	             <h:graphicImage value="../imagens/ajax-loader.gif" />  -->
+		<!-- 	             <h:outputText  -->
+		<!-- 	                 styleClass="field control-label tituloCampos"  -->
+		<!-- 	                 value="Processando..." />  -->
+		<!-- 	         </h:panelGrid>  -->
+		<!-- 	     </p:dialog>  -->
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="meusAmigos" layout="block" styleClass="row">
+				<h:panelGroup id="maConsulta" layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="Nome" />
+						<h:inputText size="30" id="campoBusca" maxlength="50" styleClass="form-control campos" value="#{ComunicacaoInternaControle.valorConsultaAluno}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center" style="margin:10px">
+						<otm:commandButton id="pesquisarAmigos" update="meusAmigos" action="#{ComunicacaoInternaControle.consultarAlunoVisao}" icon="#{msg_botoes.btn_icon_lupa_embutido}"  value="#{msg_botoes.btn_consultar}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="resultadoConsulta" style="margin-top: 15px" rowKeyVar="row" width="100%" headerClass="consulta" value="#{ComunicacaoInternaControle.listaConsultaAluno}" rows="20" var="alunoItens" rendered="#{!empty ComunicacaoInternaControle.listaConsultaAluno}">
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Pessoa_nome}" />
+						</f:facet>
+						<p:commandLink rendered="#{ComunicacaoInternaControle.permitirEnviarComunicadoParaMeusAmigos}" title="#{msg.msg_enviarMensagem}" action="#{ComunicacaoInternaControle.enviarMensagemAluno}">
+							<h:outputText value="#{alunoItens.nome}" />
+						</p:commandLink>
+						<h:outputText rendered="#{!ComunicacaoInternaControle.permitirEnviarComunicadoParaMeusAmigos}" value="#{alunoItens.nome}" />
+					</p:column>
+					<p:column style="text-align: center !important" rendered="#{ComunicacaoInternaControle.permitirEnviarComunicadoParaMeusAmigos}">
+						<f:facet name="header">
+							<h:outputText value="Enviar Msg." />
+						</f:facet>
+						<otm:commandIcon id="enviarMsg" tooltip="#{msg.msg_enviarMensagem}" action="#{ComunicacaoInternaControle.enviarMensagemAluno}" icon="#{msg_botoes.btn_icon_enviar_email} iconePequeno" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important">
+						</div>
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup id="maMsg" layout="block" styleClass="row">
+					<otm:mensagem bean="#{ComunicacaoInternaControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText  value="#{msg_aplic.prt_VisaoAluno_minhasFaltas}" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		<h:outputScript name="autoresize.js" library="script" />
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelFaltas" widgetVar="panelFaltas" top="5px"  width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Minhas Faltas"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formFaltas">
+				<h:panelGroup styleClass="autoresize" layout="block" style="width:100%; overflow:auto;">
+				
+					<otm2:panel name="panelInf_curso" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{!empty VisaoAlunoControle.listaHistoricoFaltaTurmaTransferenciaVOs}">
+						<ui:define name="header">
+							<i class="far fa-square tituloCampos mr5 fs16"></i>
+							<h:outputText styleClass="tituloCampos font-weight-bold" value="Faltas Provenientes de Transferência" />
+						</ui:define>
+						<ui:define name="body">
+							<h:panelGroup layout="block" columns="1" width="100%" styleClass="tabFormSubordinada">
+								<p:dataTable id="mihasFaltasTransferencia" rendered="#{!empty VisaoAlunoControle.listaHistoricoFaltaTurmaTransferenciaVOs}" width="100%" columnClasses="colunaCentralizada" headerClass="consulta" value="#{VisaoAlunoControle.listaHistoricoFaltaTurmaTransferenciaVOs}" var="faltasTransferenciaItens">
+									<p:column style="width:25%">
+										<f:facet name="header">
+											<h:outputText value="Turma" />
+										</f:facet>
+										<h:outputText value="#{faltasTransferenciaItens.turmaOrigemVO.identificadorTurma}" />
+									</p:column>
+									<p:column style="width:25%">
+										<f:facet name="header">
+											<h:outputText value="Disciplina" />
+										</f:facet>
+										<h:outputText value="#{faltasTransferenciaItens.disciplinaVO.nome}" />
+									</p:column>
+									<p:column style="width:25%">
+										<f:facet name="header">
+											<h:outputText value="Total Falta" />
+										</f:facet>
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-11">
+												<h:outputText value="#{faltasTransferenciaItens.totalFalta}" />
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:column>
+									<p:column style="width:25%">
+										<f:facet name="header">
+											<h:outputText value="Total Carga Horária" />
+										</f:facet>
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-11">
+												<h:outputText value="#{faltasTransferenciaItens.totalCargaHoraria}"/>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:column>
+									<p:column breakRowBefore="true" colspan="7">
+										<h:panelGroup layout="block" styleClass="row mn">
+											<h:panelGroup layout="block" styleClass="col-md-12 border-top mb5 pb5 pl5">
+												<h:outputText styleClass="tituloCampos font-weight-bold float-left" value="Registros de Faltas" />
+											</h:panelGroup>
+											<p:dataTable id="registrosTable" rows="10" width="100%" headerClass="consulta" columnClasses="colunaVerticalmenteCentralizada, colunaVerticalmenteCentralizada, colunaVerticalmenteCentralizada, colunaVerticalmenteCentralizada, colunaVerticalmenteCentralizada" value="#{faltasTransferenciaItens.listaRegistroAulaVOs}" var="registroIntes">
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Data" />
+													</f:facet>
+													<h:outputText value="#{registroIntes.data}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Horário" />
+													</f:facet>
+													<h:outputText value="#{registroIntes.horario}" />
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Dia da Semana" />
+													</f:facet>
+													<h:outputText value="#{registroIntes.diaSemana_Apresentar}">
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<otm2:dataScroller id="scRegistrosTable" boundaryControls="auto" fastControls="hide" stepControls="auto" for="registrosTable" limitRender="10" align="center" />
+												</f:facet>
+											</p:dataTable>
+										</h:panelGroup>
+									</p:column>
+								</p:dataTable>
+							</h:panelGroup>
+						</ui:define>
+					</otm2:panel>
+					
+					<otm2:panel name="panelInf_curso1" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+						<ui:define name="header">
+							<i class="far fa-square tituloCampos mr5 fs16"></i>
+							<h:outputText styleClass="tituloCampos font-weight-bold" value="Faltas Turma Atual" />
+						</ui:define>
+							<ui:define name="body">
+								<h:panelGroup columns="1" width="100%" styleClass="tabForm">
+									<p:dataTable id="mihasFaltasDetalhadas" rows="10" width="100%" columnClasses="colunaCentralizada" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{VisaoAlunoControle.listaDetalhesMinhasFaltasVOs}" var="faltasItens">
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Data" />
+											</f:facet>
+											<h:outputText value="#{faltasItens.data}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Horário" />
+											</f:facet>
+											<h:outputText value="#{faltasItens.horario}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Dia da Semana" />
+											</f:facet>
+											<h:outputText value="#{faltasItens.diaSemana_Apresentar}">
+											</h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Situação Frequência" />
+											</f:facet>
+											<h:outputText value="#{faltasItens.situacaoAbonoFalta}">
+											</h:outputText>
+										</p:column>
+										<f:facet name="footer">
+											<otm2:dataScroller id="scMinhasFaltasDetalhadas" boundaryControls="auto" fastControls="hide" stepControls="auto" for="mihasFaltasDetalhadas" limitRender="10" align="center" />
+										</f:facet>
+									</p:dataTable>
+								</h:panelGroup>
+							</ui:define>
+					</otm2:panel>
+					
+				</h:panelGroup>
+			</h:form>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl>
+		</p:dialog>
+		
+		<h:form prependId="false" id="form">			
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<h:outputText rendered="#{VisaoAlunoControle.isApresentarCampoAno and VisaoAlunoControle.isApresentarCampoSemestre}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_MatriculaPeriodo_anoSemestre}" />
+					<h:outputText rendered="#{VisaoAlunoControle.isApresentarCampoAno and !VisaoAlunoControle.isApresentarCampoSemestre}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_MatriculaPeriodo_ano}" />
+					<h:selectOneMenu id="selectItemAnoSemestre1" rendered="#{VisaoAlunoControle.isApresentarCampoAno}" styleClass="form-control campos" value="#{VisaoAlunoControle.filterAnoSemestre}">
+						<f:selectItems value="#{VisaoAlunoControle.listaSelectItemAnoSemestre}" />
+						<p:ajax event="change" update="pgPrincipal, form" listener="#{VisaoAlunoControle.consultarFaltasAluno}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup id="pgPrincipal" layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 mt10">
+					<ui:repeat var="listaSecundaria" value="#{VisaoAlunoControle.listaFaltas}">
+						<h:panelGroup rendered="#{empty VisaoAlunoControle.filterAnoSemestre or VisaoAlunoControle.filterAnoSemestre eq listaSecundaria[0].anoSemestreApresentar}" layout="block" style="width:100%">
+							<h:panelGroup rendered="#{VisaoAlunoControle.isApresentarCampoAno}" layout="block" styleClass="field control-label tituloCampos">
+								<h:outputText rendered="#{VisaoAlunoControle.isApresentarCampoAno}" value="#{listaSecundaria[0].ano}" />
+								<h:outputText value="/" rendered="#{VisaoAlunoControle.isApresentarCampoSemestre}" />
+								<h:outputText value="#{listaSecundaria[0].semestre}" rendered="#{VisaoAlunoControle.isApresentarCampoSemestre}" />
+							</h:panelGroup>
+							<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="faltas" width="100%" headerClass="consulta" style="background-color: transparent; width:100%"  value="#{listaSecundaria}" var="faltasItens">
+								<p:column width="30%" style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Disciplina" />
+									</f:facet>
+									<h:outputText value="#{faltasItens.disciplina.nome}" />
+								</p:column>
+								<p:column width="27%" style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Turma" />
+									</f:facet>
+									<h:outputText value="#{faltasItens.turma.identificadorTurma}" />
+								</p:column>
+								<p:column width="28%" rendered="#{!VisaoAlunoControle.configuracaoGeralPadraoSistema.naoApresentarProfessorVisaoAluno}" style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Professor" />
+									</f:facet>
+									<h:outputText value="#{faltasItens.professor.nome}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Qtd. Faltas" />
+									</f:facet>
+									<h:outputText value="#{faltasItens.qtdFaltas}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Opções" />
+									</f:facet>
+									<otm:commandIcon id="visualizarFaltas" process="@this" update="formFaltas" action="#{VisaoAlunoControle.visualizarFaltas}" oncomplete="PF('panelFaltas').show();" tooltip="Visualizar Faltas" icon="#{msg_botoes.btn_icon_lupa} iconePequeno" />
+								</p:column>
+							</p:dataTable>
+							<otm:spacer height="10px" />
+						</h:panelGroup>
+					</ui:repeat>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl>
+			<h:panelGroup layout="block" styleClass="barraFlutuanteInferior" rendered="#{!empty VisaoAlunoControle.listaFaltas}">
+					<otm:commandButton id="imprimirPDF" update="form" oncomplete="#{VisaoAlunoControle.download}" action="#{VisaoAlunoControle.imprimirMinhasFaltas}" value="Imprimir Relatório" icon="#{msg_botoes.btn_icon_imprimir_embutido}" title="Imprimir Relatório" accesskey="2" styleClass="btn btn-primary"  />
+				</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

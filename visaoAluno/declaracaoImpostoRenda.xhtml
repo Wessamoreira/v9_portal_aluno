@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_aplic.prt_DeclaracaoImpostoRenda_tituloForm}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form prependId="false" id="form">
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-1">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_DeclaracaoImpostoRendaRel_ano}" />
+					<h:selectOneMenu id="ano" styleClass="form-control camposObrigatorios" value="#{DeclaracaoImpostoRendaRelControle.anoConsulta}">
+						<f:selectItems value="#{DeclaracaoImpostoRendaRelControle.listaSelectItemAno}"/>
+						<p:ajax event="change" listener="#{DeclaracaoImpostoRendaRelControle.consultarListaDeclaracaoImpostoRendaAluno}" update="form" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row" style="margin-top: 15px">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  rendered="#{!empty DeclaracaoImpostoRendaRelControle.listaAnoDeclaracaoImpostoRendaRel}" id="AnoImpressaoDeclaracaoImpostoRenda" width="100%" headerClass="consulta" style="background-color: transparent; width:100%"  value="#{DeclaracaoImpostoRendaRelControle.listaAnoDeclaracaoImpostoRendaRel}" rows="10" var="anoDeclaracaoImpostoRendaItens">
+						<p:column style="text-align: center !important">
+							<f:facet name="header">
+								<h:outputText value="#{msg_aplic.prt_ControleLivroRegistroDiploma_tituloMatricula}" />
+							</f:facet>
+							<h:outputText value="#{anoDeclaracaoImpostoRendaItens.matricula.matricula eq '' ? '--' : anoDeclaracaoImpostoRendaItens.matricula.matricula}" />
+						</p:column>
+						<p:column style="text-align: center !important">
+							<f:facet name="header">
+								<h:outputText value="Responsável/Aluno" />
+							</f:facet>
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.pessoa.possuiAcessoVisaoPais and DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoPais and anoDeclaracaoImpostoRendaItens.matricula.matricula eq ''}" value="#{anoDeclaracaoImpostoRendaItens.nomeResponsavel}" />
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.pessoa.possuiAcessoVisaoPais and DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoPais and anoDeclaracaoImpostoRendaItens.matricula.matricula ne ''}" value="#{anoDeclaracaoImpostoRendaItens.nomeResponsavel} - #{anoDeclaracaoImpostoRendaItens.matricula.aluno.nome}" />
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoAluno and anoDeclaracaoImpostoRendaItens.nomeResponsavel eq '' and anoDeclaracaoImpostoRendaItens.parceiro.nome eq ''}" value="#{anoDeclaracaoImpostoRendaItens.matricula.aluno.nome}" />
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoAluno and anoDeclaracaoImpostoRendaItens.nomeResponsavel ne '' and anoDeclaracaoImpostoRendaItens.parceiro.nome eq '' and anoDeclaracaoImpostoRendaItens.matricula.aluno.nome != ''}" value="#{anoDeclaracaoImpostoRendaItens.nomeResponsavel} - #{anoDeclaracaoImpostoRendaItens.matricula.aluno.nome}" />
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoAluno and anoDeclaracaoImpostoRendaItens.nomeResponsavel ne '' and anoDeclaracaoImpostoRendaItens.parceiro.nome eq '' and anoDeclaracaoImpostoRendaItens.matricula.aluno.nome eq ''}" value="#{anoDeclaracaoImpostoRendaItens.nomeResponsavel}" />
+							<h:outputText rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoAluno and anoDeclaracaoImpostoRendaItens.parceiro.nome ne ''}" value="#{anoDeclaracaoImpostoRendaItens.parceiro.nome} - #{anoDeclaracaoImpostoRendaItens.matricula.aluno.nome}" />
+						</p:column>
+						<p:column style="text-align: center !important" rendered="#{!DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoPais or !DeclaracaoImpostoRendaRelControle.gerarDeclaracaoPorCPF}">
+							<f:facet name="header">
+								<h:outputText value="#{msg_botoes.btn_Imprimir}" />
+							</f:facet>
+							<h:panelGroup>
+								<otm:commandIcon id="imprimirPDF" update="form" oncomplete="#{DeclaracaoImpostoRendaRelControle.download}" action="#{DeclaracaoImpostoRendaRelControle.imprimirPDFVisaoAluno}" tooltip="Gerar Relatório (PDF)" accesskey="2" icon="#{msg_botoes.btn_icon_pdf} iconePequeno" />
+							</h:panelGroup>
+						</p:column>
+						<f:facet name="footer">
+							<div style="text-align: center !important">
+								<h:panelGroup rendered="#{DeclaracaoImpostoRendaRelControle.usuarioLogado.isApresentarVisaoPais and DeclaracaoImpostoRendaRelControle.gerarDeclaracaoPorCPF}">
+									<otm:commandIcon update="form" oncomplete="#{DeclaracaoImpostoRendaRelControle.download}" icon="#{msg_botoes.btn_icon_pdf} iconePequeno" value="Imprimir PDF" action="#{DeclaracaoImpostoRendaRelControle.imprimirPDFVisaoAluno}" />
+								</h:panelGroup>							
+							</div>
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{FuncionarioControle}" />
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

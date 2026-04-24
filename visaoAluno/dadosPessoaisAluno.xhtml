@@ -1,0 +1,1613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br"> <ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Dados Pessoais" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<style>
+.h35 {
+	height: 35px !important;
+}
+
+.tabconteudo {
+	padding: 0px !important;
+}
+
+.barra-btn-flutuante-modal-image {
+	position: fixed;
+	width: 80%;
+	background-color: #dedede;
+	padding: 10px 5px 5px 5px;
+	left: 10%;
+	border-radius: 0px 0px 10px 10px;
+	margin: 0 auto;
+	bottom: 5.5%;
+	z-index: 1;
+	text-align: center;
+	min-height: 35px;
+}
+</style>
+		<!-- <p:ajaxStatus id="statusCarregandoModalTopo" onstart="Richfaces.showModalPanel('panelStatusCarregandoTopo')"  onstop="Richfaces.hideModalPanel('panelStatusCarregandoTopo')" /> -->
+
+		<!--         <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelStatusCarregandoTopo" widgetVar="panelStatusCarregandoTopo" autosized="true">  -->
+		<!--             <h:panelGroup columns="2">  -->
+		<!--                 <h:graphicImage value="../imagens/ajax-loader.gif" />  -->
+		<!--                 <h:outputText styleClass="field control-label tituloCampos" value="Processando..." />  -->
+		<!--             </h:panelGroup>  -->
+		<!--         </p:dialog>  -->
+
+		<!-- <ui:include src="./richPanelImagem.xhtml" /> -->
+<!-- 		<ui:include src="../visaoPreInscricao/richCurriculumAluno.xhtml" /> -->
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelNaturalidade" widgetVar="panelNaturalidade" autosized="true" onShow="document.getElementById('valorConsultaNaturalidade');" height="300">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Cidade Naturalidade"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formNaturalidade">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-3">
+					<h:selectOneMenu styleClass="form-control campos" id="consultaNaturalidade2" value="#{VisaoAlunoControle.campoConsultaNaturalidade}">
+						<f:selectItems value="#{VisaoAlunoControle.tipoConsultaNaturalidade}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-7">
+					<h:inputText id="valorConsultaNaturalidade" size="10" styleClass="form-control campos" value="#{VisaoAlunoControle.valorConsultaNaturalidade}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<otm:commandButton id="btnConsultarNaturalidade" update="mensagemConsultaNaturalidade, formNaturalidade" action="#{VisaoAlunoControle.consultarNaturalidade}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" rendered="#{!empty VisaoAlunoControle.listaConsultaNaturalidade}" id="resultadoConsultaNaturalidade" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{VisaoAlunoControle.listaConsultaNaturalidade}" rows="5" var="naturalidade">
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_codigo}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarNaturalidade}" update="form" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.codigo}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarNaturalidade}" update="form" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarNaturalidade}" update="form" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.estado.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_botoes.btn_opcoes}" />
+						</f:facet>
+						<otm:commandIcon action="#{VisaoAlunoControle.selecionarNaturalidade}" update="form" oncomplete="PF('panelNaturalidade').hide()" tooltip="Selecionar" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" alt="#{msg.msg_selecionar_dados}" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important"> </div>
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup id="mensagemConsultaNaturalidade" layout="block" styleClass="row">
+					<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelCidadeEmpresa" widgetVar="panelCidadeEmpresa" width="750" onShow="document.getElementById('valorConsultaCidadeEmpresa');" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Cidade_consultarCidade}"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formCidadeEmpresa">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-3">
+					<h:selectOneMenu styleClass="form-control campos" id="consultaCidadeEmpresa" value="#{VisaoAlunoControle.campoConsultaCidadeEmpresa}">
+						<f:selectItems value="#{VisaoAlunoControle.tipoConsultaCidadeEmpresa}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-7">
+					<h:inputText id="valorConsultaCidadeEmpresa" size="10" styleClass="form-control campos" value="#{VisaoAlunoControle.valorConsultaCidadeEmpresa}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<otm:commandButton id="btnConsultarCidadeEmpresa" update="formCidadeEmpresa, mensagemConsultaCidadeEmpresa, resultadoConsultaCidadeEmpresa" action="#{VisaoAlunoControle.consultarCidadeEmpresa}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="resultadoConsultaCidadeEmpresa" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{VisaoAlunoControle.listaConsultaCidadeEmpresa}" rows="5" var="cidadeEmpresaItens">
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_codigo}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarCidadeEmpresa}" update="cidadeEmpresa" oncomplete="PF('panelCidadeEmpresa').hide()" value="#{cidadeEmpresaItens.codigo}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarCidadeEmpresa}" update="cidadeEmpresa" oncomplete="PF('panelCidadeEmpresa').hide()" value="#{cidadeEmpresaItens.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarCidadeEmpresa}" update="cidadeEmpresa" oncomplete="PF('panelCidadeEmpresa').hide()" value="#{cidadeEmpresaItens.estado.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_botoes.btn_opcoes}" />
+						</f:facet>
+						<otm:commandIcon action="#{VisaoAlunoControle.selecionarCidadeEmpresa}" update="cidadeEmpresa" oncomplete="PF('panelCidadeEmpresa').hide()" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" tooltip="Selecionar" alt="#{msg.msg_selecionar_dados}" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important"> </div>
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup id="mensagemConsultaCidadeEmpresa" layout="block" styleClass="row">
+					<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelCidade" widgetVar="panelCidade" width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Cidade_consultarCidade}"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formCidade">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-3">
+					<h:selectOneMenu styleClass="form-control campos" id="consultaCidade" value="#{VisaoAlunoControle.campoConsultaCidade}">
+						<f:selectItems value="#{VisaoAlunoControle.tipoConsultaCidade}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-7">
+					<h:inputText id="valorConsultaCidade" size="10" styleClass="form-control campos" value="#{VisaoAlunoControle.valorConsultaCidade}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<otm:commandButton id="btnConsultarCidade" update="mensagemConsultaCidade, resultadoConsultaCidade, formCidade" action="#{VisaoAlunoControle.consultarCidade}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" title="Consultar cidade" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" rendered="#{!empty VisaoAlunoControle.listaConsultaCidade}" id="resultadoConsultaCidade" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{VisaoAlunoControle.listaConsultaCidade}" rows="5" var="cidadeItens">
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarCidade}" update="cidade, panelEndereco_fili" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+						</f:facet>
+						<h:panelGroup>
+							<p:commandLink action="#{VisaoAlunoControle.selecionarCidade}" update="cidade, panelEndereco_fili" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.estado.nome}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column style="text-align: center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_botoes.btn_opcoes}" />
+						</f:facet>
+						<otm:commandIcon action="#{VisaoAlunoControle.selecionarCidade}" update="cidade, panelEndereco_fili" oncomplete="PF('panelCidade').hide()" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" tooltip="Selecionar Cidade" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important"> </div>
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup id="mensagemConsultaCidade" layout="block" styleClass="row">
+					<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelCapturarImagemWebCamResposavel" widgetVar="panelCapturarImagemWebCamResposavel" zindex="2000" width="750" height="500" onShow="showWebCamAPP()">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Disciplina_tirarFoto}" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formWebCamFotoResponsavel">
+				<h:panelGroup layout="block" styleClass="row text-center">
+					<div id="my_cameraResponsavel" style="width: 320px; height: 240px;"></div>
+				</h:panelGroup>
+				<br />
+				<br />
+				<h:panelGroup layout="block" id="mcMenuResposavel" styleClass="barra-btn-flutuante-modal-50">
+					<otm:commandButton id="btnTirarFotoResponsavel" styleClass="btn btn-primary" icon="#{msg_botoes.btn_icon_camera_embutido}" value="Tirar Foto" action="#{VisaoAlunoControle.executarCapturarFotoWebCam}" oncomplete="take_snapshot('../UploadServlet');" />
+					<otm:commandButton id="btnNovaFotoResponsavel" style="margin-left: 10px" styleClass="btn btn-info btn-novo" value="Nova Foto" onclick="Webcam.unfreeze();" />
+					<otm:commandButton id="btnGravarFotoResponsavel" style="margin-left: 10px" styleClass="btn btn-dark btn-gravar" icon=" #{msg_botoes.btn_icon_retrato_embutido}" value="Gravar" update="formImagemResponsavel, formWebCamFotoResponsavel" oncomplete="PF('panelCapturarImagemWebCamResposavel').hide(); PF('panelImagemResponsavel').show()" />
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado100" id="panelImagemResponsavel" widgetVar="panelImagemResponsavel" zindex="2000">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AlterarFoto}" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formImagemResponsavel">
+				<script src="#{resource['script/crop/jquery.Jcrop.js']}" />
+				<script type="text/javascript">
+					jQuery(function($) {
+						$(document).ready(function() {
+							$("#foto2Res").Jcrop({
+								onSelect : showCoords,
+								onChange : showCoords,
+								bgColor : 'black',
+								bgOpacity : .3,
+								setSelect : [ 1, 1, 85, 113 ],
+								minSize : [ 31, 21 ],
+								maxSize : [ 600, 450 ]
+							});
+						});
+					});
+					function showCoords(c) {
+						var valorX = document.getElementById('x1');
+						valorX.value = c.x;
+
+						var valorY = document.getElementById('y1');
+						valorY.value = c.y;
+
+						var valorW = document.getElementById('w1');
+						valorW.value = c.w;
+
+						var valorH = document.getElementById('h1');
+						valorH.value = c.h;
+
+					};
+				</script>
+				<h:panelGroup layout="block" styleClass="row mb10 border-bottom pb10">
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<otm:commandIcon id="btnZoomInResposavel" style="margin-left: 10px" rendered="#{VisaoAlunoControle.exibirBotao}" action="#{VisaoAlunoControle.executarZoomInPessoa}" icon="#{msg_botoes.btn_icon_zoomPlus_embutido} fs18" update="formImagemResponsavel" />
+						<otm:commandIcon id="btnZoomOutResposavel" style="margin-left: 10px" rendered="#{VisaoAlunoControle.exibirBotao}" action="#{VisaoAlunoControle.executarZoomOutPessoa}" icon="#{msg_botoes.btn_icon_zoomMinus_embutido} fs18" update="formImagemResponsavel" />
+						<otm:commandIcon id="btnGirarEsquerdaResposavel" style="margin-left: 10px" rendered="#{VisaoAlunoControle.exibirBotao}" icon="#{msg_botoes.btn_icon_girar_esquerda_embutido} fs18" action="#{VisaoAlunoControle.rotacionar90GrausParaEsquerdaPessoa}" update="formImagemResponsavel" tooltip="Girar 90º para Esquerda" />
+						<otm:commandIcon id="btnGirarDireitaResposavel" style="margin-left: 10px" rendered="#{VisaoAlunoControle.exibirBotao}" icon="#{msg_botoes.btn_icon_girar_direita_embutido} fs18" action="#{VisaoAlunoControle.rotacionar90GrausParaDireitaPessoa}" update="formImagemResponsavel" tooltip="Girar 90º para Direita" />
+						<otm:commandIcon id="btnGirar180Resposavel" style="margin-left: 10px" rendered="#{VisaoAlunoControle.exibirBotao}" icon="#{msg_botoes.btn_icon_girar_180_embutido} fs18" action="#{VisaoAlunoControle.rotacionar180GrausPessoa}" update="formImagemResponsavel" tooltip="Girar 180º" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{VisaoAlunoControle.exibirBotao}" layout="block" styleClass="row">
+					<h:graphicImage url="#{VisaoAlunoControle.showFotoCrop}" id="foto2Res" />
+				</h:panelGroup>
+				<h:panelGroup style="display:none" layout="block">
+					<h:panelGroup style="display:none" columns="6">
+						<h:panelGroup>
+							<h:outputText value="X" />
+							<h:inputText size="4" id="x1" value="#{VisaoAlunoControle.x}" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputText value="Y" />
+							<h:inputText size="4" id="y1" value="#{VisaoAlunoControle.y}" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputText value="largura" />
+							<h:inputText size="4" id="w1" value="#{VisaoAlunoControle.largura}" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputText value="altura" />
+							<h:inputText size="4" id="h1" value="#{VisaoAlunoControle.altura}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row" rendered="#{VisaoAlunoControle.exibirUpload}">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<p:fileUpload invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido #{LoginControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload}MB." sizeLimit="#{LoginControle.limiteUpload}" auto="true" mode="advanced" id="btnUploadResposavel" styleClass="rich-fileupload-list-decor-aluno" allowTypes="#{LoginControle.getExtensaoUpload('jpg, jpeg, png, JPG, JPEG, PNG')}" invalidFileMessageAdd="#{LoginControle.getMensagemArquivoInvalido('jpg, jpeg, png, JPG, JPEG, PNG')}" invalidFileMessage="#{LoginControle.getMensagemArquivoInvalido('jpg, jpeg, png, JPG, JPEG, PNG')}" previewWidth="600" listener="#{VisaoAlunoControle.upLoadImagem}" fileLimit="1" label="Selecionar Arquivo" uploadLabel="Enviar">
+						</p:fileUpload>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row" rendered="#{VisaoAlunoControle.exibirUpload}">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<h:outputText styleClass="field control-label tituloCampos" value="Você pode enviar arquivos JPG ou PNG (tamanho máximo de 2MB)" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-100">
+					<otm:commandButton styleClass="btn btn-dark" oncomplete="PF('panelImagemResponsavel').hide();Webcam.reset();" rendered="#{VisaoAlunoControle.exibirBotao}" action="#{VisaoAlunoControle.recortarFoto}" update="formImagemResponsavel, formWebCamFotoResponsavel, foto2Res, tabResponsavelAutorizadoBuscaAluno" value="Confirmar foto" icon="#{msg_botoes.btn_icon_confirmar_embutido}" />
+					<otm:commandButton styleClass="btn btn-info" style="margin-left: 10px" oncomplete="PF('panelImagemResponsavel').hide();PF('panelCapturarImagemWebCamResposavel').show()" update="formImagemResponsavel" value="Tirar foto" icon="#{msg_botoes.btn_icon_camera_embutido}" onclick="Webcam.attach( '#my_cameraResponsavel' )" />
+					<otm:commandButton style="margin-left: 10px" styleClass="btn btn-danger light btn-cancelar" icon="#{msg_botoes.btn_icon_cancelar_embutido}" value="Cancelar" action="#{VisaoAlunoControle.cancelar}" oncomplete="PF('panelImagemResponsavel').hide();" update="formImagemResponsavel" title="Cancelar" />
+				</h:panelGroup>
+				<p:outputPanel id="panelMensagemResposavel">
+					<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+				</p:outputPanel>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelPaiz" widgetVar="panelPaiz">
+			<f:facet name="header">
+				<h:outputText value="#{msg_aplic.prt_Paiz_tituloForm}" />
+			</f:facet>
+			<h:form id="formPaiz">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="tituloCampos" value="#{msg.msg_consultar_por}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-3">
+					<h:selectOneMenu styleClass="form-control" value="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz.campoConsulta}">
+						<f:selectItems value="#{VisaoAlunoControle.listaSelectItemPaiz}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-7">
+					<h:inputText styleClass="form-control" value="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz.valorConsulta}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<p:commandLink value="consultar" styleClass="btn btn-default" update="formPaiz" action="#{VisaoAlunoControle.consultarPaiz}">
+						<span class="#{msg_botoes.btn_icon_lupa_embutido} pull-left" style="margin-right: 0.8em; position: relative; top: 3px; font-size: 14px;" />
+						<f:setPropertyActionListener target="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz.paginaAtual}" value="1" />
+						<f:setPropertyActionListener target="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz.page}" value="1" />
+					</p:commandLink>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+				<p:dataTable id="listaConsultaPaiz" value="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz}" var="paizItem" rows="8">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Paiz_codigo}" />
+						</f:facet>
+						<h:outputText value="#{paizItem.codigo}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_Paiz_nome}" />
+						</f:facet>
+						<h:outputText value="#{paizItem.nome}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Opções" />
+						</f:facet>
+						<otm:commandIcon tooltip="Selecionar País" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" action="#{VisaoAlunoControle.selecionarPaiz}" update="panelEndereco, panelEndereco_fili" oncomplete="PF('panelPaiz').hide();" />
+					</p:column>
+					<f:facet name="footer">
+						<otm2:dataScroller update="formPaiz" id="scResultadoPaiz" bean="#{VisaoAlunoControle}" scrollListener="scrollerListenerPaiz" dadosConsulta="controleConsultaOtimizadoPaiz" rendered="#{VisaoAlunoControle.controleConsultaOtimizadoPaiz.apresentarPaginador}" />
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup layout="block" styleClass="row mn">
+					<otm:mensagem bean="#{VisaoAlunoControle}" />
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+
+		<otm2:modalCidade bean="#{VisaoAlunoControle}" controleConsulta="controleConsultaCidade" consultar="consultarCidadeFormacaoAcademica" selecionar="selecionarCidadeFormacaoAcademica" update="form" id="panelCidadeFormacaoAcademica" />
+
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="dadosBasico">
+				<h:panelGroup layout="block" styleClass="row mn border-bottom mb5 pb5" rendered="#{!VisaoAlunoControle.isApresentarMenusPrimeiroAcesso}">
+					<span class="#{msg_botoes.btn_icon_aviso_embutido} text-warning mr10 fs16" />
+					<h:outputText styleClass="tituloCampos, mensagemDetalhada" value="#{msg.msg_AtualizacaoDadosPessoaisPrimeiroAcesso}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 border rounded text-center" rendered="#{!(VisaoAlunoControle.meusDadosAbaDadosBasicos) and !(VisaoAlunoControle.apresentarFormacaoAcademicaDadosPessoais or (!VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.meusDadosAbaFormacaoAcademica)) and !(VisaoAlunoControle.apresentarFiliacaoDadosPessoais) and !(VisaoAlunoControle.apresentarDadosComerciaisDadosPessoais or (!VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.meusDadosAbaExperienciasProfissionais)) and !(VisaoAlunoControle.verificarQuestionarioAlunoBancoCurriculum and VisaoAlunoControle.pessoaVO.participaBancoCurriculum and !VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.meusDadosAbaQuestionario) and !(VisaoAlunoControle.apresentarFichaMedicaAluno) and !(VisaoAlunoControle.apresentarResponsavelAutorizadoBuscarAluno)}">
+					<h:panelGroup layout="block" styleClass="col-md-1">
+						<i class="fas fa-headset fs80 mb50 mt25" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-1">
+						<i class="far fa-comment fs50" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-10">
+						<h:outputText styleClass="float-left" value="Ola! O aluno #{LoginControle.usuarioLogado.nome}, para visualizar os seus dados pessoais, favor solicitar um perfil de acesso a um administrador. !" style="font-family: emoji; font-size: 17px; font-weight: 600;" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row mn" rendered="#{VisaoAlunoControle.meusDadosAbaDadosBasicos}">
+					<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{VisaoAlunoControle.usuarioLogado.pessoa.possuiAcessoVisaoPais and VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Dados Referentes a:" />
+						<h:selectOneMenu styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaVO.codigo}">
+							<f:selectItems value="#{VisaoAlunoControle.listaPessoasEditaveis}" />
+							<p:ajax event="change" process="@form" listener="#{VisaoAlunoControle.realizarSelecaoPessoa}" update="panelMatricula, form, sair" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{(VisaoAlunoControle.usuarioLogado.pessoa.possuiAcessoVisaoPais and VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais) ? 'col-md-4' : 'col-md-6'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Nome Social" />
+						<h:inputText id="nome" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaVO.nome}" disabled="true" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{(VisaoAlunoControle.usuarioLogado.pessoa.possuiAcessoVisaoPais and VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais) ? 'col-md-4' : 'col-md-6'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nomeBatismo}" />
+						<h:inputText id="nomeBatismo" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaVO.nomeBatismo}" disabled="true" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:tabView prependId="false" id="dbAbas" styleClass="row mn p5">
+					<p:tab id="dbAba1" name="nome1" process="@this" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome1')}" title="Dados Pessoais" rendered="#{VisaoAlunoControle.meusDadosAbaDadosBasicos}">
+						<h:panelGroup layout="block" styleClass="row" id="dbDadosPessoais">
+							<h:panelGroup layout="block" styleClass="row mn">
+								<otm2:panel name="panelDocumento" styleClassFooter="dn">
+									<ui:define name="header">
+										<i class="fas fa-id-card mr5"></i>
+										<h:outputText value="Documentos/Dados Pessoais" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-12" rendered="#{VisaoAlunoControle.apresentarCampoUtilizarDocumentoEstrangeiroDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Pessoa_utilizarDocumentoEstrangeiro}" />
+											<otm:selectBooleanCheckbox id="utilizarDocumentoEstrangeiro" value="#{VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro}" disabled="#{!VisaoAlunoControle.permitirAlterarCampoUtilizarDocumentoEstrangeiroDadosPessoais}">
+												<p:ajax event="click" update="panelDocumento" />
+											</otm:selectBooleanCheckbox>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_tipoDocumentoEstrangeiro}" />
+											<h:selectOneMenu value="#{VisaoAlunoControle.pessoaVO.tipoDocumentoEstrangeiro}" styleClass="#{VisaoAlunoControle.pessoaVO.cssObrigatoriedadeDocumentoEstrangeiroAluno}">
+												<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTipoDocumentoEstrangeiro}" />
+												<p:ajax event="change" update="panelDocumento" />
+											</h:selectOneMenu>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_numeroDocumentoEstrangeiro}" />
+											<h:inputText id="numeroDocumentoEstrangeiro" maxlength="30" styleClass="#{VisaoAlunoControle.pessoaVO.cssObrigatoriedadeDocumentoEstrangeiroAluno}" value="#{VisaoAlunoControle.pessoaVO.numeroDocumentoEstrangeiro}">
+												<p:ajax event="change" update="panelDocumento" />
+											</h:inputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarCpfDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_CPF}" />
+											<h:inputText id="cpf" onkeypress="return mascara(this.form, 'cpf', '999.999.999-99', event);" maxlength="14" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaVO.CPF}" disabled="#{!VisaoAlunoControle.permitirAlterarCpfDadosPessoais}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarCertidaoNascimentoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="Certidão de Nascimento" />
+											<h:inputText id="certidao" maxlength="40" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.certidaoNascimentoObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.certidaoNascimento}" />
+										</h:panelGroup>
+										<h:panelGroup id="test3" layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_RG}" />
+											<h:inputText id="rg" maxlength="25" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.rgObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.RG}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataEmissaoRG}" />
+											<otm:calendar id="dataEmissaoRG" inputClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.rgObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.dataEmissaoRG}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_orgaoEmissor}" />
+											<h:inputText id="orgaoEmissor" maxlength="200" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.rgObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.orgaoEmissor}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgDadosPessoais}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoEmissaoRG}" />
+												<h:selectOneMenu id="estadoEmissaoRG" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.rgObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.estadoEmissaoRG}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemEstadoEmissaoRGPessoa}" />
+												</h:selectOneMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="row mt5" rendered="#{VisaoAlunoControle.apresentarRegistroMilitarDadosPessoais and VisaoAlunoControle.pessoaVO.sexo != ''   and !AplicacaoControle.cliente.colegio}">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<h:outputText value="Registro Militar" styleClass="title" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'F'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_certificadoMilitar}" />
+												<h:inputText id="certificadoMilitarF" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.certificadoMilitar}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'M'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_certificadoMilitar}" />
+												<h:inputText id="certificadoMilitar" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.registroMilitarObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.certificadoMilitar}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'M'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataExpedicaoCertificadoMilitar}" />
+												<otm:calendar id="dataExpedicaoCertificadoMilitar" value="#{VisaoAlunoControle.pessoaVO.dataExpedicaoCertificadoMilitar}" inputClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.registroMilitarObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'F'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataExpedicaoCertificadoMilitar}" />
+												<otm:calendar id="dataExpedicaoCertificadoMilitarF" value="#{VisaoAlunoControle.pessoaVO.dataExpedicaoCertificadoMilitar}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'F'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_orgaoExpedidorCertificadoMilitar}" />
+												<h:inputText id="orgaoExpedidorCertificadoMilitarF" maxlength="20" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.orgaoExpedidorCertificadoMilitar}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'M'}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_orgaoExpedidorCertificadoMilitar}" />
+												<h:inputText id="orgaoExpedidorCertificadoMilitar" maxlength="20" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.registroMilitarObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.orgaoExpedidorCertificadoMilitar}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_situacaoMilitar}" />
+												<h:selectOneMenu styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.situacaoMilitar}" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'F'}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemSituacaoMilitar}" />
+												</h:selectOneMenu>
+												<h:selectOneMenu styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.registroMilitarObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.situacaoMilitar}" rendered="#{VisaoAlunoControle.pessoaVO.sexo == 'M'}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemSituacaoMilitar}" />
+												</h:selectOneMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+										<hr class="col-md-12" />
+										<h:panelGroup id="test1" layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarNaturalidadeNacionalidadeNascimentoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_naturalidade}" />
+											<h:panelGroup layout="block" styleClass="pn col-md-12">
+												<h:inputText readonly="true" id="naturalidade" maxlength="20" styleClass="#{VisaoAlunoControle.naturalidadeNacionalidadeObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.naturalidade.nome} - #{VisaoAlunoControle.pessoaVO.naturalidade.estado.sigla}" />
+												<span class="append-icon right"> <otm:commandIcon icon="#{msg_botoes.btn_icon_lupa_embutido}" id="consultaNaturalidade" alt="Localizar Cidade" update="formNaturalidade" oncomplete="PF('panelNaturalidade').show()" action="#{VisaoAlunoControle.limparMensagem}" /> </span>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup id="test2" layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarNaturalidadeNacionalidadeNascimentoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nacionalidade}" />
+											<h:selectOneMenu id="nacionalidade" styleClass="#{VisaoAlunoControle.naturalidadeNacionalidadeObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.nacionalidade.codigo}">
+												<f:selectItems value="#{VisaoAlunoControle.listaSelectItemNacionalidade}" />
+											</h:selectOneMenu>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDataNascimentoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataNasc}" />
+											<otm:calendar id="dataNasc" inputClass="#{VisaoAlunoControle.dataNascimentoObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.dataNasc}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarEstadoCivilDadosPessoais  and !AplicacaoControle.cliente.colegio}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoCivil}" />
+											<h:selectOneMenu id="estadoCivil" styleClass="#{VisaoAlunoControle.estadoCivilObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.estadoCivil}">
+												<f:selectItems value="#{VisaoAlunoControle.listaSelectItemEstadoCivilPessoa}" />
+											</h:selectOneMenu>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-12">
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarCorRacaNascimentoDadosPessoais}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_corRaca}" />
+												<h:selectOneMenu id="corRaca" styleClass="#{VisaoAlunoControle.corRacaObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.corRaca}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemCorRaca}" />
+												</h:selectOneMenu>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarSexoDadosPessoais}">
+												<h:outputText styleClass="field control-label tituloCampos" value="Sexo" />
+												<h:selectOneMenu id="sexo" styleClass="#{VisaoAlunoControle.sexoObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.sexo}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemSexoPessoa}" />
+												</h:selectOneMenu>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDeficienciaDadosPessoais}">
+												<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_deficiencia}" />
+												<h:selectOneMenu id="deficiencia" disabled="#{!VisaoAlunoControle.permitirAlterarDeficienciaDadosPessoais}" styleClass="form-control" value="#{VisaoAlunoControle.pessoaVO.deficiencia}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemDeficiencia}" />
+												</h:selectOneMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:outputText styleClass="col-md-12 title" value="Título Eleitoral"></h:outputText>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDadosEleitoraisDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_tituloEleitoral}" />
+											<h:inputText id="tituloEleitoral" maxlength="25" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.dadosEleitoraisObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.tituloEleitoral}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDadosEleitoraisDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataExpedicaoTituloEleitoral}" />
+											<otm:calendar id="dataExpedicaoTituloEleitoral" inputClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.dadosEleitoraisObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.dataExpedicaoTituloEleitoral}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDadosEleitoraisDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_zonaEleitoral}" />
+											<h:inputText id="zonaEleitoral" styleClass="#{!VisaoAlunoControle.pessoaVO.utilizarDocumentoEstrangeiro and VisaoAlunoControle.dadosEleitoraisObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.zonaEleitoral}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarAutorizoDivulgarInformacaoTerceiroDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_AutorizoDivulgacaoInformacoesATerceiros}" />
+											<h:panelGroup layout="block" styleClass="col-md-12 pn">
+												<otm:selectBooleanCheckbox id="autorizoDivulgacaoInformacoesATerceiros" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.autorizoDivulgacaoInformacoesTerceiros}" />
+											</h:panelGroup>
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" styleClass="row mn" rendered="#{VisaoAlunoControle.apresentarEnderecoDadosPessoais}">
+								<otm2:panel name="panelEndereco" styleClassFooter="dn">
+									<ui:define name="header">
+										<i class="fas fa-home mr5"></i>
+										<h:outputText value="Dados de Endereço" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-12">
+											<h:outputText styleClass="tituloCampos btn-block" value="#{msg_aplic.prt_Pessoa_resideExterior}" />
+											<otm:selectBooleanCheckbox id="resideExterior" value="#{VisaoAlunoControle.pessoaVO.resideExterior}">
+												<p:ajax event="change" update="form" process="form" />
+											</otm:selectBooleanCheckbox>
+										</h:panelGroup>
+										<h:panelGroup rendered="#{VisaoAlunoControle.pessoaVO.resideExterior}">
+											<h:panelGroup layout="block" styleClass="col-md-2">
+												<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_codigoPostal}" />
+												<h:inputText id="codigoPostal" maxlength="100" styleClass="form-control" value="#{VisaoAlunoControle.pessoaVO.codigoPostal}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-4">
+												<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_paisResideExterior}" />
+												<h:panelGroup layout="block" styleClass="col-md-12 pn">
+													<h:inputText id="paisResideExterior" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaVO.paisResideExterior.nome}" readonly="true" />
+													<span class="append-icon right">
+                                                        <otm:commandIcon tooltip="Consultar País" icon="#{msg_botoes.btn_icon_lupa_embutido}" render="formPaiz" action="#{VisaoAlunoControle.inicializarConsultaPaiz}" oncomplete="#{rich:component('panelPaiz')}.show();" >
+															<f:param name="alvoPais" value="ALUNO"/>
+														</otm:commandIcon>
+                                                        <otm:commandIcon tooltip="Limpar País" icon="#{msg_botoes.btn_icon_limpar_embutido}" update="panelEndereco" process="panelEndereco" action="#{VisaoAlunoControle.limparPaizResideExterior}" />
+													</span>
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-6">
+												<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_cidadeResideExterior}" />
+												<h:inputText id="cidadeResideExterior" maxlength="100" styleClass="form-control #{(VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.enderecoObrigatorioDadosPessoais) ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.pessoaVO.cidadeResideExterior}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-6">
+												<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoResideExterior}" />
+												<h:inputText id="estadoResideExterior" maxlength="100" styleClass="form-control" value="#{VisaoAlunoControle.pessoaVO.estadoResideExterior}" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!VisaoAlunoControle.pessoaVO.resideExterior}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_CEP}" />
+											<h:inputText id="CEP" disabled="#{!VisaoAlunoControle.permitirAlterarEnderecoDadosPessoais}" onkeypress="return mascara(this.form, 'form:CEP', '99.999-999', event);" onblur="ValidaCep(this)" size="14" maxlength="10" styleClass="#{VisaoAlunoControle.enderecoObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.CEP}">
+												<p:ajax event="change" process="@form" update="form:dbDadosPessoais" listener="#{VisaoAlunoControle.carregarEnderecoPessoa}" />
+											</h:inputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="#{VisaoAlunoControle.pessoaVO.resideExterior ? 'col-md-6' : 'col-md-4'}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_endereco}" />
+											<h:inputText id="endereco" size="48" maxlength="100" styleClass="#{(VisaoAlunoControle.enderecoObrigatorioDadosPessoais or VisaoAlunoControle.pessoaVO.resideExterior) ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.endereco}" disabled="#{!VisaoAlunoControle.permitirAlterarEnderecoDadosPessoais}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{VisaoAlunoControle.pessoaVO.resideExterior ? msg_aplic.prt_Pessoa_setorResideExterior : msg_aplic.prt_Pessoa_setor}" />
+											<h:inputText id="setor" size="20" maxlength="50" styleClass="form-control #{(VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.enderecoObrigatorioDadosPessoais || (!VisaoAlunoControle.pessoaVO.resideExterior)) ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.pessoaVO.setor}" disabled="#{!VisaoAlunoControle.permitirAlterarEnderecoDadosPessoais}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{!VisaoAlunoControle.pessoaVO.resideExterior}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_cidade}" />
+											<h:panelGroup layout="block" styleClass="pn col-md-12">
+												<h:inputText readonly="true" id="cidade" size="30" maxlength="30" styleClass="#{VisaoAlunoControle.enderecoObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.cidade.nome}" />
+												<span class="append-icon right"> <otm:commandIcon id="consultaCidades" alt="Localizar Cidade" rendered="#{VisaoAlunoControle.configuracaoGeralSistemaPrivilegiandoACfgDaUnidade.configuracaoAtualizacaoCadastralVO.permitirAlterarEndereco}" update="formCidade" oncomplete="PF('panelCidade').show()" icon="#{msg_botoes.btn_icon_lupa_embutido}" action="#{VisaoAlunoControle.setCidadeFiliacao(false)}" title="Consultar cidade" /> </span>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{VisaoAlunoControle.apresentarCampoNumeroEnderecoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_numero}" />
+											<h:inputText id="numero" size="8" maxlength="20" styleClass="form-control #{VisaoAlunoControle.campoNumeroEnderecoObrigatorioDadosPessoais ? 'camposObrigatorios' : ''}" value="#{VisaoAlunoControle.pessoaVO.numero}" disabled="#{!VisaoAlunoControle.permitirAlterarEnderecoDadosPessoais}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{VisaoAlunoControle.apresentarCampoComplementoEnderecoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_complemento}" />
+											<h:inputText id="complemento" size="35" maxlength="100" styleClass="form-control #{VisaoAlunoControle.campoComplementoEnderecoObrigatorioDadosPessoais ? 'camposObrigatorios' : ''}" value="#{VisaoAlunoControle.pessoaVO.complemento}" disabled="#{!VisaoAlunoControle.permitirAlterarEnderecoDadosPessoais}" />
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" styleClass="row mn" rendered="#{VisaoAlunoControle.apresentarContatoDadosPessoais}">
+								<otm2:panel name="panelContatos" styleClassFooter="dn">
+									<ui:define name="header">
+										<i class="fas fa-phone mr5"></i>
+										<h:outputText value="Contatos" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-2">
+                                            <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_celular}#{VisaoAlunoControle.pessoaVO.resideExterior ? ' Internacional' : ''}" />
+                                            <h:inputText id="celular" onkeyup="#{VisaoAlunoControle.pessoaVO.resideExterior ? 'return maskCelularInternational(\'form:celular\', event)' : 'return maskTelefone(\'form:celular\', event)'}" size="14" maxlength="15" styleClass="#{VisaoAlunoControle.celularObrigatorioDadosPessoais ? 'form-control camposObrigatorios' : 'form-control'}" value="#{VisaoAlunoControle.pessoaVO.celular}" />
+                                        </h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_telefoneRecado}" />
+											<h:inputText id="telefoneRecado" onkeyup="return maskTelefone('telefoneRecado',event)" size="14" maxlength="15" styleClass="form-control" value="#{VisaoAlunoControle.pessoaVO.telefoneRecado}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_telefoneRes}" />
+											<h:inputText id="telefoneRes" onkeyup="return maskTelefone('telefoneRes',event)" size="14" maxlength="15" styleClass="form-control" value="#{VisaoAlunoControle.pessoaVO.telefoneRes}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="E-mail" />
+											<h:inputText id="email" size="35" maxlength="100" styleClass="#{VisaoAlunoControle.emailObrigatorioDadosPessoais and VisaoAlunoControle.pessoaVO.idade >= 18 ? 'form-control camposObrigatorios' : 'form-control campos'}" value="#{VisaoAlunoControle.pessoaVO.email}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{!empty VisaoAlunoControle.pessoaVO.listaPessoaEmailInstitucionalVO_ApresentarHtml}">
+											<h:outputText styleClass="field control-label tituloCampos" value="E-mail Institucional" />
+											<h:inputText id="emailInstitucional" size="35" maxlength="100" styleClass="form-control camposSomenteLeitura" readonly="true" value="#{VisaoAlunoControle.pessoaVO.listaPessoaEmailInstitucionalVO_ApresentarHtml}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{!empty VisaoAlunoControle.pessoaVO.listaPessoaGsuiteVO_ApresentarHtml}">
+											<h:outputText styleClass="field control-label tituloCampos" value="E-mail Acadêmico" />
+											<h:inputText id="emailGsuite" size="35" maxlength="100" styleClass="form-control camposSomenteLeitura" readonly="true" value="#{VisaoAlunoControle.pessoaVO.listaPessoaGsuiteVO_ApresentarHtml}" />
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+							</h:panelGroup>
+
+							
+							<!-- 							<h:panelGroup layout="block" styleClass="row" rendered="#{VisaoAlunoControle.configuracaoGeralSistemaPrivilegiandoACfgDaUnidade.configuracaoAtualizacaoCadastralVO.apresentarCampoBancoCurriculo}"> -->
+							<!-- 								<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais}"> -->
+							<!-- 									<h:outputText styleClass="field control-label tituloCampos" value="Desejo Participar do #{VisaoAlunoControle.configuracaoGeralSistemaPrivilegiandoACfgDaUnidade.tituloTelaBancoCurriculum}" /> -->
+							<!-- 									<h:panelGroup layout="block" styleClass="col-md-12 pn"> -->
+							<!-- 										<otm:selectBooleanCheckbox id="participaBancoCurriculum" value="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum}"> -->
+							<!-- 											<p:ajax event="click" process="@form" update="dadosBasico" /> -->
+							<!-- 										</otm:selectBooleanCheckbox> -->
+							<!-- 									</h:panelGroup> -->
+							<!-- 								</h:panelGroup> -->
+							<!-- 								<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum}"> -->
+							<!-- 									<h:outputText styleClass="field control-label tituloCampos" value="Declaro que todas as informações aqui descritas são verdadeiras" /> -->
+							<!-- 									<h:panelGroup layout="block" styleClass="col-md-12 pn"> -->
+							<!-- 										<otm:selectBooleanCheckbox id="informacoesVerdadeiras" value="#{VisaoAlunoControle.pessoaVO.informacoesVerdadeiras}"> -->
+							<!-- 											<p:ajax event="click" process="@form" update="dadosBasico" /> -->
+							<!-- 										</otm:selectBooleanCheckbox> -->
+							<!-- 									</h:panelGroup> -->
+							<!-- 								</h:panelGroup> -->
+							<!-- 								<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum and !VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais}"> -->
+							<!-- 									<h:outputText styleClass="field control-label tituloCampos" value="Aceito divulgar meus dados no #{VisaoAlunoControle.configuracaoGeralSistemaPrivilegiandoACfgDaUnidade.tituloTelaBancoCurriculum}" /> -->
+							<!-- 									<h:panelGroup layout="block" styleClass="col-md-12 pn"> -->
+							<!-- 										<otm:selectBooleanCheckbox id="divulgarMeusDados" value="#{VisaoAlunoControle.pessoaVO.divulgarMeusDados}"> -->
+							<!-- 											<p:ajax event="click" process="@form" update="dadosBasico" /> -->
+							<!-- 										</otm:selectBooleanCheckbox> -->
+							<!-- 									</h:panelGroup> -->
+							<!-- 								</h:panelGroup> -->
+							<!-- 							</h:panelGroup> -->
+						</h:panelGroup>
+					</p:tab>
+
+					<p:tab id="bdAba2" name="nome2" process="@this" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome2')}" title="Formação Acadêmica" rendered="#{(VisaoAlunoControle.apresentarFormacaoAcademicaDadosPessoais or (!VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.meusDadosAbaFormacaoAcademica))   and !AplicacaoControle.cliente.colegio}">
+						<h:panelGroup id="pgAcademico" layout="block" styleClass="row mn">
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_curso}" />
+								<h:inputText maxlength="100" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.formacaoAcademicaVO.curso}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_tipoInst}" />
+								<h:selectOneMenu id="FormacaoAcademica_TipoInstFormacaoAcademica" styleClass="form-control #{VisaoAlunoControle.tipoInstituicaoFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.tipoInst}">
+									<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTipoInstFormacaoAcademica}" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-4">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_instituicao}" />
+								<h:inputText maxlength="100" styleClass="form-control #{VisaoAlunoControle.instituicaoFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.instituicao}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_modalidade}" />
+								<h:inputText size="70" maxlength="100" styleClass="form-control #{VisaoAlunoControle.modalidadeFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.modalidade}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_cidade}" />
+								<h:panelGroup layout="block" styleClass="pn col-md-12">
+									<h:inputText readonly="true" id="cidadeFormacao" size="30" maxlength="30" styleClass="form-control #{VisaoAlunoControle.cidadeFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.cidade.nome} - #{VisaoAlunoControle.formacaoAcademicaVO.cidade.estado.sigla}" />
+									<span class="append-icon right"> <otm:commandIcon id="consultaCidadesFormacao" tooltip="Localizar Cidade" oncomplete="PF('panelCidadeFormacaoAcademica').show()" icon="#{msg_botoes.btn_icon_lupa_embutido}" immediate="true" /> </span>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_escolaridade}" />
+								<h:selectOneMenu id="FormacaoAcademica_escolaridade" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.formacaoAcademicaVO.escolaridade}">
+									<f:selectItems value="#{VisaoAlunoControle.listaSelectItemEscolaridadeFormacaoAcademica}" />
+									<p:ajax event="change" update="bdAba2" process="bdAba2" listener="#{VisaoAlunoControle.montarListaSelectItemTitulo}" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{VisaoAlunoControle.apresentarListaSelectItemTitulo}">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Curso_titulo}" />
+								<h:selectOneMenu id="FormacaoAcademica_titulo" styleClass="form-control #{VisaoAlunoControle.tituloFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.titulo}">
+									<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTitulo}" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_areaConhecimento}" />
+								<h:panelGroup layout="block" styleClass="col-md-12 pn">
+									<h:selectOneMenu id="FormacaoAcademica_areaConhecimento" styleClass="form-control #{VisaoAlunoControle.areaConhecimentoFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.areaConhecimento.codigo}">
+										<f:selectItems value="#{VisaoAlunoControle.listaSelectItemAreaConhecimento}" />
+									</h:selectOneMenu>
+									<span class="append-icon right append-icon-combo"> <otm:commandIcon id="atualizarFormacaoAcademica" tooltip="Atualizar Formação Academica" action="#{VisaoAlunoControle.setListaSelectItemAreaConhecimento(null)}" icon="#{msg_botoes.btn_icon_atualizar_embutido}" process="@this" update="bdAba2" /> </span>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoAcademica_situacao}" />
+								<h:selectOneMenu id="FormacaoAcademica_situacao" styleClass="form-control #{VisaoAlunoControle.situacaoFormacaoAcademicoObrigatorioDadosPessoais ? 'camposObrigatorios' : 'campos'}" value="#{VisaoAlunoControle.formacaoAcademicaVO.situacao}">
+									<f:selectItems value="#{VisaoAlunoControle.listaSelectItemSituacaoFormacaoAcademica}" />
+									<p:ajax event="change" process="@form" listener="#{VisaoAlunoControle.formacaoAcademicaVO.getDesenharDataFim}" update="pgAcademico" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+							<h:panelGroup layout="block" rendered="#{VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}" styleClass="col-md-1">
+								<h:outputText styleClass="field control-label tituloCampos pn col-md-12" value="#{msg_aplic.prt_FormacaoAcademica_anoInicio}" />
+								<h:panelGroup layout="block" styleClass="pn col-md-12">
+									<p:spinner max="3000" thousandSeparator="" style="display:inline-block" id="anoDataInicio" rendered="#{VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}" value="#{VisaoAlunoControle.formacaoAcademicaVO.anoDataInicio}"  />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" rendered="#{VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos pn col-md-12" value="#{msg_aplic.prt_FormacaoAcademica_anoSemestreConclusao}" />
+								<h:panelGroup layout="block" styleClass="pn col-md-6">
+									<p:spinner max="3000" thousandSeparator="" style="display:inline-block" id="anoDataFim" rendered="#{VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}" value="#{VisaoAlunoControle.formacaoAcademicaVO.anoDataFim}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="pl5 col-md-6">
+									<p:spinner min="1" max="2" id="semestreDataFim" rendered="#{VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}" value="#{VisaoAlunoControle.formacaoAcademicaVO.semestreDataFim}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}">
+								<h:outputText styleClass="field control-label tituloCampos" value="Data Inicio" />
+								<otm:calendar id="dataInicio" value="#{VisaoAlunoControle.formacaoAcademicaVO.dataInicio}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!VisaoAlunoControle.formacaoAcademicaVO.desenharDataFim}">
+								<h:outputText styleClass="field control-label tituloCampos" value="Data Conclusão" />
+								<otm:calendar id="dataFim" value="#{VisaoAlunoControle.formacaoAcademicaVO.dataFim}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center m10">
+								<otm:commandButton action="#{VisaoAlunoControle.adicionarFormacaoAcademicaAluno}" update="pgMensagens, pgAcademico, formacaoAcademicaVO" value="Adicionar " title="Adicionar formação acadêmica" styleClass="btn btn-primary dark btn-adicionar" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="row mn">
+							<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="formacaoAcademicaVO" headerClass="consulta" columnClasses="colunaAlinhamento" value="#{VisaoAlunoControle.pessoaVO.formacaoAcademicaVOs}" rows="10" var="formacaoAcademicaItens">
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_FormacaoAcademica_curso}" />
+									</f:facet>
+									<h:outputText value="#{formacaoAcademicaItens.curso}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_FormacaoAcademica_instituicao}" />
+									</f:facet>
+									<h:outputText value="#{formacaoAcademicaItens.instituicao}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_FormacaoAcademica_escolaridade}" />
+									</f:facet>
+									<h:outputText value="#{formacaoAcademicaItens.escolaridade_Apresentar}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_FormacaoAcademica_situacao}" />
+									</f:facet>
+									<h:outputText value="#{formacaoAcademicaItens.situacao_Apresentar}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_botoes.btn_opcoes}" />
+									</f:facet>
+									<h:panelGroup>
+										<otm:commandIcon update="pgAcademico, pgMensagens, formacaoAcademicaVO" action="#{VisaoAlunoControle.editarFormacaoAcademica}" tooltip="#{msg_botoes.btn_editar}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" title="Editar formação acadêmica" />
+										<otm:commandIcon update="pgAcademico, pgMensagens, formacaoAcademicaVO" action="#{VisaoAlunoControle.removerFormacaoAcademica}" tooltip="#{msg_botoes.btn_excluir}" icon="#{msg_botoes.btn_icon_remover} iconePequeno" title="Remover formação acadêmica" />
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</p:tab>
+
+					<p:tab id="abaFiliacao" name="nome3" process="@this" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome3')}" title="Filiação" rendered="#{VisaoAlunoControle.apresentarFiliacaoDadosPessoais}">
+						<h:panelGroup id="pgFiliacao" layout="block" styleClass="row mn">
+							<h:panelGroup id="editarFiliacao">
+								<otm2:panel name="panelDocumento_fili" styleClassFooter="dn">
+									<ui:define name="header">
+										<i class="fas fa-id-card mr5"></i>
+										<h:outputText value="Documentos Pessoais" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_nome}" />
+											<h:inputText id="nomeFiliacao" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.nome}" readonly="#{(VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.usuarioLogado.pessoa.codigo eq VisaoAlunoControle.filiacaoEdicaoVO.pais.codigo)}" >
+												<p:ajax event= "change" status= "alterNomeFi" listener= "#{VisaoAlunoControle.setarNomeBatismoFiliacao}" update="nomeRegistralFiliacao, nomeFiliacao"/>
+											</h:inputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_tipo}" />
+											<h:selectOneMenu id="Filiacao_tipo" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.filiacaoEdicaoVO.tipo}" rendered="#{!VisaoAlunoControle.filiacaoEdicaoVO.editando}">
+												<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTipoFiliacao}" />
+												<p:ajax event="change" update="panelDocumento_fili" process= "panelDocumento_fili"/>
+											</h:selectOneMenu>
+											<h:inputText id="Filiacao_tipo_apresentar" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.tipo_Apresentar}" rendered="#{VisaoAlunoControle.filiacaoEdicaoVO.editando}" readonly="#{VisaoAlunoControle.filiacaoEdicaoVO.editando}" />
+										</h:panelGroup>
+										<h:panelGroup id="panelDescricaoTipoOutros" rendered="#{VisaoAlunoControle.filiacaoEdicaoVO.tipo eq 'OT'}" layout="block" styleClass="col-md-4">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_descricao_tipo_outros}" />
+											<h:inputText id="descricaoTipoOutros" size="67" maxlength="100" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.descricaoTipoOutro}"/>
+										</h:panelGroup>
+										<h:panelGroup id="panelGrauparentesco" rendered="#{VisaoAlunoControle.filiacaoEdicaoVO.tipo eq 'RL'}" layout="block" styleClass="col-md-4">
+												<h:outputText styleClass="field control-label tituloCampos" value="Grau Parentesco" />
+												<h:inputText id="grauparentesco" size="25" maxlength="60" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.grauParentesco}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nomeBatismo}" />
+											<h:inputText id="nomeRegistralFiliacao" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.nomeBatismo}" readonly="#{(VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.usuarioLogado.pessoa.codigo eq VisaoAlunoControle.filiacaoEdicaoVO.pais.codigo)}" >
+													<p:ajax event="change" status="alterNomeFi"  listener="#{VisaoAlunoControle.setarNomeSocialFiliacao}" update="nomeRegistralFiliacao, nomeFiliacao" />
+											</h:inputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarCpfFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_CPF}" />
+											<h:inputText id="filiacaoCPF" onkeypress="return mascara(this.form, 'filiacaoCPF', '999.999.999-99', event);" maxlength="14" styleClass="form-control" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.CPF}" readonly="#{(VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.usuarioLogado.pessoa.codigo eq VisaoAlunoControle.filiacaoEdicaoVO.pais.codigo)}">
+												<p:ajax event="change" process="@form" listener="#{VisaoAlunoControle.carregarFiliacaoPessoa}" update="pgFiliacao,pgMensagens" />
+											</h:inputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarDataNascimentoFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_DataNasc}" />
+											<otm:calendar id="filiacaodataNasc" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.dataNasc}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_RG}" />
+											<h:inputText id="filiacaoRG" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.RG}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarRgFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_orgaoEmissor}" />
+											<h:inputText id="filiacaoOrgaoEmissor" maxlength="200" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.orgaoEmissor}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarEstadoCivilFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_EstadoCivil}" />
+											<h:selectOneMenu id="filiacaoestadoCivil" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.estadoCivil}">
+												<f:selectItems value="#{VisaoAlunoControle.listaSelectItemEstadoCivilPessoa}" />
+											</h:selectOneMenu>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{VisaoAlunoControle.apresentarNacionalidadeFiliacaoDadosPessoais}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_Nacionalidade}" />
+											<h:panelGroup layout="block" styleClass="col-md-12 pn">
+												<h:selectOneMenu id="filiacaonacionalidade" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.nacionalidade.codigo}">
+													<f:selectItems value="#{VisaoAlunoControle.listaSelectItemNacionalidade}" />
+												</h:selectOneMenu>
+												<span class="append-icon right append-icon-combo"> <otm:commandIcon id="filiacaoatualizar_nacionalidade" action="#{VisaoAlunoControle.montarListaSelectItemNacionalidade}" icon="#{msg_botoes.btn_icon_atualizar_embutido}" immediate="true" update="filiacaonacionalidade" /> </span>
+											</h:panelGroup>
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+								<otm2:panel name="panelEndereco_fili" styleClassFooter="dn" rendered="#{VisaoAlunoControle.apresentarEnderecoFiliacaoDadosPessoais}">
+									<ui:define name="header">
+										<i class="fas fa-home mr5"></i>
+										<h:outputText value="Dados de Endereço" />
+									</ui:define>
+									<ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-12">
+                                            <h:outputText styleClass="tituloCampos btn-block" value="#{msg_aplic.prt_Pessoa_resideExterior}" />
+                                            <otm:selectBooleanCheckbox id="filiacaoResideExterior" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior}">
+                                                <a4j:ajax event="change" render="form" execute="form" />
+                                            </otm:selectBooleanCheckbox>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior}">
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_codigoPostal}" />
+                                                <h:inputText id="codigoPostalFiliacao" maxlength="100" styleClass="form-control" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.codigoPostal}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-4">
+                                                <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_paisResideExterior}" />
+                                                <h:panelGroup layout="block" styleClass="col-md-12 pn">
+                                                    <h:inputText id="paisResideExteriorFiliacao" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.paisResideExterior.nome}" readonly="true" />
+                                                    <span class="append-icon right">
+														<otm:commandIcon tooltip="Consultar País" icon="#{msg_botoes.btn_icon_lupa_embutido}" render="formPaiz" action="#{VisaoAlunoControle.inicializarConsultaPaiz}" oncomplete="#{rich:component('panelPaiz')}.show();" >
+															<f:param name="alvoPais" value="FILIACAO"/>
+														</otm:commandIcon>
+															<otm:commandIcon tooltip="Limpar País" icon="#{msg_botoes.btn_icon_limpar_embutido}" render="form:panelEndereco_fili" execute="form:panelEndereco" action="#{VisaoAlunoControle.limparPaizResideExteriorFiliacao}" />
+														</span>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-6">
+                                                <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_cidadeResideExterior}" />
+                                                <h:inputText id="cidadeResideExteriorFiliacao" maxlength="100" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.cidadeResideExterior}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-6">
+                                                <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoResideExterior}" />
+                                                <h:inputText id="estadoResideExterioFiliacao" maxlength="100" styleClass="form-control" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.estadoResideExterior}"  />
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                        <h:panelGroup id="panelCep" layout="block" styleClass="col-md-2" rendered="#{!VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior}">											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_CEP}" />
+											<h:inputText id="CEPFiliacao" onkeypress="return mascara(this.form, 'CEPFiliacao', '99.999-999', event);" onblur="ValidaCep(this)" size="10" maxlength="10" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.CEP}">
+												<p:ajax event="change" listener="#{VisaoAlunoControle.carregarEnderecoPessoaFiliacao}" process="@form" update="panelCep, filiacaoCidade, complementoFiliacao, numeroFiliacao, setorFiliacao, pgFiliacao" />
+											</h:inputText>
+											<h:message for="CEPFiliacao" styleClass="field control-label mensagemDetalhada col-md-12" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior ? 'col-md-6' : 'col-md-4'}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_endereco}" />
+											<h:inputText id="enderecoFiliacao" maxlength="100" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.endereco}" />
+										</h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-4">
+                                            <h:outputText styleClass="field control-label tituloCampos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior ? msg_aplic.prt_Pessoa_setorResideExterior : msg_aplic.prt_Pessoa_setor}" />
+											<h:inputText id="setorFiliacao" maxlength="50" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.setor}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-2">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_numero}" />
+											<h:inputText id="numeroFiliacao" maxlength="20" onkeydown="aceitarSomenteValorNumerico(this)" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.numero}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_complemento}" />
+											<h:inputText id="complementoFiliacao" maxlength="100" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.complemento}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{!VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior}">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_cidade}" />
+											<h:panelGroup layout="block" styleClass="col-md-12 pn">
+												<h:inputText readonly="true" id="filiacaoCidade" styleClass="form-control camposSomenteLeitura" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.cidade.nome} - #{VisaoAlunoControle.filiacaoEdicaoVO.pais.cidade.estado.sigla}" />
+												<span class="append-icon right"> <otm:commandIcon alt="Localizar Cidade" update="formCidade" oncomplete="PF('panelCidade').show()" action="#{VisaoAlunoControle.setCidadeFiliacao(true)}" icon="#{msg_botoes.btn_icon_lupa_embutido}" /> </span>
+											</h:panelGroup>
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+								<otm2:panel name="panelContatos_fili" styleClassFooter="dn" rendered="#{VisaoAlunoControle.apresentarContatoFiliacaoDadosPessoais}">
+									<ui:define name="header">
+										<i class="fas fa-phone mr5"></i>
+										<h:outputText value="Contatos" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos" value="E-mail" />
+											<h:inputText id="filiacao_email" maxlength="100" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.email}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+                                            <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_celular}#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior ? ' Internacional' : ''}" />
+                                            <h:inputText id="filiacaoCelular" onkeyup="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.resideExterior ? 'return maskCelularInternational(\'form:celular\', event)' : 'return maskTelefone(\'form:celular\', event)'}" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.celular}" />
+                                        </h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_telefoneComer}" />
+											<h:inputText id="filiacaoTelefoneCom" onkeyup="return maskTelefone('filiacaoTelefoneCom',event)" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.telefoneComer}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_telefoneRes}" />
+											<h:inputText id="filiacaoTelefoneRes" onkeyup="return maskTelefone('filiacaoTelefoneRes',event)" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.telefoneRes}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-3">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_telefoneRecado}" />
+											<h:inputText id="filiacaoRecado" onkeyup="return maskTelefone('filiacaoRecado',event)" size="14" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.pais.telefoneRecado}" />
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+								<otm2:panel name="panelAutorizacao_fili" styleClassFooter="dn">
+									<ui:define name="header">
+										<i class="fas fa-id-card mr5"></i>
+										<h:outputText value="Autorização" />
+									</ui:define>
+									<ui:define name="body">
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos  pn col-md-12" value="#{msg_aplic.prt_Aluno_AutorizoDivulgacaoDadosAcademicos}" />
+											<otm:selectBooleanCheckbox id="autorizoDivulgacaoDadosAcademicos" value="#{VisaoAlunoControle.filiacaoEdicaoVO.autorizoDivulgacaoDadosAcademicos}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos  pn col-md-12" value="#{msg_aplic.prt_Aluno_AutorizoDivulgacaoDadosFinanceiro}" />
+											<otm:selectBooleanCheckbox id="autorizoDivulgacaoDadosFinanceiros" value="#{VisaoAlunoControle.filiacaoEdicaoVO.autorizoDivulgacaoDadosFinanceiros}" />
+										</h:panelGroup>
+									</ui:define>
+								</otm2:panel>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 m5 text-center">
+								<otm:commandButton id="adicionarFiliacao" value="Adicionar Filiação" tooltip="Adicionar Filiação" rendered="#{!VisaoAlunoControle.filiacaoEdicaoVO.editando and !(VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais)}" action="#{VisaoAlunoControle.adicionarFiliacao}" accesskey="6" update="form" icon="#{msg_botoes.btn_icon_adicionar_embutido}" styleClass="btn btn-primary" />
+								<otm:commandButton id="confirmarFilicao" value="Confirmar Edição Filiação" tooltip="Confirmar Edição Filiação" rendered="#{VisaoAlunoControle.filiacaoEdicaoVO.editando}" action="#{VisaoAlunoControle.confirmarEdicaoFiliacao}" accesskey="6" update="form" icon="#{msg_botoes.btn_icon_selecionar_embutido}" styleClass="btn btn-success" />
+							</h:panelGroup>
+							<p:dataTable style="margin-top: 15px" id="filiacaoVOs" width="100%" columnClasses="colunaAlinhamento" value="#{VisaoAlunoControle.pessoaVO.filiacaoVOs}" var="filiacaoItens">
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_Filiacao_nome}" />
+									</f:facet>
+									<h:outputText value="#{filiacaoItens.pais.nome}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_Filiacao_tipo}" />
+									</f:facet>
+									<h:outputText value="#{filiacaoItens.getTipo_Apresentar()}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_Aluno_AutorizoDivulgacaoDadosAcademicos}" />
+									</f:facet>
+									<otm:selectBooleanCheckbox id="autorizoDivulgacaoDadosAcademicos" value="#{filiacaoItens.autorizoDivulgacaoDadosAcademicos}" disabled="true">
+									</otm:selectBooleanCheckbox>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_Aluno_AutorizoDivulgacaoDadosFinanceiro}" />
+									</f:facet>
+									<otm:selectBooleanCheckbox id="autorizoDivulgacaoDadosFinanceiros" value="#{filiacaoItens.autorizoDivulgacaoDadosFinanceiros}" disabled="true">
+									</otm:selectBooleanCheckbox>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_botoes.btn_opcoes}" />
+									</f:facet>
+									<h:panelGroup>
+										<otm:commandIcon id="editarFiliacao" update="pgFiliacao" action="#{VisaoAlunoControle.editarFiliacao}" tooltip="#{msg_botoes.btn_editar}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" rendered="#{(VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.usuarioLogado.pessoa.codigo eq filiacaoItens.pais.codigo) or !VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais}" />
+										<otm:commandIcon id="removerFiliacao" update="pgFiliacao" action="#{VisaoAlunoControle.removerFiliacao}" tooltip="#{msg_botoes.btn_remover}" icon="#{msg_botoes.btn_icon_remover} iconePequeno" rendered="#{!VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and filiacaoItens.isNovoObj()}" />
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</p:tab>
+
+<!-- 					<p:tab id="abaDadosComerciais" name="nome4" process="@this" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome4')}" title="Experiências Profissionais" rendered="#{(VisaoAlunoControle.apresentarDadosComerciaisDadosPessoais or (!VisaoAlunoControle.habilitarParametrizacaoVisaoAluno and VisaoAlunoControle.meusDadosAbaExperienciasProfissionais))  and !AplicacaoControle.cliente.colegio}"> -->
+<!-- 						<h:panelGroup id="pgDadosComerciais" layout="block" styleClass="row"> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-6"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_nomeEmpresa}" /> -->
+<!-- 								<h:inputText id="nomeEmpresa" value="#{VisaoAlunoControle.dadosComerciaisVO.nomeEmpresa}" styleClass="form-control camposObrigatorios" size="40" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-6"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_cargoEmpresa}" /> -->
+<!-- 								<h:inputText id="cargoPessoaEmpresa" value="#{VisaoAlunoControle.dadosComerciaisVO.cargoPessoaEmpresa}" styleClass="form-control camposObrigatorios" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-2"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_telefoneComer}" /> -->
+<!-- 								<h:inputText id="telefoneComer" onkeyup="return maskTelefone('telefoneComer',event)" size="14" maxlength="14" styleClass="form-control campos" value="#{VisaoAlunoControle.dadosComerciaisVO.telefoneComer}" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-2"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_DadosComerciais_dataAdmissao}" /> -->
+<!-- 								<otm:calendar id="dataAdmissao" value="#{VisaoAlunoControle.dadosComerciaisVO.dataAdmissao}" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{VisaoAlunoControle.dadosComerciaisVO.desenharDataDemissao}"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_DadosComerciais_dataDemissao}" /> -->
+<!-- 								<otm:calendar id="dataDemissao" value="#{VisaoAlunoControle.dadosComerciaisVO.dataDemissao}" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-2"> -->
+<!-- 								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_empregoAtual}" /> -->
+<!-- 								<h:panelGroup layout="block" styleClass="col-md-12 pn"> -->
+<!-- 									<otm:selectBooleanCheckbox id="empregoAtual" value="#{VisaoAlunoControle.dadosComerciaisVO.empregoAtual}"> -->
+<!-- 										<p:ajax event="click" process="@form" update="pgDadosComerciais" /> -->
+<!-- 									</otm:selectBooleanCheckbox> -->
+<!-- 								</h:panelGroup> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="col-md-12 pn"> -->
+<!-- 								<h:panelGroup layout="block" styleClass="col-md-6"> -->
+<!-- 									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Aluno_principaisAtividades}" /> -->
+<!-- 									<h:inputTextarea id="principaisAtividades" value="#{VisaoAlunoControle.dadosComerciaisVO.principaisAtividades}" styleClass="form-control camposObrigatorios" /> -->
+<!-- 								</h:panelGroup> -->
+<!-- 								<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{VisaoAlunoControle.dadosComerciaisVO.desenharDataDemissao}"> -->
+<!-- 									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_DadosComerciais_motivoDesligamento}" /> -->
+<!-- 									<h:inputTextarea id="motivoDesligamento" value="#{VisaoAlunoControle.dadosComerciaisVO.motivoDesligamento}" styleClass="form-control campos" /> -->
+<!-- 								</h:panelGroup> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="row" style="margin-top: 15px"> -->
+<!-- 								<h:panelGroup layout="block" styleClass="col-md-12 text-center"> -->
+<!-- 									<otm:commandButton styleClass="btn btn-primary dark btn-adicionar" action="#{VisaoAlunoControle.adicionarDadosComerciais}" value="#{msg_botoes.btn_adicionar}" accesskey="5" update="pgDadosComerciais,pgMensagens" /> -->
+<!-- 								</h:panelGroup> -->
+<!-- 							</h:panelGroup> -->
+<!-- 							<h:panelGroup layout="block" styleClass="row mn"> -->
+<!-- 								<p:dataTable id="dadosComerciaisVO" width="100%" headerClass="consulta" value="#{VisaoAlunoControle.pessoaVO.dadosComerciaisVOs}" var="dadosComerciaisItens"> -->
+<!-- 									<p:column style="text-align: center !important"> -->
+<!-- 										<f:facet name="header"> -->
+<!-- 											<h:outputText value="#{msg_aplic.prt_Aluno_nomeEmpresa}" /> -->
+<!-- 										</f:facet> -->
+<!-- 										<h:outputText value="#{dadosComerciaisItens.nomeEmpresa}" /> -->
+<!-- 									</p:column> -->
+<!-- 									<p:column style="text-align: center !important"> -->
+<!-- 										<f:facet name="header"> -->
+<!-- 											<h:outputText value="#{msg_aplic.prt_Aluno_cargoEmpresa}" /> -->
+<!-- 										</f:facet> -->
+<!-- 										<h:outputText value="#{dadosComerciaisItens.cargoPessoaEmpresa}" /> -->
+<!-- 									</p:column> -->
+<!-- 									<p:column style="text-align: center !important"> -->
+<!-- 										<f:facet name="header"> -->
+<!-- 											<h:outputText value="#{msg_aplic.prt_Pessoa_cidade}" /> -->
+<!-- 										</f:facet> -->
+<!-- 										<h:outputText value="#{dadosComerciaisItens.cidadeEmpresa.nome}" /> -->
+<!-- 									</p:column> -->
+<!-- 									<p:column style="text-align: center !important"> -->
+<!-- 										<f:facet name="header"> -->
+<!-- 											<h:outputText value="#{msg_aplic.prt_Pessoa_empregoAtual}" /> -->
+<!-- 										</f:facet> -->
+<!-- 										<h:outputText value="#{dadosComerciaisItens.empregoAtual_Apresentar}" /> -->
+<!-- 									</p:column> -->
+<!-- 									<p:column style="text-align: center !important"> -->
+<!-- 										<f:facet name="header"> -->
+<!-- 											<h:outputText value="#{msg_botoes.btn_opcoes}" /> -->
+<!-- 										</f:facet> -->
+<!-- 										<h:panelGroup> -->
+<!-- 											<otm:commandIcon id="editarExperienciaProfissional" update="pgDadosComerciais" action="#{VisaoAlunoControle.editarDadosComerciais}" tooltip="#{msg_botoes.btn_editar}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" /> -->
+<!-- 											<otm:commandIcon id="removerExperienciaProfissional" update="pgDadosComerciais" action="#{VisaoAlunoControle.removerDadosComerciais}" tooltip="#{msg_botoes.btn_excluir}" icon="#{msg_botoes.btn_icon_limpar} iconePequeno" /> -->
+<!-- 										</h:panelGroup> -->
+<!-- 									</p:column> -->
+<!-- 								</p:dataTable> -->
+<!-- 							</h:panelGroup> -->
+<!-- 						</h:panelGroup> -->
+<!-- 					</p:tab> -->
+
+					<!-- 	<p:tab id="abaFormacaoExtraCurricular" title="Formação Extra Curricular" update="dadosBasico" process="@this" actionListener="#{VisaoAlunoControle.processAction}" rendered="#{!VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.meusDadosAbaFormacaoExtraCurricular and VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.apresentarCampoFormacaoExtraCurricular and VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.habilitarRecursoAtualizacaoCadastral}"> 
+					<h:panelGroup id="pgFormacaoExtraCurricular" layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-6">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoExtraCurricular_instituicao}" />
+							<h:inputText id="instituicao" value="#{VisaoAlunoControle.formacaoExtraCurricularVO.instituicao}" styleClass="form-control camposObrigatorios" size="40" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-6">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoExtraCurricular_curso}" />
+							<h:inputText id="curso" value="#{VisaoAlunoControle.formacaoExtraCurricularVO.curso}" styleClass="form-control camposObrigatorios" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoExtraCurricular_anoRealizacaoConclusao}" />
+							<h:inputText id="anoRealizacaoConclusao" value="#{VisaoAlunoControle.formacaoExtraCurricularVO.anoRealizacaoConclusao}" styleClass="form-control campos" onkeydown="aceitarSomenteValorNumerico(this)" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FormacaoExtraCurricular_cargaHoraria}" />
+							<h:inputText id="cargaHoraria" value="#{VisaoAlunoControle.formacaoExtraCurricularVO.cargaHoraria}" styleClass="form-control campos" onkeydown="aceitarSomenteValorNumerico(this)" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center" style="margin:10px">
+							<otm:commandButton action="#{VisaoAlunoControle.adicionarFormacaoExtraCurricular}" value="#{msg_botoes.btn_adicionar}" update="pgMensagens, pgFormacaoExtraCurricular" styleClass="btn btn-primary dark btn-adicionar" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="row" style="margin-top: 15px">
+							<h:panelGroup layout="block" styleClass="col-md-12">
+								<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="formacaoExtraCurricularVO" width="100%" headerClass="consulta" rowClasses="linhaImparSubordinado, linhaParSubordinado"  value="#{VisaoAlunoControle.pessoaVO.formacaoExtraCurricularVOs}" var="formacaoExtraCurricularItens">
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_aplic.prt_FormacaoExtraCurricular_instituicao}" />
+										</f:facet>
+										<h:outputText value="#{formacaoExtraCurricularItens.instituicao}" />
+									</p:column>
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_aplic.prt_FormacaoExtraCurricular_curso}" />
+										</f:facet>
+										<h:outputText value="#{formacaoExtraCurricularItens.curso}" />
+									</p:column>
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_aplic.prt_FormacaoExtraCurricular_anoRealizacaoConclusao}" />
+										</f:facet>
+										<h:outputText value="#{formacaoExtraCurricularItens.anoRealizacaoConclusao}" />
+									</p:column>
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_aplic.prt_FormacaoExtraCurricular_cargaHoraria}" />
+										</f:facet>
+										<h:outputText value="#{formacaoExtraCurricularItens.cargaHoraria}" />
+									</p:column>
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_botoes.btn_opcoes}" />
+										</f:facet>
+										<h:panelGroup>
+											<otm:commandIcon id="btnEditarFormacaoExtra" update="pgFormacaoExtraCurricular" action="#{VisaoAlunoControle.editarFormacaoExtraCurricular}" tooltip="#{msg_botoes.btn_editar}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" />
+											<otm:commandIcon id="btnRemoverFormacaoExtra" update="pgFormacaoExtraCurricular" action="#{VisaoAlunoControle.removerFormacaoExtraCurricular}" tooltip="#{msg_botoes.btn_excluir}" accesskey="7" icon="#{msg_botoes.btn_icon_remover} iconePequeno" />
+										</h:panelGroup>
+									</p:column>
+								</p:dataTable>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+					</p:tab>
+
+					<p:tab id="dbAba5" title="Qualificações e Informações Complementares" update="dadosBasico" process="@this" rendered="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum and VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.apresentarCampoQualificacaoComplementar and VisaoAlunoControle.meusDadosAbaQualificaoesInformacoesComplementares and VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.habilitarRecursoAtualizacaoCadastral}">
+						<h:panelGroup id="pgIdioma" layout="block" styleClass="row">
+							<h:outputText styleClass="field control-label tituloCamposNegrito" value="Idiomas" />
+							<h:panelGroup layout="block" styleClass="row">
+								<h:panelGroup layout="block" styleClass="col-md-1">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_ingles}" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="ingles" value="#{VisaoAlunoControle.pessoaVO.ingles}">
+											<p:ajax event="click" update="pgIdioma" process="@form" />
+										</otm:selectBooleanCheckbox>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2 " rendered="#{VisaoAlunoControle.pessoaVO.ingles}">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nivel}" />
+									<h:selectOneMenu styleClass="form-control campos" id="inglesNivel" value="#{VisaoAlunoControle.pessoaVO.inglesNivel}">
+										<f:selectItems value="#{VisaoAlunoControle.tipoComboNivelIngles}" />
+									</h:selectOneMenu>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-1">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_espanhol}" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox update="pgIdioma" id="espanhol" value="#{VisaoAlunoControle.pessoaVO.espanhol}">
+											<p:ajax event="click" update="pgIdioma" process="@form" />
+										</otm:selectBooleanCheckbox>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{VisaoAlunoControle.pessoaVO.espanhol}">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nivel}" />
+									<h:selectOneMenu styleClass="form-control campos" id="espanholNivel" value="#{VisaoAlunoControle.pessoaVO.espanholNivel}">
+										<f:selectItems value="#{VisaoAlunoControle.tipoComboNivelEspanhol}" />
+									</h:selectOneMenu>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-1">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_frances}" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="frances" value="#{VisaoAlunoControle.pessoaVO.frances}">
+											<p:ajax event="click" update="pgIdioma" process="@form" />
+										</otm:selectBooleanCheckbox>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{VisaoAlunoControle.pessoaVO.frances}">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nivel}" />
+									<h:selectOneMenu styleClass="form-control campos" id="francesNivel" value="#{VisaoAlunoControle.pessoaVO.francesNivel}">
+										<f:selectItems value="#{VisaoAlunoControle.tipoComboNivelFrances}" />
+									</h:selectOneMenu>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_outrosIdiomas}" />
+									<h:inputText size="20" maxlength="20" styleClass="form-control campos" id="outrosIdiomas" value="#{VisaoAlunoControle.pessoaVO.outrosIdiomas}">
+										<p:ajax event="change" valueChangeListener="#{VisaoAlunoControle.pessoaVO.outrosIdiomas}" process="@form" update="pgIdioma" />
+									</h:inputText>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{not empty VisaoAlunoControle.pessoaVO.outrosIdiomas}">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nivel}" />
+									<h:selectOneMenu styleClass="form-control campos" id="outrosIdiomasNivel" value="#{VisaoAlunoControle.pessoaVO.outrosIdiomasNivel}">
+										<f:selectItems value="#{VisaoAlunoControle.tipoComboNivelOutrosIdiomas}" />
+									</h:selectOneMenu>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup id="pgSoftware" layout="block" styleClass="row">
+							<h:outputText styleClass="tituloCamposNegrito" value="Softwares" />
+							<h:panelGroup layout="block" styleClass="row">
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Windows" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="windows" value="#{VisaoAlunoControle.pessoaVO.windows}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Word" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="word" value="#{VisaoAlunoControle.pessoaVO.word}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Excel" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="excel" value="#{VisaoAlunoControle.pessoaVO.excel}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Access" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="access" value="#{VisaoAlunoControle.pessoaVO.access}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="PowerPoint" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="powerPoint" value="#{VisaoAlunoControle.pessoaVO.powerPoint}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Internet" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="internet" value="#{VisaoAlunoControle.pessoaVO.internet}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="SAP" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="sap" value="#{VisaoAlunoControle.pessoaVO.sap}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="CorelDraw" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="corelDraw" value="#{VisaoAlunoControle.pessoaVO.corelDraw}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="AutoCad" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="autoCad" value="#{VisaoAlunoControle.pessoaVO.autoCad}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Photoshop" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="photoshop" value="#{VisaoAlunoControle.pessoaVO.photoshop}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="Microsiga" />
+									<h:panelGroup layout="block" styleClass="col-md-12 pn">
+										<otm:selectBooleanCheckbox id="microsiga" value="#{VisaoAlunoControle.pessoaVO.microsiga}" />
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 pn">
+								<h:panelGroup layout="block" styleClass="col-md-6">
+									<h:outputText styleClass="field control-label tituloCampos" value="Outros Softwares" />
+									<h:inputTextarea styleClass="form-control campos" id="outrosSoftwares" value="#{VisaoAlunoControle.pessoaVO.outrosSoftwares}" onkeypress="return validarQtdeCaracteres(this.value, 100);" />
+								</h:panelGroup>
+								<h:panelGroup id="panelQualificacaoAtividadeComplementar" layout="block" styleClass="col-md-6">
+									<h:outputText style="margin-right:10px" styleClass="field control-label tituloCamposNegrito" value="Qualificações e Atividades Complementares" />
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Vagas_informacoesAdicionais}" />
+									<h:inputTextarea value="#{VisaoAlunoControle.pessoaVO.informacoesAdicionais}" styleClass="form-control campos" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:tab>
+
+					<p:tab id="abaAreaProfissional" update="dadosBasico" process="@this" title="Objetivo" rendered="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum and !VisaoAlunoControle.usuarioLogado.isApresentarVisaoPais and VisaoAlunoControle.meusDadosAbaObjetivo}">
+						<h:panelGroup id="pgAreaProfissional" layout="block" styleClass="row">
+							<h:panelGroup layout="block" styleClass="row">
+								<h:panelGroup layout="block" styleClass="col-md-6">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Vagas_areaProfissional}" />
+									<h:selectOneMenu id="areaProfissional" styleClass="form-control campos" value="#{VisaoAlunoControle.areaProfissionalVO.codigo}">
+										<f:selectItems value="#{VisaoAlunoControle.listaSelectItemAreaProfissional}" />
+									</h:selectOneMenu>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-12 text-center" style="margin:10px">
+									<otm:spacer width="100%" />
+									<otm:commandButton action="#{VisaoAlunoControle.adicionarAreaProfissional}" styleClass="btn btn-primary dark btn-adicionar" value="#{msg_botoes.btn_adicionar}" accesskey="5" update="pgAreaProfissional" title="Adicionar Área Profissional" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row" style="margin-top: 15px">
+								<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="areaProfissionalVO" width="100%" headerClass="consulta" rowClasses="linhaImparSubordinado, linhaParSubordinado"  value="#{VisaoAlunoControle.pessoaVO.areaProfissionalInteresseContratacaoVOs}" var="apicItens">
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_aplic.prt_AreaProfissional_descricaoAreaProfissional}" />
+										</f:facet>
+										<h:outputText value="#{apicItens.areaProfissional.descricaoAreaProfissional}" />
+									</p:column>
+									<p:column style="text-align: center !important">
+										<f:facet name="header">
+											<h:outputText value="#{msg_botoes.btn_opcoes}" />
+										</f:facet>
+										<h:panelGroup>
+											<otm:commandIcon id="editarAreaProfissional" update="pgMensagens, pgAreaProfissional" action="#{VisaoAlunoControle.editarAreaProfissional}" tooltip="#{msg_botoes.btn_editar}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" />
+											<otm:commandIcon id="removerAreaProfissional" update="pgAreaProfissional" action="#{VisaoAlunoControle.removerAreaProfissional}" tooltip="#{msg_botoes.btn_excluir}" accesskey="7" icon="#{msg_botoes.btn_icon_limpar} iconePequeno" />
+										</h:panelGroup>
+									</p:column>
+								</p:dataTable>
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:tab> -->
+
+					<!--  	<p:tab id="uploadArquivoTab" update="dadosBasico" process="@this" title="#{msg_aplic.prt_CurriculumPessoa_upload}" rendered="#{VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.apresentarCampoUploadCurriculo and VisaoAlunoControle.configuracaoGeralPadraoSistema.configuracaoAtualizacaoCadastralVO.habilitarRecursoAtualizacaoCadastral}">
+						<h:panelGroup id="curriculumPessoa" layout="block" styleClass="row">
+							<h:panelGroup layout="block" styleClass="row">
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_CurriculumPessoa_nomeRealArquivo}" />
+									<p:fileUpload invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido #{LoginControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload}MB." auto="true" mode="advanced" label="Selecionar Arquivo" previewWidth="390" listener="#{VisaoAlunoControle.uploadArquivoCurriculum}" allowTypes="#{LoginControle.getExtensaoUpload('pdf')}" invalidFileMessageAdd="#{LoginControle.getMensagemArquivoInvalido('pdf')}" invalidFileMessage="#{LoginControle.getMensagemArquivoInvalido('pdf')}" fileLimit="1" addControlLabel="Selecionar Arquivo" cancelLabel="Cancelar" sizeLimit="#{LoginControle.limiteUpload}" id="upload2">
+									</p:fileUpload>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_CurriculumPessoa_nomeApresentacaoArquivo}" />
+								<h:inputText size="50" maxlength="100" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.curriculumPessoaVO.nomeApresentacaoArquivo}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_CurriculumPessoa_descricao}" />
+								<h:inputTextarea styleClass="form-control campos" value="#{VisaoAlunoControle.curriculumPessoaVO.descricao}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center" style="margin:10px">
+							<otm:commandButton styleClass="btn btn-primary dark btn-adicionar" update="itensCurriculumPessoa, msgCurriculumPessoa, curriculumPessoa" value="#{msg_botoes.btn_adicionar}" action="#{VisaoAlunoControle.adicionarArquivoCurriculum}" />
+						</h:panelGroup>
+						<h:panelGroup id="itensCurriculumPessoa" layout="block" styleClass="row" style="margin-top: 15px">
+							<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" headerClass="consulta" rendered="#{!empty VisaoAlunoControle.pessoaVO.curriculumPessoaVOs}" width="100%" value="#{VisaoAlunoControle.pessoaVO.curriculumPessoaVOs}" var="curriculumPessoaItens">
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_CurriculumPessoa_nomeApresentacaoArquivo}" />
+									</f:facet>
+									<h:outputText styleClass="field control-label tituloCampos" value="#{curriculumPessoaItens.nomeApresentacaoArquivo}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_CurriculumPessoa_descricao}" />
+									</f:facet>
+									<h:outputText styleClass="field control-label tituloCampos" value="#{curriculumPessoaItens.descricao}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_aplic.prt_CurriculumPessoa_dataInclusao}" />
+									</f:facet>
+									<h:outputText styleClass="field control-label tituloCampos" value="#{curriculumPessoaItens.dataCadastro}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="#{msg_botoes.btn_opcoes}" />
+									</f:facet>
+									<otm:commandIcon icon="#{msg_botoes.btn_icon_limpar} iconePequeno" update="itensCurriculumPessoa, msgCurriculumPessoa" tooltip="#{msg_botoes.btn_excluir}" action="#{VisaoAlunoControle.excluirArquivoCurriculum}" />
+									<otm:commandIcon icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="#{msg_botoes.btn_download}" oncomplete="#{VisaoAlunoControle.caminhoServidorDownloadCurriculum}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</p:tab> -->
+
+
+
+					<p:tab title="#{VisaoAlunoControle.usuarioLogado.isApresentarVisaoAluno ? 'Ficha Médica' : 'Ficha Médica do Aluno'}" name="nome4" process="@this" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome6')}" rendered="#{VisaoAlunoControle.apresentarFichaMedicaAluno}">
+						<h:panelGroup layout="block" styleClass="row mn">
+							<h:panelGroup layout="block" styleClass="col-md-4">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_nomeMedico}" />
+								<h:inputText id="nomeMedico" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.nomeMedico}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_telefoneMedico}" />
+								<h:inputText id="telefoneMedico" onkeyup="return maskTelefone('telefoneMedico',event)" size="13" maxlength="15" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.telefoneMedico}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-4">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_planoSaude}" />
+								<h:inputText id="planoSaude" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.planoSaude}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_telefonePlanoSaude}" />
+								<h:inputText id="telefonePlanoSaude" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.telefonePlanoSaude}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-2">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_tipoSanguineo}" />
+								<h:selectOneMenu id="tipoSanguineo" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.tipoSanguineo}" disabled="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}">
+									<f:selectItems value="#{VisaoAlunoControle.listaSelectItemTipoSanguineo}" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-4">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_alergia}" />
+								<h:inputText id="alergia" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.alergia}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_doencaGrave}" />
+								<h:inputText id="doencaGrave" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.doencaGrave}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_remedioEspecial}" />
+								<h:inputText id="remedioEspecial" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.remedioEspecial}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_diagnostico}" />
+								<h:inputText id="diagnostico" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.diagnostico}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-6">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_FichaMedica_apoioRecurso}" />
+								<h:inputText id="apoioRecurso" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaVO.apoioRecurso}" readonly="#{!VisaoAlunoControle.permitirAlterarFichaMedicaAluno}" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:tab>
+
+					<p:tab title="#{VisaoAlunoControle.usuarioLogado.isApresentarVisaoAluno ? 'Responsáveis Autorizados Por Busca' : 'Responsáveis Autorizados Por Buscar Aluno'}" id="tabResponsavelAutorizadoBuscaAluno" rendered="#{VisaoAlunoControle.apresentarResponsavelAutorizadoBuscarAluno}" name="nome5" process="@form" update="form" actionListener="#{VisaoAlunoControle.navegarAba('nome7')}">
+						<h:panelGroup layout="block" styleClass="row mn bg-white rounded p5">
+							<h:panelGroup rendered="#{!VisaoAlunoControle.usuarioLogado.isApresentarVisaoAluno}">
+								<h:panelGroup layout="block" styleClass="col-md-1 text-center p5">
+									<h:panelGroup rendered="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.existeImagem}" layout="block" styleClass="circle">
+										<h:graphicImage id="fotoResponsavel" alt="Alterar Foto" style="width:64px; height:64px;border-radius: 50%;" value="#{VisaoAlunoControle.caminhoFotoResponsavel}">
+											<p:ajax event="click" process="@this" update="formImagemResponsavel" oncomplete="Webcam.reset(); PF('panelImagemResponsavel').show()" listener="#{VisaoAlunoControle.iniciarMontagemFotoResponsavel}" />
+										</h:graphicImage>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{!VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.existeImagem}" layout="block">
+										<otm:commandIcon tooltip="Adicionar Foto Responsavel" icon="fa fa-user" styleIcon="font-size:64px;color: #CCCCCC  !important;" oncomplete="Webcam.reset(); PF('panelImagemResponsavel').show()" action="#{VisaoAlunoControle.iniciarMontagemFotoResponsavel}" update="formImagemResponsavel" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-11 pn">
+									<h:panelGroup layout="block" styleClass="col-md-6">
+										<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_PessoaAutorizadaBuscarAluno_nome}" />
+										<h:inputText id="pessoaAutorizada_nome" styleClass="form-control camposObrigatorios" value="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.nome}" />
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="col-md-2">
+										<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_PessoaAutorizadaBuscarAluno_cpf}" />
+										<h:inputText id="pessoaAutorizada_cpf" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.cpf}" onkeypress="return mascara(this.form, 'pessoaAutorizada_cpf', '999.999.999-99', event);" size="14" maxlength="14" />
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="col-md-2">
+										<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_PessoaAutorizadaBuscarAluno_rg}" />
+										<h:inputText id="pessoaAutorizada_rg" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.rg}" />
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="col-md-2">
+										<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_PessoaAutorizadaBuscarAluno_telefone}" />
+										<h:inputText id="pessoaAutorizada_telefone" size="13" maxlength="15" onkeyup="return maskTelefone('pessoaAutorizada_telefone',event)" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.telefone}" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-12">
+									<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_PessoaAutorizadaBuscarAluno_observacao}" />
+									<h:inputTextarea id="pessoaAutorizada_observacao" styleClass="form-control campos" value="#{VisaoAlunoControle.pessoaAutorizadaBuscarAlunoVO.observacao}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-12 text-center mt10 mb10">
+									<otm:commandButton value="Adicionar" icon="#{msg_botoes.btn_icon_adicionar_embutido}" styleClass="btn btn-primary" action="#{VisaoAlunoControle.adicionarPessoaAutorizadaBuscarAluno}" update="listaPessoaAutorizada, tabResponsavelAutorizadoBuscaAluno, form" process="@form" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row mn" id="listaPessoaAutorizada">
+								<ui:repeat value="#{VisaoAlunoControle.pessoaVO.pessoaAutorizadaBuscarAlunoVOs}" var="itens" rendered="#{!empty VisaoAlunoControle.pessoaVO.pessoaAutorizadaBuscarAlunoVOs}">
+									<h:panelGroup layout="block" styleClass="row mn p5 border rounded-top bg-gray">
+										<h:panelGroup layout="block" styleClass="col-md-1 text-center">
+											<h:graphicImage id="fotoResponsavel" style="width:64px; height:64px;border-radius: 50%;" value="#{itens.caminhoFotoResponsavel}" rendered="#{itens.existeImagem}" />
+											<h:panelGroup rendered="#{!itens.existeImagem}">
+												<otm:commandIcon icon="fa fa-user" styleIcon="font-size:64px;color: #CCCCCC  !important;" disabled="true" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-11 p10 text-center">
+											<h:panelGroup layout="block" styleClass="col-md-3">
+												<h:outputText styleClass="tituloCampos btn-block" value="Nome Responsável" />
+												<h:outputText value="#{itens.nome}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3">
+												<h:outputText styleClass="tituloCampos btn-block" value="Cpf Responsável" />
+												<h:outputText value="#{itens.cpf}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3">
+												<h:outputText styleClass="tituloCampos btn-block" value="Telefone Responsável" />
+												<h:outputText value="#{itens.telefone}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="col-md-3">
+												<h:outputText styleClass="tituloCampos btn-block" value="Rg Responsável" />
+												<h:outputText value="#{itens.rg}" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-12 float-right border-top pt5 mt5">
+											<h:outputText styleClass="tituloCampos mr10" value="Observação: " />
+											<h:outputText value="#{itens.observacao}" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="row mn p5 border rounded-bottom bg-white mb5 position-panel">
+										<h:panelGroup layout="block" styleClass="float-right">
+											<otm:commandButton value="Editar" icon="#{msg_botoes.btn_icon_editar_embutido}" styleClass="btn btn-primary pr20 pl20 mr5" action="#{VisaoAlunoControle.editarPessoaAutorizadaBuscarAluno}" rendered="#{!VisaoAlunoControle.editarResponsavelAutorizadoBuscarAluno and !VisaoAlunoControle.usuarioLogado.isApresentarVisaoAluno}" update="tabResponsavelAutorizadoBuscaAluno" />
+											<otm:commandButton value="Excluir" icon="#{msg_botoes.btn_icon_excluir_embutido}" styleClass="btn btn-danger pr20 pl20" action="#{VisaoAlunoControle.excluirPessoaAutorizadaBuscarAluno}" onclick="confirmOtm('Confirma a exclusão deste responsavel?');" rendered="#{!VisaoAlunoControle.editarResponsavelAutorizadoBuscarAluno and !VisaoAlunoControle.usuarioLogado.isApresentarVisaoAluno}" update="listaPessoaAutorizada" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:tab>
+				</p:tabView>
+				
+				<h:panelGroup id="pgMensagens" layout="block" styleClass="row">
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+				<otm:mensagem bean="#{VisaoAlunoControle}"></otm:mensagem>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{VisaoAlunoControle.mostrarBotoesGravarGeral}" styleClass="barraFlutuanteInferior " layout="block">
+					<h:panelGroup styleClass="barraFlutuanteInferior" layout="block">
+						<otm:commandButton id="btnGravarDadosPessoa" action="#{VisaoAlunoControle.persistirDadosAluno}" update="form" value="Gravar" accesskey="2" styleClass="btn btn-dark btn-gravar" title="Gravar dados pessoais" rendered="#{VisaoAlunoControle.permitiAlterarDados}" icon="#{msg_botoes.btn_icon_gravar_embutido}" />
+						<!-- 						<otm:commandButton id="btnCurriculumAluno" style="margin-left: 5px" action="#{VisaoAlunoControle.realizarAbrirRichCurriculumAluno}" rendered="#{VisaoAlunoControle.pessoaVO.participaBancoCurriculum}" oncomplete="PF('panelCurriculum').show()" update="pgMensagens" accesskey="3" styleClass="btn btn-primary" icon="#{msg_botoes.btn_icon_pdf_embutido}" value="Gerar Currículum" title="Gerar Relatório em PDF" /> -->
+						<otm:commandButton id="comunicado" style="margin-left: 5px" rendered="#{VisaoAlunoControle.configuracaoGeralSistemaPrivilegiandoACfgDaUnidade.funcionarioRespAlteracaoDados.codigo ne 0}" action="#{VisaoAlunoControle.removerControleMemoriaFlashTela('','dadosPessoaisAlunoEnviarComunicado.xhtml')}" value="Enviar E-mail Dados Cadastrais" icon="#{msg_botoes.btn_icon_envelope_fechado_embutido}" styleClass="btn btn-default" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+		</h:form>
+	</ui:define>
+</ui:composition> </html>

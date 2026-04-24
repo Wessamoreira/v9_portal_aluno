@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+
+<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelAlterarSenhaContaGsuite" widgetVar="panelAlterarSenhaContaGsuite" onShow="document.getElementById('novaSenhaContaGsuite').focus()"  >
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Atenção" />
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formAlterarSenhaContaGsuite">
+		<h:panelGroup layout="block" styleClass="row">
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AlterarSenha_usuarioAtual}" />
+					<h:inputText styleClass="form-control camposObrigatorios" id="loginAnterior" disabled="true" value="#{VisaoAlunoControle.usuarioLogado.nome_Apresentar}" style="width: 566px;" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="Conta Gsuite" />
+					<h:inputTextarea id="emailGsuite" rows="2" styleClass="form-control campoSomenteLeituraTextArea" readonly="true" value="#{VisaoAlunoControle.pessoaVO.listaPessoaGsuiteVO_ApresentarHtml}" style="width: 566px;" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AlterarSenha_senhaNova}" />
+					<h:inputSecret id="novaSenhaContaGsuite" styleClass="form-control camposObrigatorios" size="20" maxlength="50" value="#{VisaoAlunoControle.senhaAnterior}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="Confirmação Senha Nova" />
+					<h:inputSecret styleClass="form-control camposObrigatorios" size="20" maxlength="50" value="#{VisaoAlunoControle.senha}" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-50">
+			<otm:commandButton id="salvarSenhaContagsuite" update="form, formAlterarSenhaContaGsuite" action="#{VisaoAlunoControle.realizarAlteracaoSenhaContaGsuite}" value="#{msg_botoes.btn_gravar}" alt="#{msg.msg_gravar_dados}" styleClass="btn btn-dark btn-gravar" />
+		</h:panelGroup>
+		
+		<h:panelGroup  id="mensagemformAlterarSenhaContaGsuite" layout="block" styleClass="col-md-12">
+			<otm:mensagem bean="#{VisaoAlunoControle}" />
+		</h:panelGroup>
+		
+	<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+</p:dialog>
+
+
+
+
+</html>

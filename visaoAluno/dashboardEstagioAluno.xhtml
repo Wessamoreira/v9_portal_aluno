@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<otm2:panel name="panelGeralDashboards" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" styleClassBody="mn p5">
+    
+    <ui:define name="header">
+        <i class="#{msg_botoes.btn_icon_grafico_embutido} tituloCampos mr5 fs16"></i>
+        <h:outputText styleClass="tituloCampos font-weight-bold" value="Dashboards"/>
+    </ui:define>
+    
+    <ui:define name="body">
+        <h:panelGroup id="dashBoardEstagioAluno" layout="block" styleClass="col-md-12">
+            <h:panelGroup layout="block" styleClass="#{EstagioControle.dashboardEstagioVO.cargaHorariaAguardandoAssinatura eq 0 ? 'col-md-6' : 'col-md-3'}">
+                <otm2:panel name="panelEstagioExigidas" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Total de Horas Exigidas"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.matriculaVO.gradeCurricularAtual.totalCargaHorariaEstagio} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Cadastrar" action="#{EstagioControle.cadastrarEstagioTelaInicialVisaoAluno}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioPendentes" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Total de Horas Pendentes"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaPendentes} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Cadastrar" action="#{EstagioControle.cadastrarEstagioTelaInicialVisaoAluno}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioEmAnalise" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Em Análise"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaEmAnalise} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('EM_ANALISE')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.dashboardEstagioVO.cargaHorariaAguardandoAssinatura ne 0}">
+                <otm2:panel name="panelEstagioAguardandoAssinatura" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Aguardando Assinatura"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaAguardandoAssinatura} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('AGUARDANDO_ASSINATURA')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioAguardandoSolicitacaoAssinatura" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Aguardando Solicitação de Assinatura"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaAguardandoSolicitacaoAssinatura} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('AGUARDANDO_SOLICITACAO_ASSINATURA')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioRealizando" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Realizando"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaRealizando} h" style="font-size: 18px !important; border: none; text-align:center;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('REALIZANDO')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioIndeferido" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Indeferido"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaIndeferido} h" style="font-size: 18px !important; border: none; text-align:center; color: #ff000f!important;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('INDEFERIDO')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="col-md-3">
+                <otm2:panel name="panelEstagioDeferido" styleClassHeader="" styleClassFooter="dn" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important">
+                    <ui:define name="header">
+                        <h:outputText value="Deferido"/>
+                    </ui:define>
+                    <ui:define name="body">
+                        <h:outputText styleClass="title" value="#{EstagioControle.dashboardEstagioVO.cargaHorariaDeferido} h" style="font-size: 18px !important; border: none; text-align:center; color: #00ff10!important;"/>
+                        <h:panelGroup layout="block" styleClass="row" style="text-align:center; height:20px;">
+                            <p:commandLink update="form" process="form" value="Visualizar" action="#{EstagioControle.realizarFiltroListaEstagioPorSituacaoEstagio('DEFERIDO')}"/>
+                        </h:panelGroup>
+                    </ui:define>
+                </otm2:panel>
+            </h:panelGroup>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="col-md-12" style="border-radius: 10px; background-color: #ededed">
+            <h:panelGroup layout="block" styleClass="col-md-12">
+                <ui:repeat id="repeatGradeCurricularEstagioVO" value="#{EstagioControle.matriculaVO.gradeCurricularAtual.listaGradeCurricularEstagioVOs}" var="gradeCurricularEstagioItens">
+                    <h:panelGroup layout="block" styleClass="col-md-2">
+                        <h:panelGroup layout="block" styleClass="col-md-12" style="text-align:center; height:20px;">
+                            <h:outputText value="#{gradeCurricularEstagioItens.nome}" style="font-size: 12px !important;"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-12" style="text-align:center;">
+                            <h:outputText styleClass="title" value="#{gradeCurricularEstagioItens.totalCargaHorariaEstagio}h/#{gradeCurricularEstagioItens.horasEstagio}h" style="font-size: 18px !important; border: none; text-align:center; margin-bottom: 0px; padding: 20px 0px;"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{gradeCurricularEstagioItens.permiteAberturaAluno and EstagioControle.validarVisibilidadeBotaoCadastrarEstagio(gradeCurricularEstagioItens)}">
+                            <h:panelGroup layout="block" styleClass="col-md-12" style="text-align:center;">
+                                <otm:commandButton id="cadastrarEstagioDash" action="#{EstagioControle.setarComponenteEstagioAoClicarBotaoCadastrar(gradeCurricularEstagioItens)}" value="Cadastrar" accesskey="1" update="form, panelErroCargaHorariaMaxima, panelQuestionario, formIncluirEstagio" icon="#{msg_botoes.btn_icon_adicionar_embutido}" style="width: 95%;" styleClass="btn btn-primary"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" style="text-align:center; padding-top: 1%">
+                                <otm:commandButton id="aproveitamento" value="Aproveitamento" accesskey="1" rendered="#{gradeCurricularEstagioItens.permiteSolicitarAproveitamento}" style="width: 95%;" action="#{EstagioControle.realizarAproveitamento(gradeCurricularEstagioItens)}" icon="#{msg_botoes.btn_icon_adicionar_embutido}" styleClass="btn btn-primary">
+                                </otm:commandButton>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </ui:repeat>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+    
+</otm2:panel>
+</html>

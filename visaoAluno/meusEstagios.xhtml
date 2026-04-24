@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+
+    <ui:define name="tituloPagina">
+        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MeusEstagios}"/>
+    </ui:define>
+    
+    <ui:define name="conteudo">
+    
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado100" id="panelTermoEstagioMeusEstagios" widgetVar="panelTermoEstagioMeusEstagios" zindex="2000" shadowOpacity="false" width="400" height="200">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_VisualizarTermoEstagio}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formTermoEstagioMeusEstagios">
+                <h:panelGroup id="panelTermoEstagioMeusEstagiosGeral" styleClass="row">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{EstagioControle.caminhoPreview != ''}">
+                        <otm2:pdfView2 bean="#{EstagioControle}" toolbar="1" id="pdfViewTermoEstagio" data="#{EstagioControle.caminhoPreview}" width="100%" height="80vh"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-100">
+                        <otm:commandButton id="fecharTermoEstagio" title="#{msg_botoes.btn_fechar}" icon="#{msg_botoes.btn_icon_fechar_embutido}" value="#{msg_botoes.btn_fechar}" styleClass="btn btn-info" oncomplete="PF('panelTermoEstagioMeusEstagios').hide();"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado100" id="panelVisualizarRelatorioEstagioMeusEstagios" widgetVar="panelVisualizarRelatorioEstagioMeusEstagios" zindex="2000" shadowOpacity="false" width="400" height="200">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_VisualizarRelatorioEstagio}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formPanelVisualizarRelatorioEstagioMeusEstagios">
+                <h:panelGroup id="panelVisualizarRelatorioEstagioMeusEstagiosGeral" styleClass="row">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{EstagioControle.caminhoPreview != ''}">
+                        <otm2:pdfView2 bean="#{EstagioControle}" toolbar="1" id="pdfViewVisualizarRelatorio" data="#{EstagioControle.caminhoPreview}" width="100%" height="80vh"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-100">
+                        <otm:commandButton id="fecharpanelVisualizarRelatorio" title="#{msg_botoes.btn_fechar}" icon="#{msg_botoes.btn_icon_fechar_embutido}" value="#{msg_botoes.btn_fechar}" styleClass="btn btn-info" oncomplete="PF('panelVisualizarRelatorioEstagioMeusEstagios').hide();"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelVisualizarTodosRelatorioEstagio" widgetVar="panelVisualizarTodosRelatoriosEstagio" zindex="2000" shadowOpacity="false" width="400" height="200">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_VisualizarRelatoriosEstagio}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formPanelVisualizarTodosRelatorioEstagio">
+                <h:panelGroup id="panelVisualizarTodosRelatorioEstagioGeral" styleClass="row">
+                    <h:panelGroup layout="block" styleClass="col-md-12">
+                        <h:panelGroup id="panelListaEstagios" layout="block" styleClass="row mt10">
+                            <p:dataTable id="items" width="100%" headerClass="consulta" styleClass="tabConsulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" rendered="#{!empty EstagioControle.listaRelatoriosEstagioEntregues}" value="#{EstagioControle.listaRelatoriosEstagioEntregues}" rows="10" var="relatorioEstagioItens">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_EntregueDia}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{EstagioControle.realizarFormatacaoData(relatorioEstagioItens.dataEnvioAnalise)}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoRelatorio}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{EstagioControle.realizarFormatacaoData(relatorioEstagioItens.dataInicioRelatorio)} à #{EstagioControle.realizarFormatacaoData(relatorioEstagioItens.dataFinalRelatorio)}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_Situacao}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{relatorioEstagioItens.situacaoRelatorioEstagioEnum.valor}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_NumeroEntrega}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{relatorioEstagioItens.numeroEntrega}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_botoes.btn_opcoes}"/>
+                                    </f:facet>
+                                    <otm:commandIcon id="visualizarArquivo" style="border:none;" action="#{EstagioControle.realizarVisualizacaoRelatorioLista}" tooltip="#{msg_botoes.btn_visualizar}" update="panelQuestionarioRelatorioEstagio, formQuestionarioRelatorioEstagio" oncomplete="PF('panelQuestionarioRelatorioEstagio').show()" icon="#{msg_botoes.btn_icon_verificar_embutido} iconePequeno"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg_bt.btn_opcoes}"/>
+                                    </f:facet>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <div style="text-align: center !important">
+                                        <otm2:dataScroller align="center" for="items" fastControls="hide" stepControls="auto" boundaryControls="auto" id="scResultadoConsulta"/>
+                                    </div>
+                                </f:facet>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="fecharpanelVisualizarTodosRelatorios" title="#{msg_botoes.btn_fechar}" icon="#{msg_botoes.btn_icon_fechar_embutido}" value="#{msg_botoes.btn_fechar}" styleClass="btn btn-danger" oncomplete="PF('panelVisualizarTodosRelatorioEstagio').hide();"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizadoRelatorioEstagio" id="panelRelatorioEstagio" widgetVar="panelRelatorioEstagio" domElementAttachment="parent" shadowOpacity="true">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_RelatorioEstagio}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formRelatorioEstagio">
+                <h:panelGroup layout="block" styleClass="col-md-12">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty EstagioControle.estagioVO.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoRelatorioEstagioAluno}">
+                        <h:outputText styleClass="tituloCampos" value="Orientações de Abertura do Relatório de Estágio"/>
+                        <h:inputTextarea id="informacoesAberturaRelatorioEstagio" rows="5" readonly="true" styleClass="form-control" value="#{EstagioControle.estagioVO.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoRelatorioEstagioAluno}"/>
+                    </h:panelGroup>
+                    <otm:spacer height="5%"/>
+                    <h:panelGroup layout="block" styleClass="col-md-7">
+                        <h:panelGroup layout="block" styleClass="col-md-12">
+                            <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoRelatorioEstagio}"/>
+                        </h:panelGroup>
+                       <!--  <a4j:jsFunction process="@form" name="iniciarConsulta" action="#{EstagioControle.realizarCalculoCargasHorariasConsideradasRelatorioEstagio}" update="formRelatorioEstagio">
+                        </a4j:jsFunction> -->
+                        <h:panelGroup layout="block" styleClass="col-md-6">
+                            <otm:calendar id="dataInicio" jsFunction="iniciarConsulta()" value="#{EstagioControle.relatorioEstagioVO.dataInicioRelatorio}"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-6">
+                            <otm:calendar id="dataFim" jsFunction="iniciarConsulta()" value="#{EstagioControle.relatorioEstagioVO.dataFinalRelatorio}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-2">
+                        <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MesesConsiderados}"/>
+                        <h:inputText id="mesesConsiderados" styleClass="form-control campos col-md-1" value="#{EstagioControle.relatorioEstagioVO.mesesConsiderados}" disabled="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-1">
+                        <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_HorasPorMes}"/>
+                        <h:inputText id="mesesConsiderados2" styleClass="form-control campos col-md-1" value="#{EstagioControle.relatorioEstagioVO.horasPorMes}" disabled="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-2">
+                        <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_HorasConsideradas}"/>
+                        <h:inputText id="mesesConsiderados3" styleClass="form-control campos col-md-1" value="#{EstagioControle.relatorioEstagioVO.horasConsideras}" disabled="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-topo-modal-relatorioEstagio">
+                        <otm:commandButton id="solicitarAvaliacao" update="form" action="#{EstagioControle.realizarSolicitacaoAvaliacaoRelatorioEstagio}" icon="#{msg_botoes.btn_icon_adicionar_embutido}" styleClass="btn btn-primary" oncomplete="#{EstagioControle.modalRelatorioEstagio}" rendered="#{EstagioControle.estagioVO.relatorioEstagioVO.situacaoRelatorioEstagioEnum ne 'EM_CORRECAO'}" value="#{msg_botoes.btn_solicitar_avaliacao_orientador}"/>
+                        <otm:commandButton id="solicitarCorrecaoRelatorioEstagio" update="form" action="#{EstagioControle.realizarCorrecaoRelatorioEstagio}" icon="#{msg_botoes.btn_icon_editar_embutido}" styleClass="btn btn-primary" oncomplete="PF('panelRelatorioEstagio').hide();" rendered="#{EstagioControle.estagioVO.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'EM_CORRECAO'}" value="#{msg_botoes.btn_estagioEnviarCorrecao}"/>
+                        <otm:commandButton id="fecharRelatorioEstagio" style="margin-left: 1%;" update="form" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger" oncomplete="PF('panelRelatorioEstagio').hide();" value="#{msg_botoes.btn_fechar}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup styleClass="col-md-12" style="margin-top: 1%">
+                    <otm2:questionarioResposta id="questionarioRelatorioEstagio" permiteDeletarArquivo="true" styleAdicionalUpload="uploadArquivoBtn" renderedControlPanel="true" renderedListaAnexos="true" renderedAnexoPergunta="true" bean="#{EstagioControle}" objetoOrigem="#{EstagioControle.relatorioEstagioVO.questionarioRespostaOrigemVO}"/>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelUploadAditivo" widgetVar="panelUploadAditivo" zindex="2000" shadowOpacity="false" width="450" height="150">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_UplaodTermoAditivo}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formUploadAditivo">
+                <h:panelGroup layout="block" styleClass="row" style="text-align:center" id="panelArquivoUploadTermoEstagio">
+                	<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UploadArquivos_escolherArquivo}"/>
+                	<!-- <rich:fileUpload listHeight="40" listWidth="270" noDuplicate="true" fileUploadListener="#{EstagioControle.uploadTermoAditivo}" maxFilesQuantity="1" doneLabel="Pronto" addLabel="Selecionar Termo Aditivo" sizeExceededLabel="Arquivo não Enviado. Tamanho Máximo Permitido 15 MB" uploadLabel="Enviar" clearAllLabel="Limpar lista" serverErrorLabel="Falha de Transmissão" immediateUpload="true" >
+                		<a4j:ajax event="uploadcomplete" update="formUploadTermoAditivo, formCorrecaoTermoAditivo" oncomplete="PF('panelUploadAditivo').hide()"/>
+                	</rich:fileUpload> -->
+                	<p:fileUpload auto="true" mode="advanced" listener="#{EstagioControle.uploadTermoAditivo}" label="Selecionar Termo Aditivo" fileLimit="1" cancelLabel="Cancelar" sizeLimit="#{LoginControle.limiteUpload}" id="uploadTermoAditivo" invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido 15 MB" update="formUploadTermoAditivo, formCorrecaoTermoAditivo" oncomplete="PF('panelUploadAditivo').hide()">
+                    </p:fileUpload>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMeusEstagiosTermoAditivo80" id="panelUploadTermoAditivo" widgetVar="panelUploadTermoAditivo" autosized="true" width="600" domElementAttachment="parent" shadowOpacity="true">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formUploadTermoAditivo">
+                <h:panelGroup layout="block" styleClass="col-md-12">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoAditivoAluno}">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_OrientacaoSolicitacao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="informacoesAbertura" rows="5" readonly="true" styleClass="form-control"  value="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoAditivoAluno}"/>
+                    </h:panelGroup>
+                    <otm:spacer height="25px" width="8px"/>
+                    <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}" styleClass="tituloCampos" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.formaImpressaoTA ne 'MODELO'}"/>
+                    <h:panelGroup layout="block" styleClass="row" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.formaImpressaoTA ne 'MODELO'}">
+                        <h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+                            <h:panelGroup layout="block" styleClass="col-md-12 title" style="border: none!important;">
+                                <p:commandLink rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" styleClass="uploadArquivoBtn" update="formUploadTermoAditivo" id="removerTermoAditivo" action="#{EstagioControle.removerUploadTermoAditivo}">
+                                    <h:outputText styleClass="field control-label tituloCampos" id="nomeTermoAditivo" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CliqueParaRemoverArquivo} #{EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}"/>
+                                    <p:tooltip for="removerTermoAditivo" value="Remover Termo Estágio" styleClass="tooltipRich"/>
+                                </p:commandLink>
+                                <h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+                                    <otm:commandIcon rendered="#{empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" update="formUploadAditivo, panelUploadAditivo, form" oncomplete="PF('panelUploadAditivo').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="#{msg_botoes.btn_estagioSubirTermoAditivo}" styleClass="uploadArquivoBtn" accesskey="2"  id="btnUploadTermoAditivo"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-10">
+                        <h:panelGroup layout="block" styleClass="col-md-12">
+                            <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoTermoAditivo}"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-5">
+                            <otm:calendar id="dataInicioUploadAditivo" value="#{EstagioControle.estagioTermoAditivoRescisaoVO.dataInicio}"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-1 text-center">
+                            <h:outputText styleClass="field control-label tituloCampos" style="position:relative; top:5px" value="#{msg_aplic.prt_Tarefa_periodo_ate}" />
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-5">
+                            <otm:calendar id="dataFimUploadAditivo" value="#{EstagioControle.estagioTermoAditivoRescisaoVO.dataTermino}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="solicitarCorrecaoUploadTermoAditivo" update="panelVisualizarTermoAditivoRescisao, formVisualizarTermoAditivoRescisao" action="#{EstagioControle.incluirArquivoTermoAditivoCaminhoPreview}" icon="#{msg_botoes.btn_icon_gravar_embutido}" styleClass="btn btn-primary" oncomplete="#{EstagioControle.abrirModalTermoAditivoRescisao}" value="#{msg_botoes.btn_confirmar}"/>
+                        <otm:commandButton id="fecharUploadTermoAditivo" style="margin-left: 1%;" update="form, formUploadTermoAditivo" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger" action="#{EstagioControle.realizarLiberacaoAtributosEstagio}" oncomplete="PF('panelUploadTermoAditivo').hide();" value="#{msg_botoes.btn_cancelar}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMeusEstagiosTermoAditivo80" id="panelCorrecaoTermoAditivo" widgetVar="panelCorrecaoTermoAditivo" autosized="true" width="600" domElementAttachment="parent" shadowOpacity="true">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="Corrigir #{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formCorrecaoTermoAditivo">
+                <h:panelGroup layout="block" styleClass="col-md-12">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoAditivoAluno}">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_OrientacaoSolicitacao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="informacoesCorrecaoTermoAditivo" rows="5" readonly="true" styleClass="form-control"  value="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoAditivoAluno}"/>
+                    </h:panelGroup>
+                    <otm:spacer height="25px" width="8px"/>
+                    <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}" styleClass="tituloCampos" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.formaImpressaoTA ne 'MODELO'}"/>
+                    <h:panelGroup layout="block" styleClass="row" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.formaImpressaoTA ne 'MODELO'}">
+                        <h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+                            <h:panelGroup layout="block" styleClass="col-md-12 title" style="border: none!important;">
+                                <p:commandLink rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" styleClass="uploadArquivoBtn" update="formUploadTermoAditivo" id="removerCorrecaoTermoAditivo" oncomplete="PF('panelConfirmarExclusao').show()">
+                                    <h:outputText styleClass="field control-label tituloCampos" id="nomeCorrecaoTermoAditivo" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CliqueParaRemoverArquivo} #{EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}"/>
+                                    <p:tooltip for="removerCorrecaoTermoAditivo" value="Remover Termo Estágio" styleClass="tooltipRich"/>
+                                </p:commandLink>
+                                <h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+                                    <otm:commandIcon rendered="#{empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" update="formUploadAditivo, panelUploadAditivo, form" oncomplete="PF('panelUploadAditivo').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="#{msg_botoes.btn_estagioSubirTermoAditivo}" styleClass="uploadArquivoBtn" accesskey="2" id="btnCorrecaoTermoAditivo"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-10">
+                        <h:panelGroup layout="block" styleClass="col-md-12">
+                            <h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoTermoAditivo}"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-5">
+                            <otm:calendar id="dataInicioCorrecaoAditivo" value="#{EstagioControle.estagioTermoAditivoRescisaoVO.dataInicio}"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-1 text-center">
+                            <h:outputText styleClass="field control-label tituloCampos" style="position:relative; top:5px" value="#{msg_aplic.prt_Tarefa_periodo_ate}" />
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="col-md-5">
+                            <otm:calendar id="dataFimCorrecaoAditivo" value="#{EstagioControle.estagioTermoAditivoRescisaoVO.dataTermino}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="solicitarCorrecaoTermoAditivo" update="panelVisualizarTermoAditivoRescisao, formVisualizarTermoAditivoRescisao" action="#{EstagioControle.incluirArquivoTermoAditivoCaminhoPreview}" icon="#{msg_botoes.btn_icon_gravar_embutido}" styleClass="btn btn-primary" oncomplete="#{EstagioControle.abrirModalTermoAditivoRescisao}" value="#{msg_botoes.btn_confirmar}"/>
+                        <otm:commandButton id="fecharCorrecaoTermoAditivo" style="margin-left: 1%;" update="form, formUploadTermoAditivo" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger" action="#{EstagioControle.realizarLiberacaoAtributosEstagio}" oncomplete="PF('panelUploadTermoAditivo').hide();" value="#{msg_botoes.btn_cancelar}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMeusEstagiosTermoAditivo80" id="panelCorrecaoTermoRescisao" widgetVar="panelCorrecaoTermoRescisao" autosized="true" width="600" domElementAttachment="parent" shadowOpacity="true">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="Corrigir #{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formCorrecaoTermoRescisao">
+                <h:panelGroup layout="block" styleClass="col-md-12">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoRescisaoAluno}">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_OrientacaoSolicitacao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="informacoesCorrecaoTermoRescisao" rows="5" readonly="true" styleClass="form-control"  value="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoRescisaoAluno}"/>
+                    </h:panelGroup>
+                    <otm:spacer height="25px" width="8px"/>
+                    <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}" styleClass="tituloCampos"/>
+                    <h:panelGroup layout="block" styleClass="row">
+                        <h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+                            <h:panelGroup layout="block" styleClass="col-md-12 title" style="border: none!important;">
+                                <p:commandLink rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" styleClass="uploadArquivoBtn" update="formUploadTermoAditivo" id="removerCorrecaoTermoRescisao" oncomplete="PF('panelConfirmarExclusao').show()">
+                                    <h:outputText styleClass="field control-label tituloCampos" id="nomeCorrecaoTermoRescisao" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CliqueParaRemoverArquivo} #{EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}"/>
+                                    <p:tooltip for="removerCorrecaoTermoRescisao" value="Remover Termo Estágio" styleClass="tooltipRich"/>
+                                </p:commandLink>
+                                <h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+                                    <otm:commandIcon rendered="#{empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" update="formUploadRescisao, panelUploadRescisao, form" oncomplete="PF('panelUploadRescisao').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="#{msg_botoes.btn_estagioSubirTermoRescisao}" styleClass="uploadArquivoBtn" accesskey="2"  id="btnCorrecaoTermoRescisao"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-12">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoEncerramentoTermoRescisao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="motivoEncerramentoTermoRescisao" rows="5" styleClass="form-control camposObrigatorios"  value="#{EstagioControle.estagioTermoAditivoRescisaoVO.motivoEncerramento}"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="solicitarCorrecaoTermoRescisao" update="panelVisualizarTermoRescisao, formVisualizarTermoRescisao" action="#{EstagioControle.incluirArquivoTermoRescisaoCaminhoPreview}" icon="#{msg_botoes.btn_icon_gravar_embutido}" styleClass="btn btn-primary" oncomplete="#{EstagioControle.abrirModalTermoAditivoRescisao}" value="#{msg_botoes.btn_confirmar}"/>
+                        <otm:commandButton id="fecharCorrecaoTermoRescisao" style="margin-left: 1%;" update="form, formUploadTermoAditivo" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger" action="#{EstagioControle.realizarLiberacaoAtributosEstagio}" oncomplete="PF('panelCorrecaoTermoRescisao').hide();" value="#{msg_botoes.btn_cancelar}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelConfirmarExclusao" widgetVar="panelConfirmarExclusao" zindex="2000" shadowOpacity="false" width="450" height="150">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_ConfirmarExclusao}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formConfirmarExclusao">
+                <h:panelGroup styleClass="col-md-12">
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_ExclusaoArquivoAssinado}"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-50">
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_gravar_embutido}" id="btnConfirmarExclusao" update="formCorrecaoTermoAditivo formCorrecaoTermoRescisao" action="#{EstagioControle.removerUploadTermoAditivoAssinadoDigitalmente}" oncomplete="PF('panelConfirmarExclusao').hide()" value="#{msg_botoes.btn_confirmar}" styleClass="btn btn-primary ml-2"/>
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_fechar_embutido}" id="btnCancelarExclusao" oncomplete="PF('panelConfirmarExclusao').hide()" value="#{msg_botoes.btn_cancelar}" styleClass="btn btn-danger ml-2" />
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelVisualizarTermoAditivoRescisao" widgetVar="panelVisualizarTermoAditivoRescisao" shadowOpacity="true" top="0">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="#{EstagioControle.estagioTermoAditivoRescisaoVO.tipoTermo.descricao}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formVisualizarTermoAditivoRescisao">
+                <h:panelGroup layout="block" styleClass="col-md-12 text-center">
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_VoceConfirmaDadosAbaixo}" rendered="true" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="col-md-12 text-center">
+                    <object type="application/pdf" data="#{EstagioControle.caminhoPreview}" width="950" height="600"> </object>
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_gravar_embutido}" id="btnGravarTermoAditivoRescisao" update="panelUploadTermoAditivo, form" action="#{EstagioControle.incluirTermoAditivo(false)}" oncomplete="PF('panelVisualizarTermoAditivoRescisao').hide()" value="#{msg_botoes.btn_gravar}" styleClass="btn btn-dark btn-gravar ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and !(EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoAditivo and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTA and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoAditivo)}" />
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_gravar_embutido}" id="btnCorrigirTermoAditivoRescisao" update="panelUploadTermoAditivo, form, panelCorrecaoTermoAditivo, panelCorrecaoTermoRescisao" action="#{EstagioControle.CorrigirTermoAditivoRescisao}" oncomplete="PF('panelVisualizarTermoAditivoRescisao').hide();PF('panelCorrecaoTermoRescisao').hide()" value="#{msg_botoes.btn_estagioCorrigir}" styleClass="btn btn-dark btn-gravar ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao eq 'EM_CORRECAO'}" />
+                    <otm:assinaturaDigitalButton icon="#{msg_botoes.btn_icon_requerimento_deferido}" id="btnGravarTermoAditivoRescisaoComAssinatura" update="panelUploadTermoAditivo, form" action="#{EstagioControle.incluirTermoAditivo(true)}" oncomplete="PF('panelVisualizarTermoAditivoRescisao').hide()" value="#{msg_botoes.btn_gravar} e solicitar assinaturas" styleClass="btn btn-success ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoAditivo and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTA and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoAditivo}" bean="#{EstagioControle}"/>
+                    <otm:assinaturaDigitalButton icon="#{msg_botoes.btn_icon_requerimento_indeferido}" id="btnGravarTermoAditivoRescisaoSemAssinatura" update="panelUploadTermoAditivo, form" action="#{EstagioControle.incluirTermoAditivo(false)}" oncomplete="PF('panelVisualizarTermoAditivoRescisao').hide()" value="#{msg_botoes.btn_gravar} sem solicitar assinaturas" styleClass="btn btn-danger btn-excluir ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoAditivo and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTA and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoAditivo}" bean="#{EstagioControle}" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="row">
+                    <otm:mensagem bean="#{EstagioControle}"></otm:mensagem>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMeusEstagiosTermoAditivo80" id="panelUploadTermoRescisao" widgetVar="panelUploadTermoRescisao" autosized="true" width="600" domElementAttachment="parent" shadowOpacity="true">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formUploadTermoRescisao">
+                <h:panelGroup layout="block" styleClass="col-md-12">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoRescisaoAluno}">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_OrientacaoSolicitacao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="informacoesAberturaTermoRescisao" rows="5" readonly="true" styleClass="form-control" value="#{EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoTermoRescisaoAluno}"/>
+                    </h:panelGroup>
+                    <otm:spacer height="25px" width="8px"/>
+                    <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}" styleClass="tituloCampos"/>
+                    <h:panelGroup layout="block" styleClass="row">
+                        <h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+                            <h:panelGroup layout="block" styleClass="col-md-12 title" style="border: none!important;">
+                                <p:commandLink rendered="#{!empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" styleClass="uploadArquivoBtn" update="formUploadTermoRescisao" id="removerTermoRescisao" action="#{EstagioControle.removerUploadTermoAditivo}">
+                                    <h:outputText styleClass="field control-label tituloCampos" id="nomeTermoRescisao" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CliqueParaRemoverArquivo} #{EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}"/>
+                                    <p:tooltip for="removerTermoRescisao" value="Remover Termo Estágio" styleClass="tooltipRich"/>
+                                </p:commandLink>
+                                <h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+                                    <otm:commandIcon rendered="#{empty EstagioControle.estagioTermoAditivoRescisaoVO.arquivo.nome}" update="formUploadAditivo, panelUploadAditivo, form" oncomplete="PF('panelUploadRescisao').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="#{msg_botoes.btn_estagioSubirTermoRescisao}" styleClass="uploadArquivoBtn" accesskey="2" id="btnUploadTermoRescisao"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-12">
+                        <h:outputLabel value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoEncerramentoTermoRescisao}" styleClass="tituloCampos"/>
+                        <h:inputTextarea id="motivoEncerramentoEstagio" rows="5" styleClass="form-control camposObrigatorios"  value="#{EstagioControle.estagioTermoAditivoRescisaoVO.motivoEncerramento}"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="solicitarCorrecaoUploadTermoRecisao" update="panelVisualizarTermoRescisao, formVisualizarTermoRescisao" action="#{EstagioControle.incluirArquivoTermoRescisaoCaminhoPreview}" icon="#{msg_botoes.btn_icon_gravar_embutido}" styleClass="btn btn-primary" oncomplete="#{EstagioControle.abrirModalTermoAditivoRescisao}" value="#{msg_botoes.btn_confirmar}"/>
+                        <otm:commandButton id="fecharUploadTermoRecisao" style="margin-left: 1%;" update="form, formUploadTermoAditivo" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger" action="#{EstagioControle.realizarLiberacaoAtributosEstagio}" oncomplete="PF('panelUploadTermoAditivo').hide();" value="#{msg_botoes.btn_cancelar}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelUploadRescisao" widgetVar="panelUploadRescisao" zindex="2000" shadowOpacity="false" width="450" height="150">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_UplaodTermoRescisao}"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formUploadRescisao">
+                <h:panelGroup layout="block" styleClass="row" style="text-align:center" id="panelArquivoUploadRescisao">
+                    <h:panelGroup layout="block" styleClass="row" id="arquivoUploadRescisao">
+                        <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UploadArquivos_escolherArquivo}"/>
+                        <!-- <rich:fileUpload listHeight="40" listWidth="270" noDuplicate="true" fileUploadListener="#{EstagioControle.uploadTermoRescisao}" maxFilesQuantity="1" doneLabel="Pronto" addLabel="Selecionar Termo Rescisão" sizeExceededLabel="Arquivo não Enviado. Tamanho Máximo Permitido 15 MB" uploadLabel="Enviar" clearAllLabel="Limpar lista" serverErrorLabel="Falha de Transmissão" immediateUpload="true" >
+                            <a4j:ajax event="uploadcomplete" update="formUploadTermoRescisao, formCorrecaoTermoRescisao" oncomplete="PF('panelUploadRescisao').hide()"/>
+                        </rich:fileUpload> -->
+                        <p:fileUpload auto="true" mode="advanced" listener="#{EstagioControle.uploadTermoRescisao}" label="Selecionar Termo Rescisão" fileLimit="1" cancelLabel="Cancelar" sizeLimit="#{LoginControle.limiteUpload}" id="uploadTermoRescisao" invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido 15 MB" update="formUploadTermoRescisao, formCorrecaoTermoRescisao" oncomplete="PF('panelUploadRescisao').hide()">
+                        </p:fileUpload>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelVisualizarTermoRescisao" widgetVar="panelVisualizarTermoRescisao" shadowOpacity="true" top="0">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}"></h:outputText>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formVisualizarTermoRescisao">
+                <h:panelGroup layout="block" styleClass="col-md-12 text-center">
+                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_VoceConfirmaDadosAbaixo}" rendered="true" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="col-md-12 text-center">
+                    <object type="application/pdf" data="#{EstagioControle.caminhoPreview}" width="950" height="600"> </object>
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_gravar_embutido}" id="btnGravarTermoRescisao" update="panelUploadTermoRescisao, form" action="#{EstagioControle.incluirTermoRescisao(false)}" oncomplete="PF('panelVisualizarTermoRescisao').hide()" value="#{msg_botoes.btn_gravar}" styleClass="btn btn-dark btn-gravar ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and !(EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoRescisao and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTR and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoRescisao)}" />
+                    <otm:commandButton icon="#{msg_botoes.btn_icon_gravar_embutido}" id="btnCorrigirTermoRescisao" update="panelUploadTermoRescisao, form, panelCorrecaoTermoAditivo" action="#{EstagioControle.CorrigirTermoAditivoRescisao}" oncomplete="PF('panelVisualizarTermoRescisao').hide();PF('panelCorrecaoTermoRescisao').hide()" value="#{msg_botoes.btn_estagioCorrigir}" styleClass="btn btn-dark btn-gravar ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao eq 'EM_CORRECAO'}" />
+                    <otm:assinaturaDigitalButton bean="#{EstagioControle}" icon="#{msg_botoes.btn_icon_requerimento_deferido}" id="btnGravarTermoRescisaoComAssinatura" update="panelUploadTermoRescisao, form" action="#{EstagioControle.incluirTermoRescisao(true)}" oncomplete="PF('panelVisualizarTermoRescisao').hide()" value="#{msg_botoes.btn_gravar} e solicitar assinaturas" styleClass="btn btn-success ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoRescisao and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTR and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoRescisao}"/>
+                    <otm:assinaturaDigitalButton bean="#{EstagioControle}" icon="#{msg_botoes.btn_icon_requerimento_indeferido}" id="btnGravarTermoRescisaoSemAssinatura" update="panelUploadTermoRescisao, form" action="#{EstagioControle.incluirTermoRescisao(false)}" oncomplete="PF('panelVisualizarTermoRescisao').hide()" value="#{msg_botoes.btn_gravar} sem solicitar assinaturas" styleClass="btn btn-danger btn-excluir ml-2" rendered="#{EstagioControle.estagioTermoAditivoRescisaoVO.situacao ne 'EM_CORRECAO' and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaDigitalTermoRescisao and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.gradeCurricularEstagioVO.permiteAssinaturaDigitalTR and EstagioControle.estagioTermoAditivoRescisaoVO.estagio.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoRescisao}" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="row">
+                    <otm:mensagem bean="#{EstagioControle}"></otm:mensagem>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMeusEstagiosTermoAditivo80" zindex="2000" id="panelQuestionarioRelatorioEstagio" widgetVar="panelQuestionarioRelatorioEstagio" shadowOpacity="false" width="400" height="200">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="tituloCampos" value="Visualizar Formulário Relatório de Estágio"/>
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formQuestionarioRelatorioEstagio">
+                <h:panelGroup id="panelQuestionarioRelatorioEstagioGeral" styleClass="row">
+                    <h:panelGroup layout="block" styleClass="col-md-12">
+                        <otm2:questionarioResposta id="visulizarFormularioRelatorioEstagio" bean="#{EstagioControle}" objetoOrigem="#{EstagioControle.relatorioEstagioVO.questionarioRespostaOrigemVO}" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+                        <otm:commandButton id="fecharQuestionarioRelatorio" title="#{msg_botoes.btn_fechar}" icon="#{msg_botoes.btn_icon_fechar_embutido}" value="Fechar" styleClass="btn btn-danger" oncomplete="PF('panelQuestionarioRelatorioEstagio').hide();"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado100" id="panelPreview" widgetVar="panelPreview" zindex="2000" shadowOpacity="false" width="400" height="200">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <h:outputText styleClass="tituloCampos" value="Visualizar Arquivo" />
+                </h:panelGroup>
+            </f:facet>
+            <h:form prependId="false" id="formPreview">
+                <h:panelGroup id="panelPreviewGeral" styleClass="row">
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{EstagioControle.caminhoPreviewTipoPdf and EstagioControle.caminhoPreview != ''}">
+                        <otm2:pdfView2 bean="#{EstagioControle}" height="calc(100vh - 100px)" data="#{EstagioControle.caminhoPreview}" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!EstagioControle.caminhoPreviewTipoPdf and EstagioControle.caminhoPreview != ''}">
+                        <h:graphicImage url="#{EstagioControle.caminhoPreview}" width="98%" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-100">
+                        <otm:commandButton id="fecharpanelPreview" title="#{msg_botoes.btn_fechar}" icon="#{msg_botoes.btn_icon_fechar_embutido}" value="Fechar" styleClass="btn btn-info" oncomplete="PF('panelPreview').hide();" />
+                    </h:panelGroup>
+                </h:panelGroup>
+            <p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+        </p:dialog>
+
+        <h:panelGroup layout="block" rendered="#{EstagioControle.permiteAbrirEstagioVisaoAluno}">
+            <ui:include src="/visaoAluno/dashboardEstagioAluno.xhtml"/>
+        </h:panelGroup>
+        
+        <h:form prependId="false" id="form">
+            <ui:repeat id="subItems" value="#{EstagioControle.listaEstagioMeusEstagios}" var="estagioItens" rowKeyVar="row">
+                <h:panelGroup rendered="#{estagioItens.modalidadeEstagioEnum eq 'ESTAGIO' and estagioItens.gradeCurricularEstagioVO.codigo ne 0}">
+                    <otm2:panel name="panelEstagio_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" styleClassBody="mn p5">
+                        <ui:define name="header">
+                            <i class="fas fa-award tituloCampos mr5 fs16"></i>
+                            <h:outputText styleClass="tituloCampos font-weight-bold" value="Estágio - #{estagioItens.situacaoEstagioEnum.valor} - #{estagioItens.gradeCurricularEstagioVO.nome}/#{estagioItens.cargaHoraria}h"/>
+                        </ui:define>
+                        <ui:define name="body">
+                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                <otm2:panel name="panelEstagioDadosEstagio_#{estagioItens.codigo}" styleClassHeader="" styleClass="col-md-12" styleClassFooter="dn">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DadosEstagio}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-2">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_ComponenteEstagio}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.gradeCurricularEstagioVO.nome}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.dataInicioVigencia or !empty estagioItens.dataFinalVigencia}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoEstagio}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{EstagioControle.realizarFormatacaoData(estagioItens.dataInicioVigencia)} à #{EstagioControle.realizarFormatacaoData(estagioItens.dataFinalVigencia)}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Forum_situacao}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.situacaoEstagioEnum.valor}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.ano and !empty estagioItens.semestre}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="Ano/Semestre"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.ano}/#{estagioItens.semestre}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.ano and empty estagioItens.semestre}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="Ano"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.ano}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CHEstagio}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.cargaHoraria}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{estagioItens.situacaoEstagioEnum eq 'DEFERIDO'}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CHDeferida}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.cargaHorariaDeferida}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty EstagioControle.estagioVO.dataDeferimento}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DataDeferimento}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{EstagioControle.realizarFormatacaoData(estagioItens.dataDeferimento)}"/>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty estagioItens.empresa or !empty estagioItens.localCampoEstagio or !empty estagioItens.areaAtuacao}">
+                                <otm2:panel name="panelEstagioDadosConcedente_#{estagioItens.codigo}" styleClassHeader="" styleClass="col-md-12" styleClassFooter="dn">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DadosConcedente}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.empresaEstagio.nome}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RegistroHeader_nomeEmpresa}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.empresaEstagio.nome}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.localCampoEstagio}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Catalogo_local}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.localCampoEstagio}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.areaAtuacao}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Estagio_area_Atuacao}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.areaAtuacao}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.nomeSupervidorEstagio}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="Nome do Supervisor"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.nomeSupervidorEstagio}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.emailSupervisorEstagio}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="E-mail do Supervisor"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.emailSupervisorEstagio}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.telefoneSupervisorEstagio}">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="Telefone do Supervisor"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.telefoneSupervisorEstagio}"/>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.questionarioRespostaOrigemVO.codigo ne 0}">
+                                <otm2:panel name="panelEstagioQuestionario_#{estagioItens.codigo}" styleClassHeader="" styleClass="col-md-12" styleClassFooter="dn">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{estagioItens.questionarioRespostaOrigemVO.questionarioVO.descricao}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-12">
+                                            <otm2:questionarioResposta id="questionarioEstagio_#{estagioItens.codigo}" bean="#{EstagioControle}" objetoOrigem="#{estagioItens.questionarioRespostaOrigemVO}" />
+                                        </h:panelGroup>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{!empty estagioItens.apoliceSeguro}">
+                                <otm2:panel name="panelEstagioDadosApolice_#{estagioItens.codigo}" styleClass="border rounded" styleClassFooter="p5 ajustarConteudoNoCentro" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important;">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DadosApolice}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-2">
+                                            <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_NumeroApolice}"/>
+                                            <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.apoliceSeguro}"/>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.gradeCurricularEstagioVO.formaTermoEstagio ne 'NU' and (estagioItens.documentoAssinadoVO.codigo ne 0 or estagioItens.termoEstagio.codigo ne 0)}">
+                                <otm2:panel name="panelEstagioTermoEstagio_#{estagioItens.codigo}" styleClass="border rounded" styleClassFooter="p5 ajustarConteudoNoCentro" styleClassHeader="" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important;">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoEstagio}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="ajustarConteudoAoFinaleAoMeio">
+                                            <otm:commandButton id="solicitarAssinaturaTermoEstagio" action="#{EstagioControle.solicitarAssinaturaTermoEstagio}" value="#{msg_botoes.btn_estagioSolicitarAssinatura}" rendered="#{estagioItens.situacaoEstagioEnum eq 'AGUARDANDO_SOLICITACAO_ASSINATURA' and estagioItens.documentoAssinadoVO.codigo eq 0 and estagioItens.matriculaVO.curso.configuracaoEstagio.solicitarAssinaturaAlunoTermoEstagio and estagioItens.gradeCurricularEstagioVO.permiteAssinaturaDigitalTE}" update="form" icon="#{msg_botoes.btn_icon_assinatura_embutido}" styleClass="btn btn-primary"/>
+                                            <otm:commandButton id="visualizar" action="#{EstagioControle.realizarVisualizacaoTermoEstagioMeusEstagios}" value="#{msg_botoes.btn_estagioVisualizarArquivo}" update="panelPreview, formPreview" oncomplete="#{EstagioControle.mostrarModalTermoEstagio}" icon="#{msg_botoes.btn_icon_lupa_embutido}" styleClass="btn btn-primary ml-2"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-12">
+                                            <h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_AssinadorPor}"/>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                    <ui:define name="footer">
+                                        <ui:repeat id="itensAssinaturasTermoEstagio" value="#{estagioItens.documentoAssinadoVO.listaDocumentoAssinadoPessoa}" var="documentoAssinadoPessoaItens">
+                                            <h:panelGroup styleClass="col-md-2" style="display: flex; align-items: center;">
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'REJEITADO'}" value="#{resource['imagens/close.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="naoAssinadoIcon"> <p:tooltip for="naoAssinadoIcon" value="Rejeitado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'PENDENTE'}" value="#{resource['imagens/iconeAlertaAmarelo.jpg']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="pendenteIcon"> <p:tooltip for="pendenteIcon" value="Pendente" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'ASSINADO'}" value="#{resource['imagens/cadastradoSucesso.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="assinadoIcon"> <p:tooltip for="assinadoIcon" value="Assinado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{documentoAssinadoPessoaItens.tipoPessoa.membroComunidade ? documentoAssinadoPessoaItens.nomeMembroComunidade : documentoAssinadoPessoaItens.pessoaVO.nome}"/>
+                                            </h:panelGroup>
+                                        </ui:repeat>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                <otm2:panel name="panelEstagioRelatorioEstagio_#{estagioItens.codigo}" styleClass="border rounded" styleClassFooter="dn" styleClassHeader="" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important;">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_RelatorioEstagio}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-12 ajustarConteudoNoCentro" rendered="#{estagioItens.situacaoEstagioEnum eq 'REALIZANDO' and (estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'DEFERIDO' or estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'INDEFERIDO' or estagioItens.relatorioEstagioVO.codigo eq 0)}">
+                                            <otm:commandButton id="entregarRelatorioEstagio" value="#{msg_botoes.btn_estagioRelatorioEstagio}" action="#{EstagioControle.realizarCriacaoQuestionarioRelatorioEstagio}" update="panelRelatorioEstagio, formRelatorioEstagio, form" oncomplete="PF('panelRelatorioEstagio').show()" icon="#{msg_botoes.btn_icon_adicionar_embutido}" style="margin-bottom: 10%;" styleClass="btn btn-primary"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{estagioItens.relatorioEstagioVO.codigo ne 0}">
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_EntregueDia}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{EstagioControle.realizarFormatacaoData(estagioItens.relatorioEstagioVO.dataEnvioAnalise)}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_Situacao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" rendered="#{estagioItens.relatorioEstagioVO.codigo ne 0}" value="#{estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum.valor}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoRelatorio}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" rendered="#{estagioItens.relatorioEstagioVO.codigo ne 0}" value="#{EstagioControle.realizarFormatacaoData(estagioItens.relatorioEstagioVO.dataInicioRelatorio)} à #{EstagioControle.realizarFormatacaoData(estagioItens.relatorioEstagioVO.dataFinalRelatorio)}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_FollowMe_meses}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.relatorioEstagioVO.mesesConsiderados}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_HorasPorMes}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.relatorioEstagioVO.horasPorMes}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CHConsiderada}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.relatorioEstagioVO.horasConsideras}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'EM_CORRECAO'  or estagioItens.termoAditivo.situacao eq 'INDEFERIDO' and estagioItens.relatorioEstagioVO.motivosPadroesEstagioVO.codigo ne 0}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoPadrao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.relatorioEstagioVO.motivosPadroesEstagioVO.descricao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'EM_CORRECAO'}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoParaCorrecao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.relatorioEstagioVO.motivoCorrecao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_FormularioRelatorioEstagio}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <otm:commandButton id="downloadRelatorioEstagio" action="#{EstagioControle.realizarDownloadRelatorioEstagio}" value="#{msg_botoes.btn_estagioDownlaodArquivo}" oncomplete="location.href='../DownloadSV'" rendered="#{EstagioControle.apresentarDownloadArquivoRelatorioEstagio}" icon="#{msg_botoes.btn_icon_download_embutido}" style="margin-right: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="visualizarRelatorioEstagio" action="#{EstagioControle.realizarVisualizacaoRelatorioEstagio}" value="Visualizar Formulário" update="panelQuestionarioRelatorioEstagio, formQuestionarioRelatorioEstagio" oncomplete="#{EstagioControle.abrirModalRelatorioEstagio}" icon="#{msg_botoes.btn_icon_lupa_embutido}" style="margin-right: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="corrigirRelatorioEstagio" rendered="#{estagioItens.relatorioEstagioVO.codigo ne 0 and estagioItens.relatorioEstagioVO.situacaoRelatorioEstagioEnum eq 'EM_CORRECAO'}" action="#{EstagioControle.realizarCriacaoQuestionarioRelatorioEstagio}" value="#{msg_botoes.btn_estagioCorrigirRelatorio}" update="panelRelatorioEstagio, formRelatorioEstagio, form" oncomplete="PF('panelRelatorioEstagio').show()" icon="#{msg_botoes.btn_icon_solicitarCorrecao_embutido}" style="margin-right: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="visualizarListaRelatorioEstagio" value="#{msg_botoes.btn_estagioVisualizarRelatoriosEntregues}" action="#{EstagioControle.realizarConsultaRelatoriosEstagioEntregues}" update="panelVisualizarTodosRelatorioEstagio, formPanelVisualizarTodosRelatorioEstagio, form" oncomplete="PF('panelVisualizarTodosRelatorioEstagio').show()" icon="#{msg_botoes.btn_icon_lupa_embutido}" style="margin-right: 2%" styleClass="btn btn-primary"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.gradeCurricularEstagioVO.permiteTermoAditivo}">
+                                <otm2:panel name="panelEstagioTermoAditivo_#{estagioItens.codigo}" styleClass="border rounded" styleClassFooter="p5 ajustarConteudoNoCentro" styleClassHeader="" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important;">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-12 ajustarConteudoNoCentro" rendered="#{estagioItens.situacaoEstagioEnum eq 'REALIZANDO' and (estagioItens.termoAditivo.situacao eq 'DEFERIDO' or estagioItens.termoAditivo.situacao eq 'INDEFERIDO' or estagioItens.termoAditivo.codigo eq 0) and (estagioItens.termoRescisao.codigo eq 0 or estagioItens.termoRescisao.situacao eq 'DEFERIDO' or estagioItens.termoRescisao.situacao eq 'INDEFERIDO')}">
+                                        	<otm:commandButton id="entregarTermoAditivos" value="#{msg_botoes.btn_estagioTermoAditivo}" action="#{EstagioControle.adicionarNovoTermoAditivoRescisao}" update="panelUploadTermoAditivo, formUploadTermoAditivo" oncomplete="PF('panelUploadTermoAditivo').show()" icon="#{msg_botoes.btn_icon_adicionar_embutido}" style="margin-bottom: 10%;" styleClass="btn btn-primary"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoAditivo.codigo ne 0}">
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_EntregueDia}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{EstagioControle.realizarFormatacaoData(estagioItens.termoAditivo.dataEnvioAnalise)}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-3">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_Situacao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" rendered="#{estagioItens.termoAditivo.codigo ne 0}" value="#{estagioItens.termoAditivo.situacao.valor}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_PeriodoAditivado}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" rendered="#{estagioItens.termoAditivo.codigo ne 0}" value="#{EstagioControle.realizarFormatacaoData(estagioItens.termoAditivo.dataInicio)} à #{EstagioControle.realizarFormatacaoData(estagioItens.termoAditivo.dataTermino)}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoAditivo.situacao eq 'EM_CORRECAO' or estagioItens.termoAditivo.situacao eq 'INDEFERIDO' and estagioItens.termoAditivo.motivosPadroesEstagioVO.codigo ne 0}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoPadrao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoAditivo.motivosPadroesEstagioVO.descricao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoAditivo.situacao eq 'EM_CORRECAO'}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoParaCorrecao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoAditivo.motivoCorrecao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoAditivo.situacao eq 'INDEFERIDO'}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoParaIndeferimento}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoAditivo.motivoIndeferimento}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoAditivo}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <otm:commandButton id="downloadTermoAditivo" action="#{EstagioControle.downloadTermoAditivo}" value="#{msg_botoes.btn_estagioDownlaodArquivo}" oncomplete="#{estagioItens.termoAditivo.arquivo.nome ne '' ? EstagioControle.urlDownloadSV : EstagioControle.download}" icon="#{msg_botoes.btn_icon_download_embutido}" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="visualizarTermoAditivos" action="#{EstagioControle.visualizarTermoAditivo}" value="#{msg_botoes.btn_estagioVisualizarArquivo}" update="panelPreview, formPreview" oncomplete="#{EstagioControle.onCompleteModalTermoAditivoRescisao}" icon="#{msg_botoes.btn_icon_lupa_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="solicitarAssinatura" rendered="#{estagioItens.termoAditivo.situacao eq 'AGUARDANDO_SOLICITACAO_ASSINATURA' and estagioItens.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoAditivo and estagioItens.gradeCurricularEstagioVO.permiteAssinaturaDigitalTA}" action="#{EstagioControle.realizarSolicitacaoAssinaturaDigitalTermoAditivo}" update="form" value="#{msg_botoes.btn_estagioSolicitarAssinatura}" icon="#{msg_botoes.btn_icon_assinatura_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="corrigirTermoAditivo" rendered="#{estagioItens.termoAditivo.codigo ne 0 and estagioItens.termoAditivo.situacao eq 'EM_CORRECAO'}" action="#{EstagioControle.montarPanelCorrecaoTermoAditivo}" value="#{msg_botoes.btn_estagioCorrigirTermoAditivo}" update="panelCorrecaoTermoAditivo, formCorrecaoTermoAditivo" oncomplete="PF('panelCorrecaoTermoAditivo').show()" icon="#{msg_botoes.btn_icon_solicitarCorrecao_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                    <ui:define name="footer">
+                                        <ui:repeat id="itensAssinaturasTermoAditivo" value="#{estagioItens.termoAditivo.documentoAssinado.listaDocumentoAssinadoPessoa}" var="documentoAssinadoPessoaItens">
+                                            <h:panelGroup styleClass="col-md-2" style="display: flex; align-items: center;">
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'REJEITADO'}" value="#{resource['imagens/close.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="naoAssinadoIconTermoAditivo"> <p:tooltip for="naoAssinadoIconTermoAditivo" value="Rejeitado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'PENDENTE'}" value="#{resource['imagens/iconeAlertaAmarelo.jpg']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="pendenteIconTermoAditivo"> <p:tooltip for="pendenteIconTermoAditivo" value="Pendente" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'ASSINADO'}" value="#{resource['imagens/cadastradoSucesso.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="assinadoIconTermoAditivo"> <p:tooltip for="assinadoIconTermoAditivo" value="Assinado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{documentoAssinadoPessoaItens.tipoPessoa.membroComunidade ? documentoAssinadoPessoaItens.nomeMembroComunidade : documentoAssinadoPessoaItens.pessoaVO.nome}"/>
+                                            </h:panelGroup>
+                                        </ui:repeat>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.gradeCurricularEstagioVO.permiteTermoRecisao}">
+                                <otm2:panel name="panelEstagioTermoRescisao_#{estagioItens.codigo}" styleClass="border rounded" styleClassFooter="p5 ajustarConteudoNoCentro" styleClassHeader="" stylePanel="width: 100% !important; margin-bottom: 10px !important; padding:10px !important;">
+                                    <ui:define name="header">
+                                        <h:outputText value="#{msg_aplic.prt_PainelMonitoramentoEstagio_TermoRescisao}"/>
+                                    </ui:define>
+                                    <ui:define name="body">
+                                        <h:panelGroup layout="block" styleClass="col-md-12 ajustarConteudoNoCentro" rendered="#{estagioItens.situacaoEstagioEnum eq 'REALIZANDO' and (estagioItens.termoRescisao.situacao eq 'INDEFERIDO' or estagioItens.termoRescisao.situacao eq 'DEFERIDO' or estagioItens.termoRescisao.codigo eq 0) and (estagioItens.termoAditivo.codigo eq 0 or estagioItens.termoAditivo.situacao eq 'DEFERIDO' or estagioItens.termoAditivo.situacao eq 'INDEFERIDO')}">
+                                            <otm:commandButton id="entregarTermoRescisao" value="#{msg_botoes.btn_estagioTermoRescisao}" action="#{EstagioControle.adicionarNovoTermoAditivoRescisao}" update="panelUploadTermoRescisao, formUploadTermoRescisao" oncomplete="PF('panelUploadTermoRescisao').show()" icon="#{msg_botoes.btn_icon_adicionar_embutido}" style="margin-bottom: 10%;" styleClass="btn btn-primary"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoRescisao.codigo ne 0}">
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_EntregueDia}"/>
+                                                <h:outputText value="#{estagioItens.termoRescisao.dataEnvioAnalise}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-2">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_Situacao}"/>
+                                                <h:outputText value="#{estagioItens.termoRescisao.situacao.valor}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoRescisao.situacao eq 'EM_CORRECAO' or estagioItens.termoRescisao.situacao eq 'INDEFERIDO' and estagioItens.termoRescisao.motivosPadroesEstagioVO.codigo ne 0}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" rendered="#{!empty estagioItens.termoRescisao.motivosPadroesEstagioVO.descricao}" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoPadrao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoRescisao.motivosPadroesEstagioVO.descricao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoRescisao.situacao eq 'EM_CORRECAO'}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoParaCorrecao}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoRescisao.motivoCorrecao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.termoRescisao.situacao eq 'INDEFERIDO'}">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_MotivoParaIndeferimento}"/>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.termoRescisao.motivoIndeferimento}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_TermoRescisao}"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup layout="block" styleClass="col-md-12">
+                                                <otm:commandButton id="downloadTermoRescisaoDeclaracao" rendered="#{estagioItens.gradeCurricularEstagioVO.formaImpressaoTR eq 'MODELO'}" action="#{EstagioControle.downloadTermoRescisao}" value="#{msg_botoes.btn_estagioDownlaodArquivo}" oncomplete="#{EstagioControle.download}" icon="#{msg_botoes.btn_icon_download_embutido}" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="downloadTermoRescisao" rendered="#{estagioItens.gradeCurricularEstagioVO.formaImpressaoTR ne 'MODELO'}" action="#{EstagioControle.downloadTermoRescisao}" value="#{msg_botoes.btn_estagioDownlaodArquivo}" oncomplete="#{EstagioControle.urlDownloadSV}" icon="#{msg_botoes.btn_icon_download_embutido}" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="visualizarTermoRescisao" action="#{EstagioControle.visualizarTermoRescisao}" value="#{msg_botoes.btn_estagioVisualizarArquivo}" update="panelPreview, formPreview" oncomplete="#{EstagioControle.onCompleteModalTermoAditivoRescisao}" icon="#{msg_botoes.btn_icon_lupa_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="solicitarAssinaturaTermoRescisao" rendered="#{estagioItens.termoRescisao.situacao eq 'AGUARDANDO_SOLICITACAO_ASSINATURA' and estagioItens.termoRescisao.documentoAssinado.codigo eq 0 and estagioItens.matriculaVO.curso.configuracaoEstagio.permitirAssinaturaAlunoTermoRescisao and estagioItens.gradeCurricularEstagioVO.permiteAssinaturaDigitalTR}" action="#{EstagioControle.realizarSolicitacaoAssinaturaDigitalTermoRescisao}" update="form" value="#{msg_botoes.btn_estagioSolicitarAssinatura}" icon="#{msg_botoes.btn_icon_assinatura_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                                <otm:commandButton id="corrigirTermoRescisao" rendered="#{estagioItens.termoRescisao.codigo ne 0 and estagioItens.termoRescisao.situacao eq 'EM_CORRECAO'}" action="#{EstagioControle.montarPanelCorrecaoTermoRescisao}" value="#{msg_botoes.btn_estagioCorrigirTermoRescisao}" update="panelCorrecaoTermoRescisao, formCorrecaoTermoRescisao" oncomplete="PF('panelCorrecaoTermoRescisao').show()" icon="#{msg_botoes.btn_icon_solicitarCorrecao_embutido}" style="margin-left: 2%" styleClass="btn btn-primary"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </ui:define>
+                                    <ui:define name="footer">
+                                        <ui:repeat id="itensAssinaturasTermoRescisao" value="#{estagioItens.termoRescisao.documentoAssinado.listaDocumentoAssinadoPessoa}" var="documentoAssinadoPessoaItens">
+                                            <h:panelGroup styleClass="col-md-2" style="display: flex; align-items: center;">
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'REJEITADO'}" value="#{resource['imagens/close.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="naoAssinadoIconTermoRescisao"> <p:tooltip for="naoAssinadoIconTermoRescisao" value="Rejeitado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'PENDENTE'}" value="#{resource['imagens/iconeAlertaAmarelo.jpg']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="pendenteIconTermoRescisao"> <p:tooltip for="pendenteIconTermoRescisao" value="Pendente" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:graphicImage rendered="#{documentoAssinadoPessoaItens.situacaoDocumentoAssinadoPessoaEnum.name() eq 'ASSINADO'}" value="#{resource['imagens/cadastradoSucesso.png']}" styleClass="icon-close-assinatura" style="cursor:pointer" id="assinadoIconTermoRescisao"> <p:tooltip for="assinadoIconTermoRescisao" value="Assinado" styleClass="tooltipRich" /> </h:graphicImage>
+                                                <h:outputText styleClass="field control-label campos btn-block" value="#{documentoAssinadoPessoaItens.tipoPessoa.membroComunidade ? documentoAssinadoPessoaItens.nomeMembroComunidade : documentoAssinadoPessoaItens.pessoaVO.nome}"/>
+                                            </h:panelGroup>
+                                        </ui:repeat>
+                                    </ui:define>
+                                </otm2:panel>
+                            </h:panelGroup>
+                        </ui:define>
+                    </otm2:panel>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{estagioItens.modalidadeEstagioEnum eq 'APROVEITAMENTO'}">
+                    <otm2:panel name="panelAproveitamento_#{estagioItens.codigo}" styleClassFooter="p5 ajustarConteudoNoCentro" styleClassHeader="mn bg-gray-100 rounded-top p10" styleClassBody="mn p5" rendered="#{estagioItens.modalidadeEstagioEnum eq 'APROVEITAMENTO'}">
+                        <ui:define name="header">
+                            <i class="fas fa-award tituloCampos mr5 fs16"></i>
+                            <h:outputText styleClass="tituloCampos font-weight-bold" value="Aproveitamento - #{estagioItens.situacaoEstagioEnum.valor} - #{estagioItens.gradeCurricularEstagioVO.nome}/#{estagioItens.cargaHoraria}h"/>
+                        </ui:define>
+                        <ui:define name="body">
+                            <otm2:panel name="panelEstagioDadosAproveitamento_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="">
+                                <ui:define name="header">
+                                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DadosEstagio}"/>
+                                </ui:define>
+                                <ui:define name="body">
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_ComponenteEstagio}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.gradeCurricularEstagioVO.nome}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Forum_situacao}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.situacaoEstagioEnum.valor}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CHDeferida}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.cargaHorariaDeferida}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{estagioItens.situacaoEstagioEnum eq 'DEFERIDO'}">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DataDeferimento}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{EstagioControle.realizarFormatacaoData(estagioItens.dataDeferimento)}"/>
+                                    </h:panelGroup>
+                                </ui:define>
+                                <ui:define name="footer"></ui:define>
+                            </otm2:panel>
+                            <otm2:panel name="panelEstagioSitucaoAproveitamento_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="" rendered="#{estagioItens.situacaoEstagioEnum eq 'EM_CORRECAO' or estagioItens.situacaoEstagioEnum eq 'INDEFERIDO'}">
+                                <ui:define name="header">
+                                    <h:outputText value="Motivo - #{estagioItens.situacaoEstagioEnum.isEmCorrecao() ? 'Correção' : 'Indeferimento'}"/>
+                                </ui:define>
+                                <ui:define name="body">
+                                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.situacaoEstagioEnum eq 'INDEFERIDO'}">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="Motivo Indeferimento: "/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.motivoIndeferimento}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{estagioItens.situacaoEstagioEnum eq 'EM_CORRECAO'}">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="Motivo Correção: "/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.motivoCorrecao}"/>
+                                    </h:panelGroup>
+                                </ui:define>
+                            </otm2:panel>
+                            <otm2:panel name="panelAproveitamentoQuestionario_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="">
+                                <ui:define name="header">
+                                    <h:outputText value="Questionário"/>
+                                </ui:define>
+                                <ui:define name="body">
+                                    <h:panelGroup layout="block" styleClass="col-md-12">
+                                    	<otm2:questionarioResposta permiteDeletarArquivo="true" id="questionarioAproveitamento_#{row}" bean="#{EstagioControle}" objetoOrigem="#{estagioItens.questionarioAproveitamento}"/>
+                                    </h:panelGroup>
+                                </ui:define>
+                                <ui:define name="footer"></ui:define>
+                            </otm2:panel>
+                        </ui:define>
+                        <ui:define name="footer">
+                            <h:panelGroup styleClass="col-md-12 d-flex justify-content-center mt20">
+                                <otm:commandButton action="#{EstagioControle.corrigirAproveitamento}" value="Corrigir Aproveitamento" accesskey="1" update="panelAproveitamento_#{estagioItens.codigo}, form" rendered="#{estagioItens.situacaoEstagioEnum eq 'EM_CORRECAO'}" icon="#{msg_botoes.btn_icon_solicitarCorrecao_embutido}" styleClass="btn btn-primary"/>
+                            </h:panelGroup>
+                        </ui:define>
+                    </otm2:panel>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{estagioItens.modalidadeEstagioEnum eq 'ESTAGIO' and estagioItens.gradeCurricularEstagioVO.codigo eq 0}">
+                    <otm2:panel name="panelEstagioRegraAntiga_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" styleClassBody="mn p5">
+                        <ui:define name="header">
+                            <i class="fas fa-award tituloCampos mr5 fs16"></i>
+                            <h:outputText styleClass="tituloCampos font-weight-bold" value="Estágio - #{estagioItens.situacaoEstagioEnum.valor} - #{estagioItens.cargaHoraria}h"/>
+                        </ui:define>
+                        <ui:define name="body">
+                            <otm2:panel name="panelEstagioDadosRegraAntiga_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="">
+                                <ui:define name="header">
+                                    <h:outputText value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_DadosEstagio}"/>
+                                </ui:define>
+                                <ui:define name="body">
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="Empresa"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.empresaEstagio.nome}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.ano and !empty estagioItens.semestre}">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="Ano/Semestre"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.ano}/#{estagioItens.semestre}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty estagioItens.ano and empty estagioItens.semestre}">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="Ano"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.ano}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_Forum_situacao}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.situacaoEstagioEnum.valor}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="col-md-2">
+                                        <h:outputText styleClass="field control-label tituloCampos btn-block" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_CHDeferida}"/>
+                                        <h:outputText styleClass="field control-label campos btn-block" value="#{estagioItens.cargaHorariaDeferida}"/>
+                                    </h:panelGroup>
+                                </ui:define>
+                            </otm2:panel>
+                            <otm2:panel name="panelEstagioArquivoRegraAntiga_#{estagioItens.codigo}" styleClassFooter="dn" styleClassHeader="">
+                                <ui:define name="header">
+                                    <h:outputText value="Arquivo"/>
+                                </ui:define>
+                                <ui:define name="body">
+                                    <h:panelGroup styleClass="ajustarConteudoNoCentro">
+                                        <otm:commandButton action="#{EstagioControle.visualizarArquivoEstagioRegraAntiga}" value="Visualizar Arquivo" accesskey="1" update="panelPreview, formPreview" oncomplete="PF('panelPreview').show()" icon="#{msg_botoes.btn_icon_verificar_embutido}" styleClass="btn btn-primary"/>
+                                    </h:panelGroup>
+                                </ui:define>
+                            </otm2:panel>
+                        </ui:define>
+                    </otm2:panel>
+                </h:panelGroup>
+            </ui:repeat>
+            <h:panelGroup layout="block" styleClass="row">
+            	<otm:mensagem bean="#{EstagioControle}"/>
+            </h:panelGroup>
+            <h:panelGroup styleClass="barraFlutuanteInferior" layout="block">
+            	<otm:commandButton id="btnIncluirNovoEstagio" icon="#{msg_botoes.btn_icon_adicionar_embutido}" styleClass="btn btn-info" update="form" process="form" value="#{msg_aplic.prt_RelatorioEstagioMeusEstagios_IncluirNovoEstagio}" action="#{EstagioControle.cadastrarEstagioTelaInicialVisaoAluno}"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
+

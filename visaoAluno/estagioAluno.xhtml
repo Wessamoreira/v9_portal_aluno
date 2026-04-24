@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+    <ui:define name="tituloPagina">
+        <h:outputText value="#{msg_aplic.prt_Estagio_tituloForm}"/>
+    </ui:define>
+    <ui:define name="conteudo">
+        <h:panelGroup layout="block" styleClass="row mb2" rendered="#{EstagioControle.permiteAbrirEstagioVisaoAluno}">
+            <ui:include src="/visaoAluno/dashboardEstagioAluno.xhtml"/>
+        </h:panelGroup>
+        <h:panelGroup layout="block" rendered="#{!EstagioControle.permiteAbrirEstagioVisaoAluno}">
+            <ui:include src="/visaoAluno/dashboardEstagioNaoObrigatorioAluno.xhtml"/>
+        </h:panelGroup>
+        <h:panelGroup id="panelGroupTextArea" layout="block" styleClass="row mb-2" rendered="#{EstagioControle.permiteAbrirEstagioVisaoAluno and EstagioControle.estagioVO.modalidadeEstagioEnum eq 'ESTAGIO' and !empty EstagioControle.matriculaVO.curso.configuracaoEstagio.orientacao}">
+            <h:outputText styleClass="field control-label tituloCampos" value="Orientações de Abertura do Termo de Estágio"/>
+            <h:inputTextarea id="textAreaTermoEstagio" rows="4" cols="40" value="#{EstagioControle.matriculaVO.curso.configuracaoEstagio.orientacao}" disabled="true" styleClass="col-md-12 rounded"/>
+        </h:panelGroup>
+        <h:panelGroup id="formIncluirEstagio" layout="block" styleClass="row">
+            <h:panelGroup layout="block" styleClass="col-md-12" rendered="#{EstagioControle.permiteAbrirEstagioVisaoAluno}">
+                <ui:include src="../templates/estagioTemplate.xhtml"></ui:include>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+</html>
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="conteudo">
+	
+		<h:form prependId="false" id="form">
+			<h1 class="title1">EAD</h1>
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:spacer height="15px" />
+				<h:panelGroup style="background-color:transparent;">
+					<otm:spacer width="16px" />
+					<h:selectOneMenu styleClass="form-control campos" value="#{IntegracaoEADIPOGControle.disciplina.codigo}">
+						<f:selectItems value="#{IntegracaoEADIPOGControle.listaSelectItemDisciplinaOnline}" />
+					</h:selectOneMenu>
+					<h:panelGroup layout="block" styleClass="row mt20 ml10">
+						<!-- <otm:commandButton id="logar" action="#{IntegracaoEADIPOGControle.verificaLogarJump}" oncomplete="#{IntegracaoEADIPOGControle.popUpApresentar}" update="form" accesskey="1" styleClass="button2" style="position:relative; top:+10px;" image="#{resource['/imagens/botaoLogin2.png']}" /> -->
+						<otm:commandButton id="logar" action="#{IntegracaoEADIPOGControle.verificaLogarJump}" oncomplete="#{IntegracaoEADIPOGControle.popUpApresentar}" update="form" accesskey="1" styleClass="btn btn-default" icon="fas fa-lock" value="Entrar" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row" id="mensagemConsulta">
+				<otm:mensagem bean="#{IntegracaoEADIPOGControle}" />
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelAviso" widgetVar="panelAviso" width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Aviso"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formAviso">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<otm:spacer height="10" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD1}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD2}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD3}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD4}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD5}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD6}" />
+					</h:panelGroup>
+					<otm:spacer height="2" />
+					<h:panelGroup>
+						<otm:spacer width="15" />
+						<h:outputText styleClass="tituloCampos2" value="#{msg.msg_integracaoEAD7}" />
+					</h:panelGroup>
+					<otm:spacer height="10" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row m10">
+					<otm:commandButton id="logarJump" action="#{IntegracaoEADIPOGControle.logarJump}" update="form" accesskey="1" styleClass="btn btn-default" icon="fas fa-lock" value="Entrar" />
+				</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>
+</html>

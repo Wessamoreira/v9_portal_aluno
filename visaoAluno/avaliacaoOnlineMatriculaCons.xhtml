@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Avaliação On-line"></h:outputText>
+	</ui:define>
+	<ui:define name="conteudo">
+		<style type="text/css">
+.rich-dtascroller-table {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.rich-datascr-button {
+	border: none;
+}
+
+.rich-datascr-button-dsbld {
+	background-color: transparent;
+}
+
+.panelUnidade {
+	width: 100%;
+	min-height: 50px;
+	height: 100%;
+	float: left;
+	margin-top: 5px;
+	border: 1px solid #b3b3b3;
+	background-color: #FFFFFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-align: left;
+}
+
+.panelUnidadeImpar {
+	width: 100%;
+	min-height: 50px;
+	height: 100%;
+	float: left;
+	margin-top: 5px;
+	border: 1px solid gray;
+	background-color: #F4F4F4;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-align: left;
+}
+
+.panelUnidadeImpar:hover {
+	background-color: #FFFFFF;
+	opacity: 1.5;
+	border: 1px solid #b3b3b3;
+}
+
+.panelUnidade:hover {
+	background-color: #F4F4F4;
+	opacity: 1.5;
+	border: 1px solid gray;
+}
+
+.tabForm {
+	border-spacing: 0px;
+	border-color: #fff;
+	font: 12px arial;
+	padding: 3px;
+	border: 0px solid #fff;
+	vertical-align: top;
+}
+
+.tituloCamposResultado {
+	text-decoration: none;
+	text-align: left;
+	line-height: normal;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial,
+		Helvetica, sans-serif;
+	font-size: 12px;
+	color: #424242;
+}
+
+.tituloCamposResultado:link {
+	text-decoration: none;
+	color: #424242;
+}
+
+.tituloCamposResultado:active {
+	text-decoration: none;
+	color: #666666;
+}
+
+.col-md-3_rea {
+	width: 20% !important;
+	position: relative !important;
+	min-height: 1px !important;
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+
+.row_rea {
+	margin-left: -3.48837209px;
+	margin-right: -3.48837209px;
+	width: 100%;
+	flex-wrap: wrap;
+	display: flex;
+}
+
+@media ( min-width : 992px) {
+	.col-md-3_rea {
+		width: 20% !important;
+	}
+}
+
+@media ( max-width : 780px) {
+	.col-md-3_rea {
+		width: 50% !important;
+	}
+}
+
+.item-card {
+  border: 4px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+</style>
+		<h:form prependId="false" id="form">
+			<h:outputScript name="highcharts.js" library="script/highcharts" />
+			<h:outputScript name="exporting.js" library="script/highcharts/modules" />
+			<p:commandLink action="#{AvaliacaoOnlineMatriculaControle.liberarBackingBeanMemoria}" id="idLiberarBackingBeanMemoria" style="display: none" />
+			<h:panelGroup layout="block" styleClass="col-md-12 border rounded" rendered="#{empty AvaliacaoOnlineMatriculaControle.calendarioAtividadeMatriculaVOs}">
+				<h:panelGroup layout="block" styleClass="col-md-1">
+					<i class="fas fa-headset fs80 mb50 mt25" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-1">
+					<i class="far fa-comment fs50" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-10">
+					<h:outputText styleClass="float-left" value="''Ola! #{LoginControle.usuarioLogado.nome} não possui Avaliação On-line cadastradas !'' " style="font-family: emoji; font-size: 17px; font-weight: 600;" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{!empty AvaliacaoOnlineMatriculaControle.calendarioAtividadeMatriculaVOs}" id="panelGridForm">
+				<h:panelGroup id="panelGridAvaliacao">
+					<ui:repeat value="#{AvaliacaoOnlineMatriculaControle.calendarioAvaliacaoOnlineVOs}" var="calendarioAvaliacaoOnlineItens" rowKeyVar="idx">
+						<h:panelGroup layout="block" styleClass="item-card">
+    						<h:panelGroup layout="block" styleClass="row">
+								<otm2:panel id="panelAvaliacao_#{idx}" name="panelAvaliacao_#{idx}" opened="#{idx == 0}" styleClassHeader="row mn rounded-top p10" styleClassBody="mn p10" styleClassFooter="dn" renderedControl="true">
+									<ui:define name="header">
+										<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{calendarioAvaliacaoOnlineItens.apresentarConteudoUnidadePaginaRecursoEducacional}">
+											<h:outputText styleClass="tituloCampos font-weight-bold" value="Unidade:#{calendarioAvaliacaoOnlineItens.nomeUnidade}" />
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="tituloCampos font-weight-bold" value="Avaliação:#{calendarioAvaliacaoOnlineItens.nomeAvaliacao}" />
+										</h:panelGroup>
+									</ui:define>
+									<ui:define name="body">
+						  				<ui:repeat value="#{calendarioAvaliacaoOnlineItens.calendarioAtividadeMatriculaVOs}" var="avaliacaoOnlineItens">
+						  					<h:panelGroup layout="block" styleClass="item-card">
+		    									<h:panelGroup layout="block" styleClass="row">
+						  						<h:panelGroup layout="block" styleClass="col-md-3">
+													<h:outputText value="Data Liberação: " styleClass="field control-label tituloCampos" />
+													<h:outputText readonly="true" value="#{avaliacaoOnlineItens.dataInicio}">
+														<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+													</h:outputText>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="col-md-3">
+													<h:outputText value="Data Limite Realização: " styleClass="field control-label tituloCampos" />
+													<h:outputText readonly="true" value="#{avaliacaoOnlineItens.dataFim}">
+														<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+													</h:outputText>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'AGUARDANDO_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'EM_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'EXPIRADO'}">
+													<h:outputText value="Data Realização: " styleClass="field control-label tituloCampos" />
+													<h:outputText readonly="true" value="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.dataTermino}">
+														<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+													</h:outputText>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'AGUARDANDO_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'EM_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'EXPIRADO' ? 'col-md-3' : 'col-md-1'}">
+													<h:outputText value="Situação: " styleClass="field control-label tituloCampos" />
+													<h:outputText id="situacaoEnum" readonly="true" value="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum_Apresentar}" />
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="col-md-1" rendered="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'AGUARDANDO_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'EM_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum gt 'EXPIRADO'}">
+													<h:outputText value="Nota: " styleClass="field control-label tituloCampos" />
+													<h:outputText id="nota" value="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.nota}" readonly="true" onkeydown="aceitarSomenteValorDecimal(this)">
+														<f:converter converterId="FormatadorNumerico" />
+														<f:attribute name="quantidadeCasasDecimaisPermitirAposVirgula" value="3"></f:attribute>
+														<f:attribute name="quantidadeMinimaCasasDecimaisPermitirAposVirgula" value="3"></f:attribute>
+													</h:outputText>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'AGUARDANDO_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'EM_REALIZACAO' or avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'EXPIRADO' ? 'col-md-3' : 'col-md-1'}">
+													<h:outputText value="Tentativa: " styleClass="field control-label tituloCampos" />
+													<h:outputText readonly="true" value="#{avaliacaoOnlineItens.tentativaAvaliacaoOnline}" />
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="col-md-12">
+													<h:panelGroup layout="block" styleClass="col-md-6">
+														<p:dataTable id="graficoAproveitamento2" width="100%" headerClass="consulta" columnClasses="colunaAlinhamento" value="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.graficoAproveitamentoAvaliacaoVOs}" rowKeyVar="row" rendered="#{! empty avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.graficoAproveitamentoAvaliacaoVOs}" rows="1" var="graficoItem">
+															 <p:column filterExpression="#{graficoItem.geral}" style="text-align: center !important;">
+														        <f:facet name="header">
+														            <h:outputText value="Monitor de Conhecimento Por Disciplina" />
+														        </f:facet>
+														        <h:panelGroup layout="block" styleClass="col-md-12">
+																	<h:panelGroup layout="block" styleClass="col-md-6">
+																		<h:outputText id="assunto2" value="#{graficoItem.assunto}"/>
+																	</h:panelGroup>
+																	<h:panelGroup layout="block" styleClass="col-md-6">
+																		<h:outputText id="grafico2" value="#{graficoItem.graficoAproveitamento}" escape="false" />
+																	</h:panelGroup>
+																</h:panelGroup>
+														            <h:outputText id="descricao2" value="#{graficoItem.descricaoParametro}" style="#{graficoItem.cssNivelAproveitamento}" />
+														    </p:column>
+														</p:dataTable>
+													</h:panelGroup>
+													<h:panelGroup layout="block" styleClass="col-md-6">
+														<p:dataTable id="graficoAproveitamento" width="100%" headerClass="consulta" columnClasses="colunaAlinhamento" value="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.graficoAproveitamentoAvaliacaoVOs}" rowKeyVar="row" rendered="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.isApresentarMonitorConhecimentoPorAssunto}" rows="1" var="graficoItem">
+															<p:column filterExpression="#{!graficoItem.geral}" style="text-align: center !important;">
+																<f:facet name="header">
+																	<h:outputText value="Monitor de Conhecimento Por Assunto" />
+																</f:facet>
+																<h:panelGroup layout="block" styleClass="col-md-12">
+																	<h:panelGroup layout="block" styleClass="col-md-6">
+																		<h:outputText id="assunto" value="#{graficoItem.assunto}"/>
+																	</h:panelGroup>
+																	<h:panelGroup layout="block" styleClass="col-md-6">
+																		<h:outputText id="grafico1" escape="false" value="#{graficoItem.graficoAproveitamento}" />
+																	</h:panelGroup>
+																</h:panelGroup>
+																<h:outputText id="descricao" value="#{graficoItem.descricaoParametro}" style="#{graficoItem.cssNivelAproveitamento}" />
+															</p:column>
+														</p:dataTable>
+													</h:panelGroup>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="col-md-12 #{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.avaliacaoOnlineNaoRealizada ? 'mb10 pb10' : ''}">
+													<h:panelGroup styleClass="row mt10 text-center" rendered="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.avaliacaoOnlineNaoRealizada}">
+														<otm:commandButton id="iniciarAvaliacaoOnline" execute="@this" render="formInstrucoes" rendered="#{avaliacaoOnlineItens.isApresentarBotaoIniciarAvaliacaoOnline}" action="#{AvaliacaoOnlineMatriculaControle.iniciarInstrucoesAvaliacaoOnline}" accesskey="1" icon="#{msg_botoes.btn_icon_editar_embutido}" styleClass="btn btn-success" oncomplete="PF('panelInstrucoes').show();" value="#{msg.msg_iniciarAvaliacaoOnline}" />
+														<otm:commandButton id="continuarAvaliacaoOnline" render="form:panelGridMensagens" execute="@this" rendered="#{avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.situacaoAvaliacaoOnlineMatriculaEnum eq 'EM_REALIZACAO'}" action="#{AvaliacaoOnlineMatriculaControle.continuarAvaliacaoOnline}" accesskey="1" icon="#{msg_botoes.btn_icon_play_embutido}" styleClass="btn btn-success" value="#{msg.msg_continuarAvaliacaoOnline}" />
+													</h:panelGroup>
+													<h:panelGroup layout="block" styleClass="row mt10 text-center" rendered="#{!avaliacaoOnlineItens.avaliacaoOnlineMatriculaVO.avaliacaoOnlineNaoRealizada}">
+														<otm:commandButton id="visualizarGabarito" execute="@this" render="form:panelGridMensagens" action="#{AvaliacaoOnlineMatriculaControle.visualizarGabarito}" accesskey="1" icon="#{msg_botoes.btn_icon_lupa_embutido}" styleClass="btn btn-primary" value="Visualizar Gabarito" />
+													</h:panelGroup>
+												</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+						    			</ui:repeat>
+					     			</ui:define>
+					 			</otm2:panel>
+				 			</h:panelGroup>
+				 		</h:panelGroup>
+					</ui:repeat>
+					<h:outputText value="#{msg.msg_AvaliacaoOnline_nenhumaAvaliacaoOnlineDisponivel}" rendered="#{empty AvaliacaoOnlineMatriculaControle.calendarioAtividadeMatriculaVOs}" />
+				</h:panelGroup>
+				<otm:spacer height="10px" />
+				<h:panelGroup id="panelGridMensagens" layout="block" styleClass="row">
+					<otm:mensagem bean="#{AvaliacaoOnlineMatriculaControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado50" id="panelInstrucoes" widgetVar="panelInstrucoes" width="550" autosized="true" onShow="document.getElementById('valorConsultaProrrogar');">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Instruções da Avaliação On-line" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formInstrucoes">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText escape="false" value="Prezado(a) #{AvaliacaoOnlineMatriculaControle.visaoAlunoControle.pessoaVO.nome}, #{AvaliacaoOnlineMatriculaControle.avaliacaoOnlineMatriculaVO.configuracaoEADVO.instrucoesAvaliacaoOnline} " />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 text-center mt20">
+					<h:outputText styleClass="field control-label tituloCampos fs18" value="Gostaria de iniciar a realização da Avaliação On-line?" />
+				</h:panelGroup>
+				<otm:spacer height="10" />
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-50">
+					<otm:commandButton id="sim" value="Sim" icon="#{msg_botoes.btn_icon_confirmar_embutido}" styleClass="btn btn-info" update="form, formInstrucoes, panelGridMensagens" action="#{AvaliacaoOnlineMatriculaControle.iniciarAvaliacaoOnline}" image="#{resource['/imagens/ead/sim.png']}" onclick="this.disabled = true" oncomplete="this.disabled = false" />
+					<otm:spacer width="5" />
+					<otm:commandButton id="nao" value="Não" icon="#{msg_botoes.btn_icon_cancelar_embutido}" styleClass="btn btn-danger" oncomplete="PF('panelInstrucoes').hide();" image="#{resource['/imagens/ead/nao.png']}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row" id="panelGroupMensagens">
+					<otm:mensagem bean="#{AvaliacaoOnlineMatriculaControle}"></otm:mensagem>
+				</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

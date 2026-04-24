@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Download de Arquivos" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<!-- 		<ui:include src="./richPanelImagem.xhtml" /> -->
+		<script>
+			$('#conteudo').css('width', '98%');
+		</script>
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="downloadArquivo" layout="block" styleClass="row">
+				<h:panelGroup id="panelArquivo" layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-1" rendered="#{ArquivoControle.apresentarComboboxPeriodoVisaoAluno and ArquivoControle.matriculaVO.curso.periodicidade ne 'IN'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_BibliotecaEmprestimo_periodo}" />
+						<h:selectOneMenu styleClass="form-control camposObrigatorios" value="#{ArquivoControle.anoSemestre}">
+							<p:ajax event="change" listener="#{ArquivoControle.montarListaDisciplinaTurmaVisaoAluno}" update="panelArquivo, downloadArquivo, panelAbasConsulta" />
+							<f:selectItems value="#{ArquivoControle.listaSelectItemAnoSemestre}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_ProgramacaoAula_disciplina}" />
+						<h:selectOneMenu id="disciplina" styleClass="form-control camposObrigatorios" value="#{ArquivoControle.disciplinaVO.codigo}">
+							<p:ajax event="change" listener="#{ArquivoControle.consultarArquivos}" update="downloadArquivo, panelAbasConsulta" />
+							<f:selectItems value="#{ArquivoControle.listaSelectItemDisciplinasTurma}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup style="margin-top: 15px" layout="block" styleClass="row" rendered="#{ArquivoControle.isApresentarDadosArquivoAposSelecionarDisciplina and ArquivoControle.dentroDataMaximaLimiteDownload}" id="panelAbasConsulta">
+					<h:panelGroup layout="block" styleClass="row" rendered="#{ArquivoControle.apresentarListaArquivosAnexadosProfessor}" id="arquivosProf">
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  style="border:none; width:100%;" border="none" rowClasses="linhaSemBorda" columnClasses="columnSemBorda" id="arquivoDisciplinaTurmaProfessorVOs" value="#{ArquivoControle.arquivoVOs}" var="arquivoDisciplinaTurmaProfessor">
+							<p:column>
+								<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  style="border:none; width:100%; border:0;" rowClasses="linhaSemBorda" columnClasses="columnSemBorda" id="arquivoVOs" value="#{arquivoDisciplinaTurmaProfessor.arquivoFilhoVOs}" var="arquivoItens">
+									<f:facet name="header">
+										<h:panelGroup columns="2" width="100%">
+											<h:panelGroup layout="block" style="width:100%;text-align:left;">
+												<h:outputText value="Turma: #{arquivoDisciplinaTurmaProfessor.turma.identificadorTurma}" />
+											</h:panelGroup>
+											<h:panelGroup layout="block" style="width:100%;text-align:left;">
+												<h:outputText styleClass="float-right" value="Professor(a): #{arquivoDisciplinaTurmaProfessor.professor.nome}" />
+											</h:panelGroup>
+										</h:panelGroup>
+									</f:facet>
+									<p:column style="width:80%">
+										<h:panelGroup columns="1" width="100%">
+											<h:panelGroup>
+												<h:outputText styleClass="tituloCampos float-left" value="#{arquivoItens.indiceAgrupador} - " />
+												<h:outputText style="text-decoration:none;margin-left:5px;float: left" styleClass="tituloCampos" rendered="#{!empty arquivoItens.arquivoFilhoVOs}" value="#{arquivoItens.agrupador}" />
+												<h:outputText style="text-decoration:none;margin-left:5px;float: left" styleClass="tituloCampos" rendered="#{empty arquivoItens.arquivoFilhoVOs}" value="#{arquivoItens.descricaoApresentar}" />
+												<h:panelGroup style="float:right;">
+													<h:outputText rendered="#{empty arquivoItens.arquivoFilhoVOs}" value="Disponibilizado em: #{arquivoItens.dataUpload_Apresentar}" styleClass="tituloCampos" />
+													<otm:spacer width="5px" />
+													<h:panelGroup id="download1">
+														<p:commandLink target="#{arquivoItens.servidorArquivoOnline ne 'APACHE' ? '_blank' : '' }" action="#{ArquivoControle.selecionarArquivoParaDownload}" rendered="#{empty arquivoItens.arquivoFilhoVOs}" style="position:relative;" styleClass="iconeOpcoesUnidade" title="Download Arquivo">
+															<span class="#{msg_botoes.btn_icon_download_embutido} text-dark fa15" />
+															<!-- 														<h:graphicImage url="#{resource['/imagens/botaoDownloadResumido.png']}" /> -->
+														</p:commandLink>
+													</h:panelGroup>
+													<p:tooltip value="Download Arquivo" for="download1" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:column>
+									<p:column width="20%"><p:dataTable id="arquivoFilhoVOs" value="#{arquivoItens.arquivoFilhoVOs}" var="arquivoFilhoVOItens">
+										<p:column style="padding-left:30px;text-align:left">
+											<h:panelGroup columns="1" width="100%">
+												<h:panelGroup>
+													<h:outputText styleClass="itemIndicePagina" style="text-decoration:none;margin-left:5px" value="#{arquivoItens.indiceAgrupador}.#{arquivoFilhoVOItens.indice} - #{arquivoFilhoVOItens.descricaoApresentar}" />
+													<h:panelGroup style="float:right;">
+														<h:outputText value="Disponibilizado em: #{arquivoFilhoVOItens.dataUpload_Apresentar}" styleClass="tituloCampos" />
+														<otm:spacer width="5px" />
+														<h:panelGroup id="download">
+															<p:commandLink action="#{ArquivoControle.selecionarArquivoFilhoParaDownload}" style="position:relative;" styleClass="iconeOpcoesUnidade" target="#{arquivoFilhoVOItens.servidorArquivoOnline ne 'APACHE' ? '_blank' : '' }" title="Download Arquivo">
+																<span class="#{msg_botoes.btn_icon_download_embutido} text-dark fs15" />
+																<!-- 															<h:graphicImage url="#{resource['/imagens/botaoDownloadResumido.png']}" /> -->
+															</p:commandLink>
+														</h:panelGroup>
+														<otm:tooltip value="Download Arquivo" target="download" />
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+										</p:column>
+									</p:dataTable></p:column>
+								</p:dataTable>
+							</p:column>
+						</p:dataTable>
+						<p:remoteCommand name="update" update="form">
+						</p:remoteCommand>
+					</h:panelGroup>
+					<h:panelGroup style="margin-top: 20px" layout="block" styleClass="row" id="arquivosInst" rendered="#{ArquivoControle.apresentarListaArquivosAnexadosInstituicao}">
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+							<h:outputText styleClass="field control-label tituloCamposNegrito" style="font-size: 15px" value="Arquivos anexados pela Instituição" />
+						</h:panelGroup>
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="arquivos3" width="100%" headerClass="consulta" styleClass="tabConsulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaEsquerda" value="#{ArquivoControle.arquivosAnexadosInstituicao}" var="arquivoItens">
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="Descrição" />
+								</f:facet>
+								<h:outputText style="border:none;width:100%;height:auto;resize:auto;word-wrap: break-word;display:block;word-break:break-all;text-align: justify;" value="#{arquivoItens.descricaoArquivo}" />
+							</p:column>
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="Nome" />
+								</f:facet>
+								<h:outputText id="inputNome" styleClass="field control-label tituloCampos" value="#{arquivoItens.descricao}" />
+							</p:column>
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="#{msg_botoes.btn_opcoes}" />
+								</f:facet>
+								<h:panelGroup>
+									<otm:commandIcon id="cmdDownload" process="@this" oncomplete="#{ArquivoControle.caminhoServidorDownloadArquivo}" action="#{ArquivoControle.registrarDownloadVisaoAluno}" tooltip="Baixar Arquivo" icon="#{msg_botoes.btn_icon_download} iconePequeno" />
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row">
+					<otm:mensagem bean="#{ArquivoControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

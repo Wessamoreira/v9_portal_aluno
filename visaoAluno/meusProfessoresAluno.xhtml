@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Meus Professores" />
+	</ui:define>
+	<ui:define name="conteudo">
+	
+		<!-- <p:ajaxStatus id="statusCarregandoModalTopo" onstart="Richfaces.showModalPanel('panelStatusCarregandoTopo')" onstop="Richfaces.hideModalPanel('panelStatusCarregandoTopo')" />
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelStatusCarregandoTopo" autosized="true">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="../imagens/ajax-loader.gif" />
+				<h:outputText styleClass="field control-label tituloCampos" value="Processando..." />
+			</h:panelGrid>
+		</p:dialog> -->
+		<!-- <ui:include src="./richPanelImagem.xhtml" /> -->
+
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="meusProfessores" style="margin-top: 15px" layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="resultadoConsultaProfessor" style="background-color: transparent" width="100%" headerClass="consulta" columnClasses="colunaAlinhamentoCentralizada" value="#{ComunicacaoInternaControle.listaConsultaProfessor}" rowKeyVar="row" rows="10" var="professorItens" rendered="#{!empty ComunicacaoInternaControle.listaConsultaProfessor}">
+						<p:column style="text-align: center !important">
+							<f:facet name="header">
+								<h:outputText value="#{msg_aplic.prt_Pessoa_nome}" />
+							</f:facet>
+							<p:commandLink id="nomeProfessorItem" rendered="#{ComunicacaoInternaControle.apresentarVisaoAluno}" update="meusProfessores" action="#{ComunicacaoInternaControle.enviarMensagemProfessor}" value="#{professorItens.professorVO.nome}" />
+							<h:outputText rendered="#{!ComunicacaoInternaControle.apresentarVisaoAluno}" value="#{professorItens.professorVO.nome}" />
+						</p:column>
+						<p:column style="text-align: center !important">
+							<f:facet name="header">
+								<h:outputText value="#{msg_aplic.prt_Disciplina_tituloForm}" />
+							</f:facet>
+							<p:commandLink update="meusProfessores" title="#{msg.msg_enviarMensagem}" action="#{ComunicacaoInternaControle.enviarMensagemProfessor}" value="#{professorItens.disciplinaVO.nome}" />
+						</p:column>
+						<p:column style="text-align: center !important" width="10%" rendered="#{ComunicacaoInternaControle.apresentarVisaoAluno}">
+							<f:facet name="header">
+								<h:outputText value="Enviar Msg." />
+							</f:facet>
+							<otm:commandIcon update="meusProfessores" id="enviarMsg" tooltip="#{msg.msg_enviarMensagem}" action="#{ComunicacaoInternaControle.enviarMensagemProfessor}" icon="#{msg_botoes.btn_icon_enviar_email} iconePequeno" />	
+						</p:column>
+						<f:facet name="footer">
+							<div style="text-align: center !important">
+							</div>
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

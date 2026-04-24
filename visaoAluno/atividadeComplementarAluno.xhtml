@@ -1,0 +1,1227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+<h:head></h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_aplic.prt_VisaoAluno_atividadeComplementar}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="form" prependId="false">
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+					<h:panelGroup layout="block" styleClass="col-md-3">
+						<h:panelGroup layout="block"
+									  style="display: flex; align-items: center; width: 100%;">
+							<h:panelGroup layout="block" style="flex: 3;">
+								<h:outputText styleClass="field control-label tituloCamposNegrito" value="Total #{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaExigida}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="flex: 1; text-align: right;">
+								<otm:outputHelp	tooltip="#{msg.msg_AcompanhamentoAtividadeComplementar_chExigida}" id="AcompanhamentoAtividadeComplementar_chExigida"/>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaExigida}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3">
+						<h:panelGroup layout="block"
+									  style="display: flex; align-items: center; width: 100%;">
+							<h:panelGroup layout="block" style="flex: 3;">
+								<h:outputText styleClass="field control-label tituloCamposNegrito" value="Total #{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="flex: 1; text-align: right;">
+								<otm:outputHelp	tooltip="#{msg.msg_AcompanhamentoAtividadeComplementar_chRealizada}" id="AcompanhamentoAtividadeComplementar_chRealizada"/>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaRealizada}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3">
+						<h:panelGroup layout="block"
+									  style="display: flex; align-items: center; width: 100%;">
+							<h:panelGroup layout="block" style="flex: 3;">
+								<h:outputText styleClass="field control-label tituloCamposNegrito" value="Total #{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="flex: 1; text-align: right;">
+								<otm:outputHelp
+										tooltip="#{msg.msg_AcompanhamentoAtividadeComplementar_chConsiderada}"
+										id="AcompanhamentoAtividadeComplementar_chConsiderada"/>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaConsiderada}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3">
+						<h:panelGroup layout="block"
+									  style="display: flex; align-items: center; width: 100%;">
+							<h:panelGroup layout="block" style="flex: 3;">
+								<h:outputText styleClass="field control-label tituloCamposNegrito" value="Total #{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pendente}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="flex: 1; text-align: right;">
+								<otm:outputHelp	tooltip="#{msg.msg_AcompanhamentoAtividadeComplementar_chPendente}" id="AcompanhamentoAtividadeComplementar_chPendente"/>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaPendente}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{AcompanhamentoAtividadeComplementarControle.permiteAlunoImprimirRelatorioAtividade}">
+						<h:outputText value=" " style="display: block; height: 20px;" />
+						<otm:commandButton id="imprimirRelatorioAtividadeComplementar" oncomplete="#{AcompanhamentoAtividadeComplementarControle.download}" action="#{AcompanhamentoAtividadeComplementarControle.imprimirPDFAnalitico}"  render="formCadastro:panelMensagem" styleClass="btn btn-danger light btn-pdf" accesskey="2" title="#{msg_botoes.btn_GerarRelatorio}" value="#{msg_botoes.btn_GerarRelatorio}" icon="#{msg_botoes.btn_icon_pdf_embutido}" style="bottom: 0;"/>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row mn">
+					<p:tabView switchType="ajax">
+						<p:tab switchType="ajax" header="Atividade Complementar/Ensino" rendered="#{AcompanhamentoAtividadeComplementarControle.getExibirComplementarAcompanhamentoAtividadesComplementares() || AcompanhamentoAtividadeComplementarControle.exibirAbaPorTipoGrupoAtividade('COMPLEMENTAR')}">
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center" rendered="#{AcompanhamentoAtividadeComplementarControle.permiteAlunoIncluirAtividade}" style="margin:10px">
+								<otm:commandButton oncomplete="PF('panelIncluirAtividade').show()" update="formIncluirAtividade" action="#{AcompanhamentoAtividadeComplementarControle.novo('COMPLEMENTAR')}" value="Adicionar Atividade Complementar/Ensino" styleClass="btn btn-primary" icon="#{msg_botoes.btn_icon_adicionar_embutido}" onclick="" />
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaExigida}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarExigida}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarRealizada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarConsiderada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pendente}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarPendente}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_aguardandoDef}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarAguardandoDeferimento}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_indeferido}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoComplementarIndeferido}" />
+								</h:panelGroup>
+
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row">
+								<p:tabView switchType="ajax" style="margin-top: 15px">
+									<p:tab header="Atividade(s) Deferida(s)">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<h:outputText styleClass="field control-label tituloCamposNegrito" rendered="#{empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaVOs}" value="Não existe nenhum registro de atividade complementar para este aluno." />
+												<p:dataTable rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoComplementarVOs}" id="resultadoConsultaRegistroAtividadeComplementarMatriculaTipoComplementar" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoComplementarVOs}" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="width: 400px;text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_complementar}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_chExigida}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaExigida}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList type="none" style="width:100%;display:inline !important" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chRealizadaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaRealizada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaRealizada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList style="width:100%;display:inline !important" type="none" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chConsideradaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaConsiderada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento(s)" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<otm:commandIcon id="consultaDadosAtividadeComplementar" action="#{AcompanhamentoAtividadeComplementarControle.consultarListaRegistroAtividadeComplementarMatrilculaVOsAluno}" oncomplete="PF('panelRegistroAtividadeComplementar').show()" update="formRegistroAtividadeComplementar" icon="#{msg_botoes.btn_icon_lupa} iconePequeno" tooltip="Consultar Lista Registro Atividade Complementar/Ensino Matricula" />
+														</h:panelGroup>
+													</p:column>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab id="atividadesIndeferidasTipoComplementar" execute="@this" header="Atividade(s) Indeferida(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoComplementarVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoComplementar" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoComplementarVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Motivo Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.motivoIndeferimento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.dataDeferimentoIndeferimento}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoComplementar" maxPages="10" id="scResultadoRegistroIndeferido" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab header="Atividade(s) Aguardando Deferimento" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoComplementarVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoComplementar" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoComplementarVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Início Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Fim Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.dataFimAtividade}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoComplementar" maxPages="10" id="scResultadoRegistroAguardando" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab switchType="ajax" header="Atividade(s) Obrigatoria(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoComplementar}">
+										<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaObrigatoriasTipoComplementar" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoComplementar}" var="atividadeComplementarObrigatoriasItens">
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_complementar}" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.tipoAtividadeComplementarApresentar}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Horas Minima Exigida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaMinimaExigida}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Realizada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaRealizada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Considerada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaConsiderada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Pendente" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaPendente}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Excedida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaExcedida}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:tab>
+								</p:tabView>
+							</h:panelGroup>
+						</p:tab>
+						<p:tab switchType="ajax" header="Atividade Extensão"  rendered="#{AcompanhamentoAtividadeComplementarControle.getExibirExtensaoAcompanhamentoAtividadesComplementares() || AcompanhamentoAtividadeComplementarControle.exibirAbaPorTipoGrupoAtividade('EXTENSAO')}">
+							<h:panelGroup layout="block"  rendered="#{AcompanhamentoAtividadeComplementarControle.permiteAlunoIncluirAtividade}" styleClass="col-md-12 text-center" style="margin:10px">
+								<otm:commandButton oncomplete="PF('panelIncluirAtividade').show()"  update="formIncluirAtividade" action="#{AcompanhamentoAtividadeComplementarControle.novo('EXTENSAO')}" value="Adicionar Atividade Extensão" styleClass="btn btn-primary" icon="#{msg_botoes.btn_icon_adicionar_embutido}"/>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaExigida}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoExigida}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoRealizada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoConsiderada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pendente}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoPendente}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_aguardandoDef}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoAguardandoDeferimento}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_indeferido}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoExtensaoIndeferido}" />
+								</h:panelGroup>
+
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row">
+								<p:tabView switchType="ajax" style="margin-top: 15px">
+									<p:tab header="Atividade(s) Deferida(s)">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<h:outputText styleClass="field control-label tituloCamposNegrito" rendered="#{empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoExtensaoVOs}" value="Não existe nenhum registro de atividade extensão para este aluno." />
+												<p:dataTable rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoExtensaoVOs}" id="resultadoConsultaRegistroAtividadeComplementarMatriculaTipoExtensao" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoExtensaoVOs}" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="width: 400px; text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_extensao}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_chExigida}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaExigida}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList type="none" style="width:100%;display:inline !important" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chRealizadaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaRealizada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaRealizada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList style="width:100%;display:inline !important" type="none" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chConsideradaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaConsiderada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento(s)" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<otm:commandIcon id="consultaDadosAtividadeComplementar" action="#{AcompanhamentoAtividadeComplementarControle.consultarListaRegistroAtividadeComplementarMatrilculaVOsAluno}" oncomplete="PF('panelRegistroAtividadeComplementar').show()" update="formRegistroAtividadeComplementar" icon="#{msg_botoes.btn_icon_lupa} iconePequeno" tooltip="Consultar Lista Registro Atividade Complementar/Ensino Matricula" />
+														</h:panelGroup>
+													</p:column>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab id="atividadesIndeferidasTipoExtensao" execute="@this" header="Atividade(s) Indeferida(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoExtensaoVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoExtensao" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoExtensaoVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Motivo Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.motivoIndeferimento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.dataDeferimentoIndeferimento}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon id="download_documento2" action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoExtensao" maxPages="10" id="scResultadoRegistroIndeferido" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab header="Atividade(s) Aguardando Deferimento" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoExtensaoVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoExtensao" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoExtensaoVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Início Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Fim Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.dataFimAtividade}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon id="download_documento1" action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoExtensao" maxPages="10" id="scResultadoRegistroAguardando" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab switchType="ajax" header="Atividade(s) Obrigatoria(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoExtensao}">
+										<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaObrigatoriasTipoExtensao" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoExtensao}" var="atividadeComplementarObrigatoriasItens">
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_extensao}" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.tipoAtividadeComplementarApresentar}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Horas Minima Exigida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaMinimaExigida}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Realizada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaRealizada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Considerada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaConsiderada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Pendente" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaPendente}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Excedida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaExcedida}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:tab>
+								</p:tabView>
+							</h:panelGroup>
+
+						</p:tab>
+						<p:tab switchType="ajax" header="Atividade Pesquisa"  rendered="#{AcompanhamentoAtividadeComplementarControle.getExibirPesquisaAcompanhamentoAtividadesComplementares() || AcompanhamentoAtividadeComplementarControle.exibirAbaPorTipoGrupoAtividade('PESQUISA')}">
+							<h:panelGroup layout="block"  rendered="#{AcompanhamentoAtividadeComplementarControle.permiteAlunoIncluirAtividade}" styleClass="col-md-12 text-center" style="margin:10px">
+								<otm:commandButton oncomplete="PF('panelIncluirAtividade').show()"  update="formIncluirAtividade" action="#{AcompanhamentoAtividadeComplementarControle.novo('PESQUISA')}" value="Adicionar Atividade Pesquisa" styleClass="btn btn-primary" icon="#{msg_botoes.btn_icon_adicionar_embutido}"/>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaExigida}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaExigida}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaRealizada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaConsiderada}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pendente}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaPendente}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_aguardandoDef}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaAguardandoDeferimento}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="col-md-2">
+									<h:outputText styleClass="field control-label tituloCamposNegrito" value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_indeferido}" />
+									<h:inputText size="50" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.cargaHorariaTipoPesquisaIndeferido}" />
+								</h:panelGroup>
+
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row">
+								<p:tabView switchType="ajax" style="margin-top: 15px">
+									<p:tab header="Atividade(s) Deferida(s)">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<h:outputText styleClass="field control-label tituloCamposNegrito" rendered="#{empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoPesquisaVOs}" value="Não existe nenhum registro de atividade extensão para este aluno." />
+												<p:dataTable rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoPesquisaVOs}" id="resultadoConsultaRegistroAtividadeComplementarMatriculaTipoPesquisa" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaTipoPesquisaVOs}" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="width: 400px; text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pesquisa}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_chExigida}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaExigida}" />
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList type="none" style="width:100%;display:inline !important" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chRealizadaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaRealizada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaRealizada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; border-bottom:1px solid #cccccc;text-align:center" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}">
+															<p:dataList style="width:100%;display:inline !important" type="none" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" id="chConsideradaPeriodo" value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+																<h:panelGroup layout="block" style="width:100%">
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}: " />
+																	<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaConsiderada}" />
+																</h:panelGroup>
+															</p:dataList>
+														</h:panelGroup>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<h:outputText styleClass="field control-label tituloCampos" rendered="#{!empty registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementarMatriculaPeriodoVOs and !AcompanhamentoAtividadeComplementarControle.atividadeComplementarMatricula.matriculaVO.curso.integral}" value="Total: " />
+															<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}" />
+														</h:panelGroup>
+														<f:facet name="footer">
+														</f:facet>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento(s)" />
+														</f:facet>
+														<h:panelGroup layout="block" style="width:100%; text-align:center">
+															<otm:commandIcon id="consultaDadosAtividadeComplementar" action="#{AcompanhamentoAtividadeComplementarControle.consultarListaRegistroAtividadeComplementarMatrilculaVOsAluno}" oncomplete="PF('panelRegistroAtividadeComplementar').show()" update="formRegistroAtividadeComplementar" icon="#{msg_botoes.btn_icon_lupa} iconePequeno" tooltip="Consultar Lista Registro Atividade Complementar/Ensino Matricula" />
+														</h:panelGroup>
+													</p:column>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab id="atividadesIndeferidasTipoPesquisa" execute="@this" header="Atividade(s) Indeferida(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoPesquisaVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoPesquisa" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaIndeferidoTipoPesquisaVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Motivo Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.motivoIndeferimento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Indeferimento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.dataDeferimentoIndeferimento}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaIndeferidaTipoPesquisa" maxPages="10" id="scResultadoRegistroIndeferido" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab header="Atividade(s) Aguardando Deferimento" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoPesquisaVOs}">
+										<h:panelGroup layout="block" styleClass="row">
+											<h:panelGroup layout="block" styleClass="col-md-12">
+												<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoPesquisa" style="width:100%" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarMatriculaAguardandoDeferimentoTipoPesquisaVOs}" rows="10" var="registroAtividadeComplementarMatriculaVOItens">
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.nomeEvento}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Início Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.data}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Data Fim Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.registroAtividadeComplementar.dataFimAtividade}">
+															<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_ativComp}" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.tipoAtividadeComplementarVO.nome}" />
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H. Evento" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaEvento}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="C.H Realizada" />
+														</f:facet>
+														<h:outputText value="#{registroAtividadeComplementarMatriculaVOItens.cargaHorariaConsiderada}">
+															<f:converter converterId="FormatadorNumerico" />
+														</h:outputText>
+													</p:column>
+													<p:column style="text-align: center !important">
+														<f:facet name="header">
+															<h:outputText value="Download" />
+														</f:facet>
+														<otm:commandIcon action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+														<otm:commandIcon rendered="#{registroAtividadeComplementarMatriculaVOItens.apresentarDownload and registroAtividadeComplementarMatriculaVOItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (registroAtividadeComplementarMatriculaVOItens.arquivoVO.isImagem or registroAtividadeComplementarMatriculaVOItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(registroAtividadeComplementarMatriculaVOItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+													</p:column>
+													<f:facet name="footer">
+														<div style="text-align: center !important">
+															<otm2:dataScroller align="center" fastControls="hide" stepControls="auto" boundaryControls="auto" for="form:resultadoConsultaRegistroAtividadeComplementarMatriculaAguardandoTipoPesquisa" maxPages="10" id="scResultadoRegistroAguardando" />
+														</div>
+													</f:facet>
+												</p:dataTable>
+											</h:panelGroup>
+										</h:panelGroup>
+									</p:tab>
+									<p:tab switchType="ajax" header="Atividade(s) Obrigatoria(s)" rendered="#{!empty AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoPesquisa}">
+										<p:dataTable id="resultadoConsultaRegistroAtividadeComplementarMatriculaObrigatoriasTipoPesquisa" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{AcompanhamentoAtividadeComplementarControle.listaConsultaRegistroAtividadeComplementarObrigatoriaMatriculaTipoPesquisa}" var="atividadeComplementarObrigatoriasItens">
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_pesquisa}" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.tipoAtividadeComplementarApresentar}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Horas Minima Exigida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaMinimaExigida}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Realizada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaRealizada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Considerada" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaConsiderada}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Pendente" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaPendente}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="Carga Horaria Excedida" />
+												</f:facet>
+												<h:outputText value="#{atividadeComplementarObrigatoriasItens.cargaHorariaExcedida}">
+													<f:converter converterId="FormatadorNumerico" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:tab>
+								</p:tabView>
+							</h:panelGroup>
+						</p:tab>
+
+					</p:tabView>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="row" id="mensagemConsultaRegistroAtividadeComplementarMatricula">
+					<otm:mensagem bean="#{AcompanhamentoAtividadeComplementarControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+		<p:dialog styleClass="modalMaximizado" id="panelRegistroAtividadeComplementar" widgetVar="panelRegistroAtividadeComplementar" shadowOpacity="true" top="0" autosized="false" width="800" height="600">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Evento(s)"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="#{resource['imagens/close.png']}" styleClass="icon-close-modal" style="cursor:pointer" id="hidelinkAtividadeComplementar" />
+					<otm:componentControl target="panelRegistroAtividadeComplementar" operation="hide" event="click" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form id="formRegistroAtividadeComplementar" prependId="false">
+				<h:panelGroup layout="block" styleClass="row">
+					<ui:repeat rendered="#{!empty AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatricula.registroAtividadeComplementarMatriculaPeriodoVOs}" id="resultadoConsultaRegistroAtividadeComplementarMatriculaPeriodo" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatricula.registroAtividadeComplementarMatriculaPeriodoVOs}" var="registroAtividadeComplementarMatriculaPeriodoVOItens">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+
+							<p:dataTable id="resultadoConsultarAtividadeComplementar" width="100%" headerClass="consulta" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.eventoAtividadeComplementarVOs}" var="eventosItens">
+								<f:facet name="header">
+									<p:columnGroup>
+										<p:column colspan="10">
+											<h:outputText styleClass="field control-label tituloCampos" value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.ordenacao}" />
+										</p:column>
+										<p:column style="width:300px !important" width="300px" breakRowBefore="true">
+											<h:outputText value="#{msg_aplic.prt_VisaoAluno_atividadeComplementar_nomeEvento}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="Data Início Evento" />
+										</p:column>
+										<p:column>
+											<h:outputText value="Data Fim Evento" />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{msg_aplic.prt_VisaoAluno_atividadeComplementar_cargaHorariaEvento}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaRealizada}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{msg_aplic.prt_AcompanhamentoAtividadeComplementar_cargaHorariaConsiderada}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{msg_aplic.prt_RegistroAtividadeComplementar_observacao}" />
+										</p:column>
+										<p:column>
+											<h:outputText value="Download" />
+										</p:column>
+										<p:column>
+											<h:outputText value="Imprimir Certificado" />
+										</p:column>
+									</p:columnGroup>
+								</f:facet>
+								<p:column style="width:300px !important; text-align: center !important" width="300px">
+									<h:outputText value="#{eventosItens.nomeEvento}" />
+									<f:facet name="footer">
+									</f:facet>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<h:outputText value="#{eventosItens.data_Apresentar}" />
+									<f:facet name="footer">
+										<h:outputText value="Total" />
+									</f:facet>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<h:outputText value="#{eventosItens.dataFim_Apresentar}" />
+									<f:facet name="footer">
+										<h:outputText value="Total" />
+									</f:facet>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<h:outputText value="#{eventosItens.cargaHorariaEvento}" />
+									<f:facet name="footer">
+										<h:outputText value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaEvento}" />
+									</f:facet>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<h:outputText value="#{eventosItens.cargaHorariaRealizada}" />
+									<f:facet name="footer">
+										<h:outputText value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaRealizada}" />
+									</f:facet>
+								</p:column>
+								<p:column style="text-align: center !important">
+									<h:outputText value="#{eventosItens.cargaHorariaConsiderada}" />
+									<f:facet name="footer">
+										<h:outputText value="#{registroAtividadeComplementarMatriculaPeriodoVOItens.cargaHorariaConsiderada}" />
+									</f:facet>
+								</p:column>
+								<p:column id="columnObservacao">
+									<h:panelGroup layout="block" style="width:100%; text-align:center" rendered="#{!empty eventosItens.observacao}">
+										<otm:commandIcon update="formObservacao" oncomplete="PF('panelObservacao').show()" tooltip="#{eventosItens.observacao}" id="botaoObservacao" icon="#{msg_botoes.btn_icon_urgente} iconePequeno" action="#{AcompanhamentoAtividadeComplementarControle.selecionarEventoAtividadeComplementarVO}" />
+									</h:panelGroup>
+									<f:facet name="footer">
+									</f:facet>
+								</p:column>
+								<p:column>
+									<h:panelGroup layout="block" style="width:100%; text-align:center">
+										<otm:commandIcon action="#{AcompanhamentoAtividadeComplementarControle.realizarDownloadArquivo(eventosItens.arquivoVO)}" rendered="#{eventosItens.apresentarDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" tooltip="Download" oncomplete="#{AcompanhamentoAtividadeComplementarControle.getUrlDownloadSV(null)}" />
+										<!-- 											<otm:commandIcon rendered="#{eventosItens.apresentarDownload}" tooltip="#{msg_botoes.btn_download}" id="download" action="#{AcompanhamentoAtividadeComplementarControle.selecionarArquivoParaDownload}" icon="#{msg_botoes.btn_icon_download} iconePequeno" /> -->
+										<otm:commandIcon rendered="#{eventosItens.apresentarDownload and eventosItens.arquivoVO.servidorArquivoOnline eq 'APACHE' and (eventosItens.arquivoVO.isImagem or eventosItens.arquivoVO.isPdF)}" tooltip="Visualizar Arquivo" id="visualizar" action="#{AcompanhamentoAtividadeComplementarControle.realizarVisualizarArquivo(eventosItens.arquivoVO)}" icon="fas fa-eye  btn-white btn-primary iconePequeno" oncomplete="PF('panelPreviewAnexo').show();" update="formPreviewAnexo" />
+									</h:panelGroup>
+									<f:facet name="footer">
+									</f:facet>
+								</p:column>
+								<p:column id="columnImprimir">
+									<otm:commandIcon id="certificado"  rendered="#{eventosItens.registroAtividadeComplementarMatriculaVO.existeDocumentoAssinadoIndividual and AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatricula.tipoAtividadeComplementarVO.textoPadraoDeclaracao > 0}" tooltip="Imprimir Certificado" update="resultadoConsultarAtividadeComplementar"  action="#{AcompanhamentoAtividadeComplementarControle.gerarPDF}"   oncomplete="#{AcompanhamentoAtividadeComplementarControle.textoRelatorio}" icon="#{msg_botoes.btn_icon_download} iconePequeno" />
+									<otm:commandIcon id="certificado1"  rendered="#{!eventosItens.registroAtividadeComplementarMatriculaVO.existeDocumentoAssinadoIndividual and AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatricula.tipoAtividadeComplementarVO.textoPadraoDeclaracao > 0}"  tooltip="Gerar Certificado"  update="resultadoConsultarAtividadeComplementar" action="#{AcompanhamentoAtividadeComplementarControle.regerarPDF}"   oncomplete="#{AcompanhamentoAtividadeComplementarControle.textoRelatorio}" icon="#{msg_botoes.btn_icon_download} iconePequeno" />
+									<f:facet name="footer">
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</ui:repeat>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog styleClass="modalMaximizado" id="panelObservacao" widgetVar="panelObservacao" shadowOpacity="true" top="0" autosized="true" minWidth="800" minHeight="450">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Evento(s)"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="#{resource['imagens/close.png']}" styleClass="icon-close-modal" style="cursor:pointer" id="hidelinkPanelObs" />
+					<otm:componentControl target="panelObservacao" operation="hide" event="click" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form id="formObservacao" prependId="false">
+				<h:panelGroup layout="block" styleClass="col-md-10">
+					<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_VisaoAluno_atividadeComplementar_nomeEvento}" />
+					<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.eventoAtividadeComplementarVO.nomeEvento}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2">
+					<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_VisaoAluno_atividadeComplementar_data}" />
+					<h:inputText size="10" readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.eventoAtividadeComplementarVO.data_Apresentar}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_observacao}" />
+					<h:inputTextarea rows="4" styleClass="form-control campos" value="#{AcompanhamentoAtividadeComplementarControle.eventoAtividadeComplementarVO.observacao}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+					<otm:commandButton id="gravarObservacao" styleClass="btn btn-dark btn-gravar" title="#{msg_botoes.btn_gravar}" value="#{msg_botoes.btn_gravar}" update="mensagemConsultaRegistroAtividadeComplementarMatriculaIens, formRegistroAtividadeComplementar" action="#{AcompanhamentoAtividadeComplementarControle.alterarObservacaoRegistroAtividadeComplementarMatricula}" />
+				</h:panelGroup>
+				<h:panelGroup id="mensagemConsultaRegistroAtividadeComplementarMatriculaIens" columns="1" width="100%" styleClass="tabMensagens">
+					<otm:mensagem bean="#{AcompanhamentoAtividadeComplementarControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog styleClass="modalMaximizado" id="panelPreviewAnexo" widgetVar="panelPreviewAnexo" style="z-index:4200 !important" resizeable="true" zindex="4200" width="800" height="600" domElementAttachment="parent" autosized="false" shadowOpacity="true" top="10">
+			<f:facet name="header">
+				<h:outputText styleClass="field control-label tituloCampos" value="Visualizar Anexo"></h:outputText>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="#{resource['imagens/close.png']}" styleClass="icon-close-modal" style="cursor:pointer" id="hidelinkPreviewPreviewAnexo">
+						<otm:componentControl target="panelPreviewAnexo" operation="hide" event="click" />
+					</h:graphicImage>
+				</h:panelGroup>
+			</f:facet>
+			<h:form id="formPreviewAnexo" prependId="false">
+				<h:panelGroup layout="block" styleClass="row">
+
+					<h:panelGroup layout="block" rendered="#{AcompanhamentoAtividadeComplementarControle.isAnexoPDF}" style="margin-top: 15px" styleClass="col-md-12 text-center">
+						<otm:pdfView id="pdfAnexoPDF" toolbar="1" data="#{AcompanhamentoAtividadeComplementarControle.caminhoPreviewAnexo}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" rendered="#{AcompanhamentoAtividadeComplementarControle.isAnexoImagem}" style="margin-top: 15px" styleClass="col-md-12 text-center">
+						<h:graphicImage id="pdfAnexoImg" url="#{AcompanhamentoAtividadeComplementarControle.caminhoPreviewAnexo}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+
+						<otm:commandButton id="btnFecharAnexo" value="Fechar" icon="#{msg_botoes.btn_icon_cancelar_embutido}" styleClass="btn btn-danger" style="margin-left: 5px" oncomplete="PF('panelPreviewAnexo').hide();" />
+
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog styleClass="modalMaximizado" id="panelIncluirAtividade" widgetVar="panelIncluirAtividade" shadowOpacity="false">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Disciplina_uploadArquivos}" />
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="#{resource['imagens/close.png']}" styleClass="icon-close-modal" style="cursor:pointer" id="hidelinkpanelIncluirAtividade" />
+					<otm:componentControl target="panelIncluirAtividade" operation="hide" event="click" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form id="formIncluirAtividade" prependId="false">
+				<h:panelGroup id="panelDadosIncluriAtividade">
+					<h:panelGroup layout="block" styleClass="row mn">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_nomeEvento}" />
+							<h:inputText id="nomeEvento" maxlength="100" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.nomeEvento}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_data}" />
+							<h:panelGroup layout="block" styleClass="col-md-12 pn h36">
+								<otm:calendar id="data" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.data}" inputClass="form-control camposObrigatorios" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_data} Fim" />
+							<h:panelGroup layout="block" styleClass="col-md-12 pn h36">
+								<otm:calendar id="dataFim" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.dataFimAtividade}" inputClass="form-control camposObrigatorios" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="C.H Evento" />
+							<h:inputText id="cargaHorariaEvento" size="5" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatriculaIncluirVO.cargaHorariaEvento}">
+								<p:ajax event="change" update="cargaHorariaEvento" />
+								<f:converter converterId="FormatadorNumerico" />
+							</h:inputText>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="C.H Realizada" />
+							<h:inputText id="cargaHorariaConsiderada" size="5" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatriculaIncluirVO.cargaHorariaConsiderada}">
+								<p:ajax event="change" update="cargaHorariaConsiderada" />
+								<f:converter converterId="FormatadorNumerico" />
+							</h:inputText>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_instituicaoResponsavel}" />
+						<h:inputText id="instituicaoResponsavel" maxlength="100" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.instituicaoResponsavel}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_local}" />
+						<h:inputText id="local" maxlength="100" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.local}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_RegistroAtividadeComplementar_atividade}" />
+						<h:inputText id="atividade" maxlength="100" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarVO.atividade}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_GradeCurricularTipoAtividadeComplementar_tipoGrupoAtividade}" />
+						<h:selectOneMenu id="tipoAtividadeComplementar" styleClass="form-control camposObrigatorios" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatriculaIncluirVO.tipoAtividadeComplementarVO.codigo}">
+							<f:selectItems value="#{AcompanhamentoAtividadeComplementarControle.listaSelectItemTipoAtividadeComplementar}"/>
+							<p:ajax event="change" update="formIncluirAtividade" listener="#{AcompanhamentoAtividadeComplementarControle.montarDadosTipoAtividadeComplementarSelecionado}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-12 pn">
+						<h:panelGroup layout="block" styleClass="col-md-12" >
+							<h:outputText styleClass="field control-label tituloCampos" value="" />
+							<otm:outputHelp id="UploadArquivos_escolherArquivo" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UploadArquivos_escolherArquivo}">
+								<h:outputText style="display:block; width:100%; text-align:left" value="Formatos Válidos: gif, png, jpg, jpeg, bmp, pdf, JPEG, JPG, PNG, GIF, BMP, PDF, rar, zip" />
+								<h:outputText style="display:block; width:100%; text-align:left" value="Tamanho Máximo Permitido: #{AcompanhamentoAtividadeComplementarControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload} MB" />
+							</otm:outputHelp>
+
+							<p:fileUpload style="#{AcompanhamentoAtividadeComplementarControle.cssArquivoObrigatorio}" addLabel="Selecionar Arquivo" listHeight="40" listWidth="500" execute="formIncluirAtividade" noDuplicate="true" ontyperejected="alert('Formato de arquivo inválido, selecione arquivo nos formatos gif, png, jpg, jpeg, bmp, pdf, JPEG, JPG, PNG, GIF, BMP, PDF, rar, zip.');" onsizerejected="alert(Tamnho de arquivo não permitido)" fileUploadListener="#{AcompanhamentoAtividadeComplementarControle.upLoadArquivo}" acceptedTypes="gif, png, jpg, jpeg, bmp, pdf, JPEG, JPG, PNG, GIF, BMP, PDF, rar, zip" maxFilesQuantity="1" addControlLabel="Selecionar Arquivo" cancelEntryControlLabel="Cancelar" doneLabel="Pronto" sizeErrorLabel="Arquivo não Enviado. Tamanho Máximo Permitido #{AcompanhamentoAtividadeComplementarControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload} MB" progressLabel="Enviando" stopControlLabel="Parar" uploadControlLabel="Enviar" clearAllControlLabel="Limpar lista" transferErrorLabel="Falha de Transmissão" stopEntryControlLabel="Parar"
+											 immediateUpload="true">
+								<!--<p:ajax event="uploadcomplete" update="formIncluirAtividade" />-->
+							</p:fileUpload>
+
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<!-- <h:outputText styleClass="field control-label tituloCampos" value="Nome Arquivo" /> -->
+							<!-- <h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatriculaIncluirVO.arquivoVO.descricao}" /> -->
+							<h:outputText styleClass="field control-label tituloCampos" value="#{AcompanhamentoAtividadeComplementarControle.registroAtividadeComplementarMatriculaIncluirVO.arquivoVO.descricao}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<otm:mensagem bean="#{AcompanhamentoAtividadeComplementarControle}"></otm:mensagem>
+					<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+						<otm:commandButton update="formIncluirAtividade, form" oncomplete="#{AcompanhamentoAtividadeComplementarControle.oncompleteModal}" id="salvar" action="#{AcompanhamentoAtividadeComplementarControle.gravar}" value="#{msg_botoes.btn_gravar}" accesskey="1" styleClass="btn btn-dark btn-gravar" />
+						<otm:commandButton style="margin-left:5px" oncomplete="PF('panelIncluirAtividade').hide()"  immediate="true" value="#{msg_botoes.btn_fechar}" accesskey="2" styleClass="btn btn-primary dark btn-fechar" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

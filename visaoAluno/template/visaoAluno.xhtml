@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:otm3="http://www.otimize-ti.com.br" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br"  >
+<h:head>
+	<!-- Meta and Title -->
+	<title><ui:insert name="tituloPagina"></ui:insert><ui:insert name="tituloNavegador"></ui:insert></title>
+	<meta name="keywords" content="SEI, OTIMIZE-TI, SOFTWARE, EDUCACIONAL" />
+	<meta name="description" content="SEI - Sistema Educacional Intregrado" />
+	<meta name="author" content="Otimize-TI" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<ui:include src="/templates/cssVisao.xhtml"></ui:include>
+	<script src="#{resource['fontawesome/js/all.js']}" />
+	<h:outputScript name="nivelSenha.js" library="V2/script" />
+	<h:outputStylesheet name="nivelSenha.css" library="css" />
+	<f:loadBundle var="msg_botoes" basename="propriedades.Botoes" />
+	<f:loadBundle var="msg_aplic" basename="propriedades.Aplicacao" />
+	<f:loadBundle var="msg" basename="propriedades.Mensagens" />
+	<f:loadBundle var="msg_menu" basename="propriedades.Menu" />
+</h:head>
+<h:body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<ui:insert name="menu">
+			<h:form prependId="false" id="formMenuLateral" styleClass="backMenu menuLateral overflow-x">
+				<ui:fragment rendered="#{VisaoAlunoControle.ambienteVisaoAluno}">
+					<ui:include src="/visaoAluno/menuVisaoAluno.xhtml" />
+				</ui:fragment>
+				<ui:fragment rendered="#{!VisaoAlunoControle.ambienteVisaoAluno}">
+					<ui:include src="/visaoAluno/menuEstudoOnline.xhtml" />
+				</ui:fragment>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</ui:insert>
+		<div id="content-wrapper" class="d-flex flex-column ">
+			<div id="content">
+				<div class="navbar navbar-expand navbar-light fixed-top shadow border-bottom backTopo" style="height: 50px; border-bottom-size: 2px">
+					<ui:insert name="topo">
+						<ui:include src="/visaoAluno/topoVisaoAluno.xhtml" />
+					</ui:insert>
+				</div>
+				<h:panelGroup layout="block" styleClass="container-fluid " style="margin-top: 60px" id="pgConteudo">
+					<h:panelGroup id="titulo" layout="block" styleClass=" mb-3 border-bottom border-dark row">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h1 class="#{LoginControle.appMovel ? 'h5 pl-3' :'h4'} mb-0 pb-2 w-100">
+								<ui:insert name="tituloPagina">
+
+								</ui:insert>
+							</h1>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<ui:insert name="subTituloPagina">
+
+							</ui:insert>
+						</h:panelGroup>
+					</h:panelGroup>
+					<div id="conteudo" style="margin-top: 0px; width: 100%">
+						<ui:include src="../../ajaxStatus.xhtml" />
+						<div id="contentPopup" class="row tabconteudo tabconteudoead">
+							<ui:include src="/templates/javascriptVisao.xhtml"></ui:include>
+							<!-- 							<p:focus /> -->
+							<ui:insert name="conteudo">
+							</ui:insert>
+							<h:panelGroup layout="block" styleClass="row" style="order:1000">
+<!-- 							<p:growl id="msgFlutuante" life="5000" escape="false" redisplay="false" globalOnly="true" showDetail="true" showSummary="false" ></p:growl> -->
+							</h:panelGroup>
+						</div>
+					</div>
+					<div id="rodape">
+						<ui:insert name="rodape">
+							<ui:include src="../../visaoAdministrativo/template/rodapeVisaoAdministrativa.xhtml" />
+						</ui:insert>
+					</div>
+				</h:panelGroup>
+				<footer class="sticky-footer"> </footer>
+			</div>
+		</div>
+	</div>
+	<a class="scroll-to-top rounded" href="#page-top"> <i class="fas fa-angle-up"></i>
+	</a>
+
+	<script type="text/javascript">
+		(function($) {
+		    $(window).ready(function () {
+		    	if(#{session != null and session.getAttribute("LoginControle") != null
+		    		and session.getAttribute("LoginControle").getUsuarioLogado() != null
+		    		and session.getAttribute("LoginControle").getUsuarioLogado().getCodigo() > 0
+		    		and (session.getAttribute("LoginControle").getUsuarioLogado().getIsApresentarVisaoAluno() == null || !session.getAttribute("LoginControle").getUsuarioLogado().getIsApresentarVisaoAluno())
+		    		and (session.getAttribute("LoginControle").getUsuarioLogado().getIsApresentarVisaoPais() == null || !session.getAttribute("LoginControle").getUsuarioLogado().getIsApresentarVisaoPais())
+		    		and (!session.getAttribute("LoginControle").getNomeTelaAtual().contains("conteudoAlunoForm.xhtml") and !session.getAttribute("LoginControle").getNomeTelaAtual().contains("conteudoAlunoCons.xhtml"))
+		    		
+		    	}) {
+		    		$(location).attr('href', '../acessoRestrito.xhtml?faces-redirect=true');
+		    	}
+		    	 history.pushState(null, null, document.URL);
+				    window.addEventListener('popstate', function () {
+				        history.pushState(null, null, document.URL);
+				    });
+		    });
+		   
+		}(jQuery));
+		
+		
+	</script>
+	<ui:insert name="modal">
+
+	</ui:insert>
+	<ui:insert name="css">
+		<h:form prependId="false" id="formCss">
+			<style type="text/css">
+				#{LoginControle.scriptCssGerado}
+			</style>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:insert>
+
+</h:body>
+
+</html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_menu.Menu_Tarefa}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form prependId="false" id="form">
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-6">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_ProgramacaoAula_disciplina}" />
+					<h:selectOneMenu id="disciplina" styleClass="form-control campos" value="#{TarefaControle.tarefaConsultaVO.disciplinaVO.codigo}">
+						<p:ajax event="change" listener="#{TarefaControle.iniciarConsulta}" update="form">
+						</p:ajax>
+						<f:selectItems value="#{TarefaControle.listaSelectItemDisciplina}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-6">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Tarefa_periodo}" />
+					<p:remoteCommand process="@form" name="iniciarConsulta" action="#{TarefaControle.iniciarConsulta}" update="form">
+					</p:remoteCommand>
+					<h:panelGroup layout="block" styleClass="col-md-12 pn">
+						<h:panelGroup layout="block" styleClass="col-md-5 pn">
+							<otm:calendar id="dataIn" jsFunction="iniciarConsulta()" value="#{TarefaControle.controleConsultaOtimizado.dataIni}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-1 text-center">
+							<h:outputText styleClass="field control-label tituloCampos " style="position:relative; top:5px" value="#{msg_aplic.prt_Tarefa_periodo_ate}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-6 pn">
+							<otm:calendar id="dataFIn" jsFunction="iniciarConsulta()" value="#{TarefaControle.controleConsultaOtimizado.dataFim}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" rendered="#{!empty TarefaControle.controleConsultaOtimizado.listaConsulta}" styleClass="col-md-12 text-center mt10">
+					<otm:commandButton id="imprimirTarefa" update="form" oncomplete="#{TarefaControle.download}" action="#{TarefaControle.imprimirTarefas}" value="#{msg_botoes.btn_Imprimir}" styleClass="btn btn-primary btn-consultar" icon="#{msg_botoes.btn_icon_pdf_embutido}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 mt10">
+					<h:panelGroup styleClass="#{msg_botoes.btn_icon_alerta_triangulo_embutido} mr5" style="font-size:18px" rendered="#{empty TarefaControle.controleConsultaOtimizado.listaConsulta}" />
+					<h:outputText styleClass="tituloCampos " style="font-size:18px" rendered="#{empty TarefaControle.controleConsultaOtimizado.listaConsulta}" value="Nenhuma tarefa encontrada para os filtros informados."></h:outputText>
+					<p:dataTable id="items" type="definitions" value="#{TarefaControle.controleConsultaOtimizado}" var="tarefaItem" rows="10">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<otm2:panel name="tarefa_#{tarefaItem.codigo}">
+								<ui:define name="header">
+									<h:panelGroup layout="block" styleClass="col-md-10">
+										<h:panelGroup styleClass="#{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.icone} mr5 #{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.corIcone}" />
+										<h:outputText styleClass="field control-label tituloCampos" value="#{tarefaItem.descricao}"></h:outputText>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="col-md-2 text-right">
+										<h:panelGroup styleClass="fas fa-clock mr5 " />
+										<h:outputText styleClass="field control-label tituloCampos #{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.corIcone}" value="#{tarefaItem.dataTarefa_Apresentar}"></h:outputText>
+									</h:panelGroup>
+								</ui:define>
+								<ui:define name="body">
+									<h:panelGroup layout="block" styleClass="row">
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Turma"></h:outputText>
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.turmaVO.identificadorTurma}"></h:outputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Disciplina"></h:outputText>
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.disciplinaVO.nome}"></h:outputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Professor"></h:outputText>
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.professorVO.nome}"></h:outputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="col-md-6">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Situação"></h:outputText>
+											<h:panelGroup layout="block" styleClass="col-md-12 pn">
+												<h:panelGroup styleClass="#{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.icone} mr5 #{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.corIcone}" />
+												<h:outputText styleClass="field control-label tituloCampos  font-weight-bolder" value="#{tarefaItem.tarefaAlunoVO.situacaoTarefaAluno.valorApresentar}"></h:outputText>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{!empty tarefaItem.observacao}" styleClass="col-md-12">
+												<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Observação Tarefa"></h:outputText>
+												<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.observacao}"></h:outputText>
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{!empty tarefaItem.tarefaAlunoVO.observacao}" styleClass="col-md-12">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Observação Aluno"></h:outputText>
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.tarefaAlunoVO.observacao}"></h:outputText>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" rendered="#{!empty tarefaItem.tarefaAlunoVO.ocorrenciaVO.advertencia}" styleClass="row">
+										<h:panelGroup layout="block" styleClass="col-md-12">
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-lighter" value="Ocorrência"></h:outputText>
+											<h:outputText styleClass="field control-label tituloCampos col-md-12 pn font-weight-bolder" value="#{tarefaItem.tarefaAlunoVO.ocorrenciaVO.advertencia}"></h:outputText>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="row" rendered="#{!empty tarefaItem.arquivoVOs}">
+										<h:outputText styleClass="field control-label tituloCampos col-md-12 font-weight-lighter" style="display:block" value="Anexo(s)"></h:outputText>
+										<h:panelGroup layout="block" styleClass="col-md-12 pn ">
+											<ui:repeat value="#{tarefaItem.arquivoVOs}" var="arquivoItem">
+												<h:panelGroup layout="block" styleClass="col-md-6 ">
+													<h:panelGroup layout="block" styleClass="col-md-12 border rounded mt5">
+														<otm:commandIcon id="dwl" oncomplete="#{arquivoItem.servidorArquivoOnline eq 'APACHE'} ? location.href='#{LoginControle.usuarioLogado.isApresentarVisaoAdministrativa? '../../' : '../'}DownloadSV' : abrirPopup('#{LoginControle.usuarioLogado.isApresentarVisaoAdministrativa? '../../' : '../'}DownloadSV', 'DownloadSV_#{arquivoItem.codigo}',950,595)" tooltip="Download Arquivo" icon="#{arquivoItem.icone} iconePequeno" action="#{TarefaControle.realizarDownloadArquivo(arquivoItem)}" />
+														<p:commandLink styleClass="field control-label tituloCampos" oncomplete="#{arquivoItem.servidorArquivoOnline eq 'APACHE'} ? location.href='#{LoginControle.usuarioLogado.isApresentarVisaoAdministrativa? '../../' : '../'}DownloadSV' : abrirPopup('#{LoginControle.usuarioLogado.isApresentarVisaoAdministrativa? '../../' : '../'}DownloadSV', 'DownloadSV_#{arquivoItem.codigo}',950,595)" action="#{TarefaControle.realizarDownloadArquivo(arquivoItem)}">
+															<h:outputText value="#{arquivoItem.descricao}"></h:outputText>
+														</p:commandLink>
+													</h:panelGroup>
+												</h:panelGroup>
+											</ui:repeat>
+										</h:panelGroup>
+									</h:panelGroup>
+								</ui:define>
+								<ui:define name="footer">
+									<h:panelGroup layout="block" styleClass="col-md-12 mt10 text-center border-top pt5">
+										<otm:commandButton id="imprimirTarefaEsp" update="form" oncomplete="#{TarefaControle.download}" action="#{TarefaControle.imprimirTarefaEspecifica(tarefaItem)}" value="#{msg_botoes.btn_Imprimir}" styleClass="btn btn-danger" icon="#{msg_botoes.btn_icon_pdf_embutido}" />
+									</h:panelGroup>
+								</ui:define>
+							</otm2:panel>
+						</h:panelGroup>
+						<f:facet name="footer">
+						</f:facet>
+					</p:dataTable>
+					<otm2:dataScroller id="paginador" scrollListener="#{TarefaControle.scrollerListener}" bean="#{TarefaControle}" dadosConsulta="controleConsultaOtimizado" />
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

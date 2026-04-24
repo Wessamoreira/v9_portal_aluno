@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" >
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Documentos Digitais" />
+	</ui:define>
+	
+	<ui:define name="modal">
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelVisualizarPdf" shadowOpacity="true">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Visualização (PDF)" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form id="formVisualizarPdf">
+				<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+					<object type="application/pdf" data="#{DocumentoAssinadoControle.caminhoPreview}" width="950" height="600"></object>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<otm:mensagem bean="#{DocumentoAssinadoControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:outputScript name="jquery.color.js" library="script/crop" />
+		<h:outputScript name="jquery.Jcrop.js" library="script/crop" />
+		<h:outputStylesheet name="jquery.Jcrop.css" library="script/crop" />
+		<h:outputScript name="webcam.js" library="script/webcam" />
+		<style>
+.rf-sel-inp {
+	vertical-align: middle !important;
+	background-color: #ffffff !important;
+	background-image: none !important;
+	padding: 3px !important;
+	margin-bottom: 3px !important;
+	height: 18px !important;
+	border: 1px solid #CCCCCC !important;
+	border-left-color: #FA4D4D !important;
+	border-left-width: 2 !important;
+}
+
+::-webkit-scrollbar {
+	background: gray !important;
+	height: 7px;
+	width: 5px;
+	scrollbar-width: thin;
+}
+</style>
+
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="panelGridDocumentoDigitais" layout="block" styleClass="row mn" style="#{!empty DocumentoAssinadoControle.controleConsultaOtimizado.listaConsulta ? 'max-width: 100% !important; overflow: auto;' : ''}">
+				<h:panelGroup layout="block" styleClass="col-md-12 border rounded" rendered="#{empty DocumentoAssinadoControle.controleConsultaOtimizado.listaConsulta}">
+					<h:panelGroup layout="block" styleClass="col-md-1">
+						<i class="fas fa-headset fs80 mb50 mt25" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-1">
+						<i class="far fa-comment fs50" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-10">
+						<h:outputText styleClass="float-left" value="''Ola! O aluno '#{LoginControle.usuarioLogado.nome}' não tem Documentos Digitais !'' " style="font-family: emoji; font-size: 17px; font-weight: 600;" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="items" width="100%" headerClass="consulta"  value="#{DocumentoAssinadoControle.controleConsultaOtimizado}" rendered="#{!empty DocumentoAssinadoControle.controleConsultaOtimizado.listaConsulta}" rows="10" var="documentoAssinado1">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ArquivoAssinado_numeroDocumentoAssinado}" />
+						</f:facet>
+						<h:outputText value="#{documentoAssinado1.numeroDocumentoAssinado}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo Documento" />
+						</f:facet>
+						<h:outputText value="#{documentoAssinado1.tipoOrigemDocumentoAssinadoEnum.descricao}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Data Registro" />
+						</f:facet>
+						<h:outputText value="#{documentoAssinado1.dataRegistro}">
+							<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Arquivo" />
+						</f:facet>
+						<h:panelGroup layout="block" styleClass="row mn p5" style="max-width: 300px; overflow: auto;">
+							<h:panelGroup id="panelArquivo">
+								<h:outputText id="descricaoArquivo" value="#{documentoAssinado1.arquivo.descricaoArquivo_Apresentar}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<p:tooltip value="#{documentoAssinado1.arquivo.descricaoArquivo_Apresentar}" zindex="1000" form="panelArquivo" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Descrição" />
+						</f:facet>
+						<h:outputText value="#{documentoAssinado1.descricaoPersonalizada}" />
+					</p:column>
+					<p:column>
+				<f:facet name="header">
+    			<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+        			<div class="text-center mb10" style="flex: 1; margin-right: 10px;">
+           	 			<h:outputText value="Assinaturas" />
+        			</div>
+        			<div class="text-center mb10" style="flex: 1; margin-right: 10px;">
+            			<h:outputText value="Responsável" />
+       				 </div>
+        			<div class="text-center mb10" style="flex: 1; margin-right: 10px;">
+           				 <h:outputText value="Situação" />
+        			</div>
+        			<div class="text-center mb10" style="flex: 1;">
+            			<h:outputText value="Data" />
+        			</div>
+    			</div>
+				</f:facet>
+						<p:dataTable type="definitions" rowKeyVar="row2" style="width:100%; padding:0px !important; margin:0px !important" value="#{documentoAssinado1.listaDocumentoAssinadoPessoa}" var="pessoaItem">
+							<h:panelGroup cellpadding="0" cellspacing="0" columns="3" columnClasses="bordaDireita,bordaDireita, semBorda" style="width:100%;#{row2 ne 0 ? 'border-top:1px solid #C4C0C9;' : '' }">
+								<h:panelGroup layout="block" style="width:200px; text-align:left;min-height:20px">
+									<h:outputText value="#{pessoaItem.nomeAssinanteApresentar}" />
+								</h:panelGroup>
+								<h:panelGroup layout="block" style="width:80px; text-align:center;min-height:20px;">
+									<h:outputText value="#{pessoaItem.situacaoDocumentoAssinadoPessoaEnum.descricao}">
+									</h:outputText>
+								</h:panelGroup>
+								<h:panelGroup layout="block" style="width:120px;text-align:center;min-height:20px;">
+									<h:outputText rendered="#{pessoaItem.situacaoDocumentoAssinadoPessoaEnum eq 'ASSINADO'}" value="#{pessoaItem.dataAssinatura}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"></f:convertDateTime>
+									</h:outputText>
+									<h:outputText rendered="#{pessoaItem.situacaoDocumentoAssinadoPessoaEnum eq 'REJEITADO'}" value="#{pessoaItem.dataRejeicao}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"></f:convertDateTime>
+									</h:outputText>
+									<h:outputText rendered="#{pessoaItem.situacaoDocumentoAssinadoPessoaEnum eq 'PENDENTE'}" value="#{pessoaItem.dataSolicitacao}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"></f:convertDateTime>
+									</h:outputText>
+								</h:panelGroup>
+							</h:panelGroup>
+						</p:dataTable>
+					</p:column>
+					<p:column>
+					<f:facet name="header">
+							<h:outputText value="Opção" />
+						</f:facet>
+						<otm:commandIcon id="visualizarArquivoPdf" oncomplete="PF('panelVisualizarPdf').show()" tooltip="Visualizar PDF" rendered="#{documentoAssinado1.tipoOrigemDocumentoAssinadoEnum eq 'TERMO_RESPONSABILIDADE' or documentoAssinado1.tipoOrigemDocumentoAssinadoEnum eq 'OFICIO'}" action="#{DocumentoAssinadoControle.visualizacaoArquivoPDF}" icon="#{msg_botoes.btn_icon_verificar} iconePequeno" render="form, formVisualizarPdf" />
+						<otm:commandIcon id="visualizarPDF" oncomplete="#{DocumentoAssinadoControle.urlDownloadSV}" tooltip="Visualizar PDF" rendered="#{documentoAssinado1.tipoOrigemDocumentoAssinadoEnum eq 'DIPLOMA_DIGITAL' or documentoAssinado1.tipoOrigemDocumentoAssinadoEnum eq 'HISTORICO_DIGITAL'}" action="#{DocumentoAssinadoControle.realizarDownloadArquivoPDF}" icon="#{msg_botoes.btn_icon_download} iconePequeno" />
+						<otm:commandIcon id="dwl" oncomplete="#{DocumentoAssinadoControle.urlDownloadSV}" tooltip="Download Arquivo" icon="#{msg_botoes.btn_icon_download} iconePequeno" action="#{DocumentoAssinadoControle.realizarDownload}" />
+					</p:column>
+					<f:facet name="footer">
+					</f:facet>
+				</p:dataTable>
+				<otm2:dataScroller id="paginador" scrollListener="scrollerListenerDocumentoDigitaisAluno" bean="#{DocumentoAssinadoControle}" dadosConsulta="controleConsultaOtimizado" />
+				<h:panelGroup id="todosBotoes" styleClass="barraFlutuanteInferior" layout="block">
+					<otm:commandButton id="consultar" update="form" action="#{DocumentoAssinadoControle.realizarInicializacaoDocumentoDigitaisAluno}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{DocumentoAssinadoControle}"></otm:mensagem>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>

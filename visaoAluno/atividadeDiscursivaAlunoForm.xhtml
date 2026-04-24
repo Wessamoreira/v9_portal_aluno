@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br" xmlns:pt="http://java.sun.com/jsf/passthrough"> <h:head>
+</h:head> <ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+
+	<ui:define name="tituloPagina">
+		<h:outputText value="Atividade Discursiva" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<style type="text/css">
+.rich-dtascroller-table {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.rich-datascr-button {
+	border: none;
+}
+
+.rich-datascr-button-dsbld {
+	background-color: transparent;
+}
+
+.rich-list-item {
+	display: block;
+}
+
+.mceLayout {
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.cke_top {
+	display: none !important;
+}
+
+.cke_reset {
+	background-color: transparent !important;
+	height: 60px !important;
+}
+
+.cke_reset:hover {
+	height: auto !important;
+}
+
+.interacaoForum {
+	background-color: #fff;
+}
+
+.interacaoForum:hover {
+	background-color: #ededed;
+}
+
+.rf-dg {
+	background: none !important;
+	empty-cells: show;
+	left: 214px;
+	position: relative;
+}
+</style>
+
+		<p:dialog styleClass="modalMaximizado50" modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" id="panelConfirmarSoliticaoAvaliacaoProfessor" widgetVar="panelConfirmarSoliticaoAvaliacaoProfessor" width="500" minWidth="300" onShow="document.getElementById('botaoConfirmarSoliticaoAvaliacaoProfessor').focus()">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmar Solicitação Avaliar Resposta Atividade Discursiva" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formConfirmarSoliticaoAvaliacaoProfessor">
+				<h:panelGroup layout="block" styleClass="col-md-12 text-center m10">
+					<h:outputText styleClass="field control-label tituloCampos" rendered="#{!AtividadeDiscursivaControle.gravandoInteracao}" value="Deseja Solicitar Avaliação do Professor?" />
+					<h:outputText styleClass="field control-label tituloCampos" rendered="#{AtividadeDiscursivaControle.gravandoInteracao}" value="A resposta já se encontra preenchida. Deseja Enviar a Interação e Solicitar Avaliação do Professor ou Somente Enviar Interação?" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-50">
+					<otm:commandButton id="botaoConfirmarSoliticaoAvaliacaoProfessor" rendered="#{!AtividadeDiscursivaControle.gravandoInteracao}" update="form" oncomplete="PF('panelConfirmarSoliticaoAvaliacaoProfessor').hide();" action="#{AtividadeDiscursivaControle.solicitarAvaliacaoProfessor}" styleClass="btn btn-primary dark" value="Sim" icon="#{msg_botoes.btn_icon_gostar_embutido}" title="Sim" marginButton="2px" />
+					<otm:commandButton id="botaoConfirmarSoliticaoAvaliacaoProfessor2" rendered="#{AtividadeDiscursivaControle.gravandoInteracao}" update="form" oncomplete="PF('panelConfirmarSoliticaoAvaliacaoProfessor').hide();" action="#{AtividadeDiscursivaControle.solicitarAvaliacaoProfessor}" styleClass="btn btn-primary dark" value="Solicitar Avaliação Professor" icon="#{msg_botoes.btn_icon_confirmar_embutido}" title="Solicitar Avaliação Professor" marginButton="2px" />
+					<otm:commandButton id="botaoNaoConfirmarSoliticaoAvaliacaoProfessor" rendered="#{!AtividadeDiscursivaControle.gravandoInteracao}" update="form" oncomplete="PF('panelConfirmarSoliticaoAvaliacaoProfessor').hide();" action="#{AtividadeDiscursivaControle.cancelarSolicitacaoAvaliacaoProfessor}" styleClass="btn btn-danger dark" value="Não" icon="#{msg_botoes.btn_icon_cancelar_embutido}" title="Não" marginButton="2px" />
+					<otm:commandButton id="botaoNaoConfirmarSoliticaoAvaliacaoProfesso2" rendered="#{AtividadeDiscursivaControle.gravandoInteracao}" update="form" oncomplete="PF('panelConfirmarSoliticaoAvaliacaoProfessor').hide();" action="#{AtividadeDiscursivaControle.cancelarSolicitacaoAvaliacaoProfessor}" styleClass="btn btn-success" value="Enviar Interação" icon="#{msg_botoes.btn_icon_enviar_email_embutido}" title="Enviar Interação" marginButton="2px" />
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<!-- <ui:include src="./richPanelImagem.xhtml" /> -->
+		<h:form prependId="false" id="form">
+			<p:commandLink action="#{AtividadeDiscursivaControle.liberarBackingBeanMemoria}" id="idLiberarBackingBeanMemoria" style="display: none" />
+			<h:panelGroup id="panelGridForm" layout="block" styleClass="row">
+				<h:panelGroup layout="block" styleClass="col-md-12 pn">
+					<h:panelGroup layout="block" styleClass="col-md-1">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_codigo}" />
+						<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.codigo}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-6" id="situacao">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_situacao}" />
+					<h:inputText value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva_Apresentar}" readonly="true" styleClass="form-control camposSomenteLeitura" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-6 pn" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO'}">
+					<h:panelGroup layout="block" styleClass="col-md-12" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Nota" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6 " rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO'}">
+						<h:inputText rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO' and !AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.utilizaNotaConceito}" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.nota}" readonly="true" styleClass="form-control camposSomenteLeitura">
+							<f:converter converterId="FormatadorNumericoPermitindoValoresNulos" />
+							<f:attribute name="quantidadeCasasDecimaisPermitirAposVirgula" value="2" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6 " rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO'}">
+						<h:inputText rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva eq 'AVALIADO' and AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.utilizaNotaConceito}" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.notaConceito.conceitoNota}" readonly="true" styleClass="form-control camposSomenteLeitura" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_dataliberacaoresposta}" />
+					<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.dataInicioAtividade}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+					</h:inputText>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_datalimiteentrega}" />
+					<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.dataLimiteEntrega}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+					</h:inputText>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-2 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="Data Alteração" />
+					<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.dataUpload}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+					</h:inputText>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-6">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_disciplina}" />
+					<h:inputText readonly="true" id="disciplinasTurma" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.disciplinaVO.nome}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-4 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_turma}" />
+					<h:inputText readonly="true" styleClass="form-control camposSomenteLeitura" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.turmaVO.identificadorTurma}" />
+				</h:panelGroup>
+				<!-- <h:panelGroup layout="block" styleClass="row" style="margin-top: 20px">
+					<h:panelGroup layout="block" styleClass="col-md-3 ">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_matricula}" />
+						<h:inputText value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.matriculaPeriodoTurmaDisciplinaVO.matriculaObjetoVO.matricula}" readonly="true" styleClass="form-control camposSomenteLeitura" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6 ">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_aluno}" />
+						<h:inputText value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.matriculaPeriodoTurmaDisciplinaVO.matriculaObjetoVO.aluno.nome}" readonly="true" styleClass="form-control camposSomenteLeitura" />
+					</h:panelGroup>
+				</h:panelGroup> -->
+				<h:panelGroup layout="block" styleClass="col-md-12 ">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_AtividadeDiscursiva_enunciado}" />
+					<h:inputTextarea style="min-height:150px; white-space: pre-wrap;overflow-wrap: break-word;" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.enunciado}" readonly="true" styleClass="form-control camposSomenteLeitura" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row mn" style="margin-top:10px">
+					<h:panelGroup layout="block" styleClass="row" rendered="#{!empty AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.listaMaterialDeApoio}">
+						<h:panelGroup layout="block" styleClass="col-md-12 ">
+							<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="listaArquivo" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento, colunaAlinhamento" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.listaMaterialDeApoio}" rows="5" var="materialApoio">
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Material de Apoio" />
+									</f:facet>
+									<h:outputText value="#{materialApoio.descricao}" />
+								</p:column>
+								<p:column style="text-align: center !important">
+									<f:facet name="header">
+										<h:outputText value="Opções" />
+									</f:facet>
+									<p:commandLink action="#{AtividadeDiscursivaControle.selecionarArquivoApoioParaDownload}">
+										<span class="#{msg_botoes.btn_icon_download} iconePequeno rounded" style="margin-right: 0.8em; position: relative; top: 1px; font-size: 14px;" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row mn" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.isApresentarArtefatoEntregaUploadArquivo}">
+						<h:panelGroup layout="block" styleClass="col-md-1">
+							<h:outputText styleClass="tituloCampos" value="Upload" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.isApresentarArtefatoEntregaUploadArquivo}" />
+							<otm:outputHelp rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.isApresentarArtefatoEntregaUploadArquivo}" tooltip="#{msg.msg_AtitivadeDiscursiva_tipoArquivosPermitidos}" id="helpTipoControleTempoLimiteConclusaoDisciplina" styleClass="field control-label tituloCampos" value="" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4">
+							<p:fileUpload invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido #{LoginControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload}MB." sizeLimit="#{LoginControle.limiteUpload}" auto="true" mode="advanced" disabled="#{!AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor}" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.isApresentarArtefatoEntregaUploadArquivo }" previewWidth="200" allowTypes="#{LoginControle.getExtensaoUpload('pdf, doc, docx, pptx, ppt, xls, xlsx, zip, rar, gdoc')}" invalidFileMessageAdd="#{LoginControle.getMensagemArquivoInvalido('pdf, doc, docx, pptx, ppt, xls, xlsx, zip, rar, gdoc')}" invalidFileMessage="#{LoginControle.getMensagemArquivoInvalido('pdf, doc, docx, pptx, ppt, xls, xlsx, zip, rar, gdoc')}" listener="#{AtividadeDiscursivaControle.uploadArquivoAtividadeDiscursivaRespostaAluno}" fileLimit="1" label="Selecionar Arquivo"
+								uploadLabel="Enviar" id="upload">
+							</p:fileUpload>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-7" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.nomeArquivoApresentar ne ''}">
+							<h:inputText id="nomeArquivo" styleClass="form-control camposSomenteLeitura" readonly="true" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.nomeArquivoApresentar}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.atividadeDiscursivaVO.isApresentarArtefatoEntregaTextual}">
+					<h:outputText styleClass="field control-label tituloCampos" value="Resposta" />
+					<h:inputTextarea rows="5" value="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.resposta}" styleClass="form-control camposObrigatorios" readonly="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isEncobrirRespostaSeDataLimiteEntregaExpirar}" disabled="#{!AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barraFlutuanteInferior">
+					<otm:commandButton id="voltar" value="Voltar" styleClass="btn btn-primary pr20 pl20" action="#{AtividadeDiscursivaControle.voltarTelaConsultaVisaoAluno}" icon="#{msg_botoes.btn_icon_voltar}" alt="#{msg.msg_consultar_dados}" accesskey="2" marginButton="2px" />
+					<otm:commandButton id="solicitar" styleClass="btn btn-success" disabled="#{!AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor}" icon="#{msg_botoes.btn_icon_confirmar_embutido}" update="panelGridForm" value="Solicitar Avaliação Professor" action="#{AtividadeDiscursivaControle.solicitarAvaliacaoProfessor}" alt="#{msg.msg_consultar_dados}" accesskey="2" rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor and AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessorConsiderandoArtefatoEntregaUploadArquivo}" marginButton="2px" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row mn border rounded bg-gray mt10">
+					<h:panelGroup layout="block" styleClass="row mn border rounded-top bg-gray-100 p10 mb10">
+						<h:outputText styleClass="tituloCampos font-weight-bold" value="Interações Aluno/Professor" />
+					</h:panelGroup>
+					<!-- <h:panelGrid id="panelGridInteracao" columns="1" styleClass="tabForm" width="100%">
+						<h:panelGroup id="textoInteracao" styleClass="panelUnidadeImpar" layout="block" style="text-align:left;width:99%;height:100%;margin-top:5px;float:left;padding:5px"> -->
+					<h:panelGroup rendered="#{AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.situacaoRespostaAtividadeDiscursiva ne 'AVALIADO'}">
+						<h:panelGroup layout="block" styleClass="col-md-10">
+							<h:inputTextarea styleClass="form-control" pt:placeholder="Envie uma interação" rows="2" value="#{AtividadeDiscursivaControle.atividadeDiscursivaInteracaoVO.interacao}" disabled="#{!AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<otm:commandButton id="enviar" styleClass="btn btn-success pl20 pr20" value="Enviar" update="form, formConfirmarSoliticaoAvaliacaoProfessor, panelGridMensagens" icon="#{msg_botoes.btn_icon_enviar_email_embutido}" action="#{AtividadeDiscursivaControle.realizarVerificacaoGravarSoliticarAvaliacaoProfessor}" oncomplete="#{AtividadeDiscursivaControle.abrirModalConfirmarSoliticaoAvaliacaoProfessor}" disabled="#{!AtividadeDiscursivaControle.atividadeDiscursivaRespostaAlunoVO.isApresentarBotaoSolicitarAvaliacaoProfessor}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-12 mt10" />
+					<ui:repeat type="definitions" id="items" rowKeyVar="row" value="#{AtividadeDiscursivaControle.controleConsultaInteracao}" rows="10" var="atividadeInteracao">
+						<h:panelGroup styleClass="row border rounded ml5 interacaoForum">
+							<h:panelGroup style="cursor:pointer;z-index:1000;">
+								<h:panelGroup layout="block" style="height:45px;width:45px;" styleClass="float-left text-center mr10 mt5">
+									<h:graphicImage rendered="#{atividadeInteracao.usuarioVO.pessoa.existeImagem}" style="width: 24px;" value="#{AtividadeDiscursivaControle.caminhoBaseFoto}/imagem/#{atividadeInteracao.usuarioVO.pessoa.CPF}/#{atividadeInteracao.usuarioVO.pessoa.arquivoImagem.nome}" />
+									<h:panelGroup rendered="#{!atividadeInteracao.usuarioVO.pessoa.existeImagem}" styleClass="fa fa-user fs24 text-gray-700 mt10">
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="float-left p10" style="text-align:left;float:left;width:calc(100% - 60px);height:100%;">
+								<h:panelGroup style="cursor:pointer;z-index:1000;">
+									<h:panelGroup layout="block" style="text-align:left;width:85%;float:left;">
+										<h:panelGroup style="text-align:left;width:70%;float:left;">
+											<h:outputText styleClass="field control-label tituloCampos font-weight-bold" value="#{msg_aplic.prt_Forum_criadoPor}: " />
+											<h:outputText styleClass="field control-label tituloCampos" value="#{atividadeInteracao.usuarioVO.pessoa.nome}" />
+										</h:panelGroup>
+										<h:panelGroup style="text-align:right;width:30%;float:right;">
+											<h:outputText styleClass="field control-label tituloCampos font-weight-bold" value="Data Interação " />
+											<h:outputText styleClass="field control-label tituloCampos" value="#{atividadeInteracao.dataInteracao}">
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+											</h:outputText>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="col-md-12">
+								<h:panelGroup id="texto" style="cursor:pointer;z-index:1000;">
+									<otm:editor id="editor" value="#{atividadeInteracao.interacao}" readonly="true" autoResize="true" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</ui:repeat>
+					<otm2:dataScroller align="center" for="items" style="border:none; background-color:transparent; margin-top:5px" update="itens, panelGridMensagens" id="scResultadoConsulta" scrollListener="#{AtividadeDiscursivaControle.scrollListenerInteracao}" rendered="#{AtividadeDiscursivaControle.controleConsultaInteracao.apresentarDatascroller}" selectedStyle="border:none;background-color:transparent;" pagesVar="pages" boundaryControls="hide" fastControls="hide" inactiveStyle="border:none; background-color:transparent;">
+						<f:facet name="previous">
+							<h:outputText style="width:100px;text-align:center;display:block;" styleClass="scrollLast" value="Mais Recentes" />
+						</f:facet>
+						<f:facet name="next">
+							<h:outputText style="width:100px;display:block;text-align:center;" styleClass="scrollNext" value="Mais Antigas" />
+						</f:facet>
+						<f:facet name="pages">
+							<h:outputText style="width:200px;display:block;text-align:center;" styleClass="tituloCamposResultado" value="#{AtividadeDiscursivaControle.controleConsultaInteracao.paginaAtual}/#{pages}" />
+						</f:facet>
+					</otm2:dataScroller>
+				</h:panelGroup>
+				<h:panelGroup style="margin-top: 15px" id="panelGridMensagens" layout="block" styleClass="row">
+					<otm:mensagem bean="#{AtividadeDiscursivaControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+		</h:form>
+	</ui:define>
+</ui:composition> </html>

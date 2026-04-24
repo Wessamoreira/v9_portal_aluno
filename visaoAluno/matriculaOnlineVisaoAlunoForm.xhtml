@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br"> <h:head>
+</h:head> <ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="Matrícula On-line"></h:outputText>
+	</ui:define>
+	<ui:define name="conteudo">
+		<!-- 	<ui:include src="richPanelImagem.xhtml" /> -->
+		
+		<h:form prependId="false" id="form">
+			<div id="matricularAlunosEAD" class="marginbottom">
+				<div class="padding"> 
+					<ui:include src="./matriculaOnlineForm.xhtml" /> 
+				</div>
+			</div>
+			<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+		</h:form>
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelTermoAceite" widgetVar="panelTermoAceite" width="800" height="650" autosized="false" domElementAttachment="parent">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Contrato" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formTermoAceite">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<otm:editor id="textoTermoAceite" readonly="true" height="430px" value="#{RenovarMatriculaControle.matriculaPeriodoVO.processoMatriculaVO.mensagemApresentarVisaoAluno}">
+					</otm:editor>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText id="termoAceiteModal" styleClass="field control-label tituloCampos" value="Aceitar Termos do Contrato" />
+					<h:panelGroup layout="block" styleClass="col-md-12 pn">
+						<otm:selectBooleanCheckbox styleClass="form-control campos" value="#{RenovarMatriculaControle.termoAceiteContrato}">
+							<p:ajax event="change" update="form" oncomplete="PF('panelTermoAceite').hide()" />
+						</otm:selectBooleanCheckbox>
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+		
+		<otm2:popupRecebimentoCartaoOnline bean="#{RenovarMatriculaControle}" />
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelDocumentacaoPendente" widgetVar="panelDocumentacaoPendente" width="850" height="550" domElementAttachment="parent" style="overflow: auto;">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Documentação Pendente" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formDocumentacaoPendente">
+				<h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+					<otm:commandButton action="#{RenovarMatriculaControle.atualizarListaControleDocumentacaoCurso}" value="Atualizar Lista de Documentos Obrigatórios do Curso" update="formDocumentacaoPendente" icon="#{msg_botoes.btn_icon_atualizar_embutido}" styleClass="btn btn-primary" />
+				</h:panelGroup>
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="documetacaoMatriculaVO" width="100%" headerClass="subordinado" styleClass="tabFormSubordinada" rowClasses="linhaImparSubordinado, linhaParSubordinado" value="#{RenovarMatriculaControle.matriculaVO.documetacaoMatriculaVOs}" var="documetacaoMatriculaItens">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_DocumetacaoMatricula_tipoDocumento}" />
+						</f:facet>
+						<h:outputText value="#{documetacaoMatriculaItens.tipoDeDocumentoVO.nome}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_DocumetacaoMatricula_entregue}" />
+						</f:facet>
+						<h:outputText rendered="#{documetacaoMatriculaItens.entregue}" value="Sim" />
+						<h:outputText rendered="#{!documetacaoMatriculaItens.entregue}" value="Não" />
+					</p:column>
+				</p:dataTable>
+				<h:panelGroup layout="block" styleClass="row mn">
+					<otm:mensagem bean="#{RenovarMatriculaControle}" />
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelPreInscricao" widgetVar="panelPreInscricao" width="800" autosized="true" domElementAttachment="parent">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Pré-Inscrição" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formPreInscricao">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}">
+							<h:outputText rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_CPF}" />
+							<p:inputMask rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" id="cpf" size="14" maxlength="14" mask="999.999.999-99" styleClass="form-control camposObrigatorios" value="#{RenovarMatriculaControle.pessoaVO.CPF}">
+								<p:ajax event="change" listener="#{RenovarMatriculaControle.consultaProspectPessoaCPF}" update="formPreInscricao" />
+							</p:inputMask>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}">
+							<h:outputText rendered="#{RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_email}" />
+							<h:inputText rendered="#{RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" id="email2" size="50" maxlength="100" styleClass="form-control camposObrigatorios" value="#{RenovarMatriculaControle.pessoaVO.email}">
+								<p:ajax event="change" listener="#{RenovarMatriculaControle.consultaProspectPessoaEmail}" update="formPreInscricao" />
+							</h:inputText>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-6">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_nome}" />
+							<h:inputText id="nome" size="50" maxlength="100" styleClass="form-control camposObrigatorios" value="#{RenovarMatriculaControle.pessoaVO.nome}" />
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}">
+							<h:outputText rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_email}" />
+							<h:inputText rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarCPFPreInscricao}" id="email" size="50" maxlength="100" styleClass="form-control camposObrigatorios" value="#{RenovarMatriculaControle.pessoaVO.email}">
+							</h:inputText>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_telefoneRes}" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}" />
+							<p:inputMask id="telefoneRes" size="14" maxlength="14" styleClass="form-control campos" mask="(99) 9999-9999" value="#{RenovarMatriculaControle.pessoaVO.telefoneRes}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_celular}" />
+							<p:inputMask id="celular" size="14" maxlength="14" styleClass="form-control campos" mask="(99) 9999-9999" value="#{RenovarMatriculaControle.pessoaVO.celular}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Filiacao_telefoneComer}" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}" />
+							<p:inputMask id="telefoneComer" size="14" maxlength="14" styleClass="form-control campos" mask="(99) 9999-9999" value="#{RenovarMatriculaControle.pessoaVO.telefoneComer}" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarTelefone}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarDataNasc}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataNasc}" />
+							<otm:calendar id="dataNasc" readonly="#{RenovarMatriculaControle.encontrouProspectAluno}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" changed="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="10" value="#{RenovarMatriculaControle.pessoaVO.dataNasc}" />
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarSexo}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_sexo}" />
+							<h:selectOneMenu disabled="#{RenovarMatriculaControle.encontrouProspectAluno}" disabledClass="camposSomenteLeitura" id="sexo" styleClass="form-control campos" value="#{RenovarMatriculaControle.pessoaVO.sexo}">
+								<f:selectItems value="#{RenovarMatriculaControle.listaSelectItemSexoPessoa}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarRG}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_RG}" />
+							<h:inputText id="rg" size="13" maxlength="25" styleClass="form-control campos" value="#{RenovarMatriculaControle.pessoaVO.RG}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarRG}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_dataEmissaoRG}" />
+							<otm:calendar id="dataEmissaoRG" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" changed="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="10" value="#{RenovarMatriculaControle.pessoaVO.dataEmissaoRG}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarRG}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_orgaoEmissor}" />
+							<h:inputText id="orgaoEmissor" size="10" maxlength="200" styleClass="form-control campos" value="#{RenovarMatriculaControle.pessoaVO.orgaoEmissor}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarRG}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoEmissaoRG}" />
+							<h:selectOneMenu id="estadoEmissaoRG" styleClass="form-control campos" value="#{RenovarMatriculaControle.pessoaVO.estadoEmissaoRG}">
+								<f:selectItems value="#{RenovarMatriculaControle.listaSelectItemEstadoEmissaoRGPessoa}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEstadoCivil}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_estadoCivil}" />
+							<h:selectOneMenu id="estadoCivil" styleClass="form-control campos" value="#{RenovarMatriculaControle.pessoaVO.estadoCivil}">
+								<f:selectItems value="#{RenovarMatriculaControle.listaSelectItemEstadoCivilPessoa}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEnderecoPreInscricao}">
+							<h:panelGroup layout="block" styleClass="col-md-12">
+								<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_CEP}" />
+							</h:panelGroup>
+							<p:fragment id="regionCep">
+								<p:inputMask readonly="#{RenovarMatriculaControle.encontrouProspectAluno}" id="CEP" mask="99.999-999" size="10" maxlength="10" styleClass="#{RenovarMatriculaControle.styleClassCamposEncontrouProspect}" value="#{RenovarMatriculaControle.pessoaVO.CEP}">
+									<p:ajax event="change" listener="#{RenovarMatriculaControle.carregarEnderecoPessoa}" update="endereco, setor, cidade, estado" />
+								</p:inputMask>
+								<h:message for="CEP" styleClass="field control-label mensagemDetalhada col-md-12" />
+							</p:fragment>
+							<p:ajaxStatus for="regionCep">
+								<f:facet name="start">
+									<h:panelGroup>
+										<h:graphicImage width="15px" value="#{resource['/imagens/ajax.gif']}" />
+									</h:panelGroup>
+								</f:facet>
+							</p:ajaxStatus>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEnderecoPreInscricao}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_endereco}" />
+							<h:inputText id="endereco" size="50" maxlength="100" readonly="#{RenovarMatriculaControle.encontrouProspectAluno}" styleClass="#{RenovarMatriculaControle.styleClassCamposEncontrouProspect}" value="#{RenovarMatriculaControle.pessoaVO.endereco}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEnderecoPreInscricao}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_setor}" />
+							<h:inputText id="setor" size="50" maxlength="50" readonly="#{RenovarMatriculaControle.encontrouProspectAluno}" styleClass="#{RenovarMatriculaControle.styleClassCamposEncontrouProspect}" value="#{RenovarMatriculaControle.pessoaVO.setor}" />
+							<f:verbatim>
+								<h:outputText value=" " />
+							</f:verbatim>
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEnderecoPreInscricao}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_cidade}" />
+							<h:panelGroup layout="block" styleClass="col-md-12 pn">
+								<h:inputText readonly="true" disabled="true" id="cidade" size="55" maxlength="100" styleClass="form-control camposSomenteLeitura" value="#{RenovarMatriculaControle.pessoaVO.cidade.nome}" />
+								<span class="append-icon right"> <otm:commandIcon id="consultaCidades" tooltip="Localizar Cidade" update="formCidade" oncomplete="PF('panelCidade').show()" action="#{RenovarMatriculaControle.limparMensagem}" icon="#{msg_botoes.btn_icon_lupa_embutido}" rendered="#{!RenovarMatriculaControle.encontrouProspectAluno}" immediate="true" /> </span>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarEnderecoPreInscricao}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Estado" />
+							<h:inputText readonly="true" disabled="true" id="estado" size="20" maxlength="30" style="position:relative; top:0px; left:0px;" styleClass="form-control camposSomenteLeitura" value="#{RenovarMatriculaControle.pessoaVO.cidade.estado.nome}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{!RenovarMatriculaControle.configuracaoGeralSistemaVO.ocultarNaturalidade}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Pessoa_naturalidade}" />
+							<h:panelGroup layout="block" styleClass="pn col-md-12">
+								<h:inputText readonly="true" id="naturalidade" size="20" maxlength="20" styleClass="form-control camposSomenteLeitura" value="#{RenovarMatriculaControle.pessoaVO.naturalidade.nome}" />
+								<span class="append-icon right"> <otm:commandIcon id="consultaNaturalidade" tooltip="Localizar Cidade" update="formNaturalidade" oncomplete="PF('panelNaturalidade').show()" action="#{RenovarMatriculaControle.limparMensagem}" icon="#{msg_botoes.btn_icon_lupa_embutido}" immediate="true" /> </span>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center" style="margin:10px">
+						<h:panelGroup>
+							<otm:commandButton action="#{RenovarMatriculaControle.realizarPreInscricao}" oncomplete="#{RenovarMatriculaControle.modalPreInscricao}" update="form" process="form" image="#{resource['/imagens/botaoConfirmar2.png']}" icon="#{msg_botoes.btn_icon_confirmar_embutido}" styleClass="btn btn-info" value="Confirmar" />
+						</h:panelGroup>
+					</h:panelGroup>
+
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelNaturalidade" widgetVar="panelNaturalidade" width="750" onShow="document.getElementById('valorConsultaNaturalidade').focus();" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Cidade_consultarCidade}"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formNaturalidade">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3">
+							<h:selectOneMenu styleClass="form-control campos" id="consultaNaturalidadeModal" value="#{RenovarMatriculaControle.campoConsultaNaturalidade}">
+								<f:selectItems value="#{RenovarMatriculaControle.tipoConsultaNaturalidade}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-7">
+							<h:inputText id="valorConsultaNaturalidade" size="10" styleClass="form-control campos" value="#{RenovarMatriculaControle.valorConsultaNaturalidade}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<otm:commandButton id="btnConsultarNaturalidade" update="mensagemConsultaNaturalidade, resultadoConsultaNaturalidade" action="#{RenovarMatriculaControle.consultarNaturalidade}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" tooltip="#{msg.msg_consultar_dados}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row">
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="resultadoConsultaNaturalidade" style="width:100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{RenovarMatriculaControle.listaConsultaNaturalidade}" rows="5" var="naturalidade">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Cidade_codigo}" />
+								</f:facet>
+								<h:panelGroup>
+									<p:commandLink action="#{RenovarMatriculaControle.selecionarNaturalidade}" update="naturalidade" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.codigo}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+								</f:facet>
+								<h:panelGroup>
+									<p:commandLink action="#{RenovarMatriculaControle.selecionarNaturalidade}" update="naturalidade" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.nome}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+								</f:facet>
+								<h:panelGroup>
+									<p:commandLink action="#{RenovarMatriculaControle.selecionarNaturalidade}" update="naturalidade" oncomplete="PF('panelNaturalidade').hide()" value="#{naturalidade.estado.nome}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_botoes.btn_opcoes}" />
+								</f:facet>
+								<otm:commandIcon action="#{RenovarMatriculaControle.selecionarNaturalidade}" update="naturalidade" oncomplete="PF('panelNaturalidade').hide()" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" tooltip="#{msg.msg_selecionar_dados}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row mb20" id="mensagemConsultaNaturalidade">
+						<otm:mensagem bean="#{RenovarMatriculaControle}"></otm:mensagem>
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelCidade" widgetVar="panelCidade" autosized="true" width="550" onShow="document.getElementById('valorConsultaCidade').focus();" height="300">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Cidade_consultarCidade}"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formCidade">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3">
+							<h:selectOneMenu styleClass="form-control campos" id="consultaCidade" value="#{RenovarMatriculaControle.campoConsultaCidade}">
+								<f:selectItems value="#{RenovarMatriculaControle.tipoConsultaCidade}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-7">
+							<h:inputText id="valorConsultaCidade" size="10" styleClass="form-control campos" value="#{RenovarMatriculaControle.valorConsultaCidade}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<otm:commandButton id="btnConsultarCidade" update="mensagemConsultaCidade, resultadoConsultaCidade" action="#{RenovarMatriculaControle.consultarCidade}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row">
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="resultadoConsultaCidade" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" value="#{RenovarMatriculaControle.listaConsultaCidade}" rows="5" var="cidadeItens">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+								</f:facet>
+								<h:panelGroup>
+									<p:commandLink action="#{RenovarMatriculaControle.selecionarCidade}" update="formPreInscricao" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.nome}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+								</f:facet>
+								<h:panelGroup>
+									<p:commandLink action="#{RenovarMatriculaControle.selecionarCidade}" update="formPreInscricao" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.estado.nome}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{msg_botoes.btn_opcoes}" />
+								</f:facet>
+								<otm:commandIcon action="#{RenovarMatriculaControle.selecionarCidade}" update="formPreInscricao" oncomplete="PF('panelCidade').hide()" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" tooltip="#{msg.msg_selecionar_dados}" />
+							</p:column>
+							<f:facet name="footer">
+								<div style="text-align: center !important"> </div>
+							</f:facet>
+						</p:dataTable>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="row mb20" id="mensagemConsultaCidade">
+						<otm:mensagem bean="#{RenovarMatriculaControle}"></otm:mensagem>
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelDocumentoContratoAssinado" widgetVar="panelDocumentoContratoAssinado" zindex="4000" domElementAttachment="parent" width="800" height="600" headerClass="consulta">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Documento Pendente"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formDocumentoContratoAssinadoPendente">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<iframe src="#{RenovarMatriculaControle.caminhoPreviewContrato}" width="100%" height="500" frameborder="0" style="border:0"></iframe>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+					<otm:assinaturaDigitalButton id="registrarAssinaturaContrato" bean="#{RenovarMatriculaControle}" action="#{RenovarMatriculaControle.registrarAssinaturaContratoPorAluno}" update="formDocumentoContratoAssinadoPendente, form" styleClass="btn btn-success" icon="far fa-thumbs-up" value="Aceitar" oncomplete="PF('panelDocumentoContratoAssinado').hide();" />
+					<otm:assinaturaDigitalButton id="regeitarAssinaturaContrato" bean="#{RenovarMatriculaControle}" style="margin-left:20px" update="formMotivoNaoAceite" styleClass="btn btn-danger" icon="#{msg_botoes.btn_icon_cancelar_embutido}" value="Rejeitar" oncomplete="PF('panelMotivoNaoAceite').show();" />
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelMotivoNaoAceite" widgetVar="panelMotivoNaoAceite" zindex="5000" domElementAttachment="parent" autosized="false" top="10" width="500" height="172">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="#{msg_aplic.prt_Requerimento_motivoNaoAceiteCertificado}"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formMotivoNaoAceite">
+				<h:panelGroup layout="block" style="width:99%">
+					<h:inputTextarea id="motivoNaoAceite" rows="5" style="width:100%" styleClass="form-control camposObrigatorios" value="#{RenovarMatriculaControle.motivoRejeicao}" />
+				</h:panelGroup>
+				<otm:spacer />
+				<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+					<otm:commandButton update="formMotivoNaoAceite, form" action="#{RenovarMatriculaControle.registrarIndeferimentoContratoPorAluno}" styleClass="btn btn-danger" value="rejeitar" icon="#{msg_botoes.btn_icon_cancelar_embutido}" oncomplete="PF('panelMotivoNaoAceite').hide();PF('panelDocumentoContratoAssinado').hide();" />
+				</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false" globalOnly="true"></p:growl>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition> </html>

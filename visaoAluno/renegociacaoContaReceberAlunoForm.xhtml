@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br"  xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_aplic.prt_Renegociacao_tituloForm}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form prependId="false" id="form">
+			<h:panelGroup id="panelGridMensagensGerais" layout="block" rendered="#{!RenegociacaoContaReceberAlunoControle.apresentarDadosRenegociacao and !RenegociacaoContaReceberAlunoControle.apresentarDadosOpcaoRenegociacao and !RenegociacaoContaReceberAlunoControle.apresentarDadosGravados}">
+				<otm:mensagem bean="#{RenegociacaoContaReceberAlunoControle}" />
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="row mn" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarDadosRenegociacao}">
+				<h:panelGroup layout="block" styleClass="col-md-12 mb5">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_NegociacaoRecebimento_unidadeEnsino}" />
+					<h:selectOneMenu id="unidadeEnsinoFinanceira" styleClass="form-control camposObrigatorios" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.unidadeEnsino.codigo}">
+						<p:ajax event="change" process="form" update="form" listener="#{RenegociacaoContaReceberAlunoControle.atualizarContaReceberPorUnidadeEnsinoFinanceira}" />
+						<f:selectItems value="#{RenegociacaoContaReceberAlunoControle.listaSelectItemUnidadeEnsino}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="contasReceber" headerClass="subordinado"  value="#{RenegociacaoContaReceberAlunoControle.contaReceberVOs}" var="contaReceberItens">
+					<f:facet name="header">
+						<h:outputText styleClass="tituloCamposNegrito" style="font-size:24px" rendered="#{RenegociacaoContaReceberAlunoControle.alunoConcordouComTermosRenegociacaoOnLine}" value="#{msg.msg_selecione_contas_renegociacao}" />
+					</f:facet>
+					<p:column rendered="#{RenegociacaoContaReceberAlunoControle.alunoConcordouComTermosRenegociacaoOnLine}" style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText styleClass="btn-block" value="#{msg_aplic.prt_opcaoRenegociacao_selecionar}" />
+							<otm:selectBooleanCheckbox id="selecionarTodos" value="#{RenegociacaoContaReceberAlunoControle.selecionarTodasContas}">
+								<p:ajax event="change" process="@form" listener="#{RenegociacaoContaReceberAlunoControle.realizarSelecaoContaReceber}" update="contasReceber" />
+							</otm:selectBooleanCheckbox>
+						</f:facet>
+						<otm:selectBooleanCheckbox id="selecionar" value="#{contaReceberItens.selecionado}">
+							<p:ajax event="change" update="contasReceber" />
+						</otm:selectBooleanCheckbox>
+					</p:column>
+					<p:column rendered="#{RenegociacaoContaReceberAlunoControle.isApresentarVisaoPais}" style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="Aluno(a)" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.pessoa.nome}" />
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_dataVencimento}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.dataVencimento_Apresentar}" />
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_parcela}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.parcelaPorConfiguracaoFinanceira_Apresentar}" />
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_valor}(R$)" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.valor}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="Juro#{msg_aplic.prt_ContaReceber_juro}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.juro}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="Multa#{msg_aplic.prt_ContaReceber_multa}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.multa}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_acrescimo}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.acrescimo}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column rendered="#{RenegociacaoContaReceberAlunoControle.configuracaoFinanceiroVO.indiceReajustePadraoContasPorAtrasoVO.codigo ne 0}" style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{RenegociacaoContaReceberAlunoControle.configuracaoFinanceiroVO.indiceReajustePadraoContasPorAtrasoVO.descricao}" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.valorIndiceReajustePorAtraso}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_desconto}(R$)" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.valorTotalDesconto}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center !important; width: 9.09%">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ContaReceber_valorFinal}(R$)" />
+						</f:facet>
+						<h:outputText value="#{contaReceberItens.valorReceberCalculado}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</p:column>
+					<f:facet name="footer">
+						<div align="right">
+							<h:outputText style="font-size:16px; color:red" styleClass="field control-label  text-danger" value="Valor Total Selecionado: " />
+							<h:outputText style="font-size:16px; color:red" styleClass="field control-label  text-danger" value="#{RenegociacaoContaReceberAlunoControle.valorTotalContaReceberVisaoAluno}">
+								<f:converter converterId="FormatadorNumerico" />
+							</h:outputText>
+						</div>
+					</f:facet>
+				</p:dataTable>
+				<h:panelGroup layout="block" styleClass="row" rendered="#{RenegociacaoContaReceberAlunoControle.alunoConcordouComTermosRenegociacaoOnLine}">
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<otm:commandButton id="botaoAvancarTela" action="#{RenegociacaoContaReceberAlunoControle.realizarConfirmacaoSelecaoContaReceber}" update="form" value="Negociar Parcelas Selecionadas" icon="#{msg_botoes.btn_icon_avancar_embutido}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup id="pgPrincipal2" layout="block" styleClass="row mn" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarDadosOpcaoRenegociacao}">
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_CondicaoRenegociacao_CondicaoRenegocicao}" />
+					<h:selectOneMenu styleClass="form-control camposObrigatorios" id="comboBoxItemCondicaoRenegociacao" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.itemCondicaoRenegociacao.codigo}">
+						<f:selectItems value="#{RenegociacaoContaReceberAlunoControle.listaSelectItemItemCondicaoRenegociacao}" />
+						<p:ajax update="form" listener="#{RenegociacaoContaReceberAlunoControle.atualizarParcelasNegociacao}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-danger fs14" value="Valor Total Renegociado R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-danger fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorTotalSemIsencaoJurosMultaIndice}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<!-- 				rendered="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.itemCondicaoRenegociacao.isentarJuroParcela and RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorJuroDesconto ne 0.0}" -->
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-success fs14" value="Valor abatido de juros R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-success fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorJuroDesconto}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<!-- 				rendered="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.itemCondicaoRenegociacao.isentarMultaParcela  and RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorMultaDesconto ne 0.0}" -->
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-success fs14" value="Valor abatido de multa R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-success fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorMultaDesconto}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<!-- 				rendered="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.itemCondicaoRenegociacao.isentarIndiceReajustePorAtrasoParcela and RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorIndiceReajusteDesconto ne 0.0}" -->
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center mt5" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-success fs14" value="Valor abatido de índice de reajuste R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-success fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorIndiceReajusteDesconto}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<!-- 				rendered="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorDescontoCondicaoRenegociacao ne 0.0}" -->
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center mt5" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-success fs14" value="Descontos Concedidos R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-success fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorDescontoCondicaoRenegociacao}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<!-- 				rendered="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorAcrescimoCondicaoRenegociacao ne 0.0}" -->
+				<h:panelGroup layout="block" styleClass="col-md-4 pn border rounded text-center mt5" style="padding-bottom: 5px !important">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-danger fs14" value="Acréscimos R$" />
+					</h:panelGroup>
+					<h:outputText styleClass="field control-label text-danger fs14" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorAcrescimoCondicaoRenegociacao}">
+						<f:converter converterId="FormatadorNumerico" />
+					</h:outputText>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12 pn border rounded text-center mt5" style="padding-bottom: 5px !important" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarValorFinalRenegociado}">
+					<h:panelGroup layout="block" styleClass="col-md-12 border rounded bg-gray p5">
+						<h:outputText styleClass="field control-label text-danger fs16" value="Valor Final Renegociado R$" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-2">
+						<h:outputText styleClass="field control-label text-danger fs16" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorTotal}">
+							<f:converter converterId="FormatadorNumerico" />
+						</h:outputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="row mt10">
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{RenegociacaoContaReceberAlunoControle.mensagemFaixaEntradaApresentar}" />
+						<h:outputText styleClass="field control-label tituloCampos" value=" com vencimento em  #{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.dataVencimentoEntradaApresentar}" />
+						<h:inputText id="valor" size="20" maxlength="20" styleClass="form-control camposObrigatorios" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.valorEntrada}" onkeydown="aceitarSomenteValorDecimal(this)">
+							<f:converter converterId="FormatadorNumerico" />
+							<p:ajax event="change" update="pgPrincipal2" listener="#{RenegociacaoContaReceberAlunoControle.validarValorEntrada}" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-12 mt10">
+						<p:selectOneRadio layout="grid" columns="3" styleClass="grid-checkbox" id="nrParcela" layout="pageDirection" disabledClass="ml10 p10 field control-label  tituloCampos fs14" enabledClass="ml10 p5 field control-label  tituloCampos fs14 " styleClass="field control-label  tituloCampos fs14 ml10" value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.nrParcela}">
+							<f:selectItems value="#{RenegociacaoContaReceberAlunoControle.listaSelectItemOpcaoRenegociacao}" />
+							<p:ajax event="click" update="btns" process="@this" listener="#{RenegociacaoContaReceberAlunoControle.selecionarCondicaoRenegociacao}">
+							</p:ajax>
+						</p:selectOneRadio>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="barraFlutuanteInferior">
+					<otm:commandButton action="#{RenegociacaoContaReceberAlunoControle.voltarSelecaoContaReceber}" update="form" value="Voltar" icon="#{msg_botoes.btn_icon_voltar}" styleClass="btn btn-primary" />
+					<otm:spacer width="5px" />
+					<otm:commandButton id="btnConfirmarRenegociacao" action="#{RenegociacaoContaReceberAlunoControle.realizarConfirmacaoNegociacao}" oncomplete="#{RenegociacaoContaReceberAlunoControle.oncompleteModal}" update="formConfirmacao, form" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarBotaoConfirmarNegociacao}" value="Confirmar Renegociação" icon="#{msg_botoes.btn_icon_selecionar_embutido}" styleClass="btn btn-dark" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<p:remoteCommand name="abrirModalPagamentoOnline" update="formPagamento" oncomplete="#{RenegociacaoContaReceberAlunoControle.modalPagamentoOnline}; #{RenegociacaoContaReceberAlunoControle.modalConfirmacaoPagamento};" />
+			<h:panelGroup layout="block" styleClass="row" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarDadosGravados}">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<h:outputText styleClass="tituloCamposNegrito" value="#{msg.msg_renegociacao_gravada}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup id="consultaContasAPagar" layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  id="itemsContasAPagar" width="100%" headerClass="consulta" style="background-color:transparent;"  value="#{RenegociacaoContaReceberAlunoControle.negociacaoContaReceberVO.novaContaReceber}" var="contaAPagarItens">
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_ContaReceber_dataVencimento}" />
+								</f:facet>
+								<h:outputText value="#{contaAPagarItens.dataVencimento_Apresentar}" />
+							</p:column>
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_ContaReceber_parcela}" />
+								</f:facet>
+								<h:outputText value="#{contaAPagarItens.parcela}" />
+							</p:column>
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_ContaReceber_nossoNumero}" />
+								</f:facet>
+								<h:outputText value="#{contaAPagarItens.nossoNumero}" />
+							</p:column>
+							<p:column style="text-align: center !important">
+								<f:facet name="header">
+									<h:outputText value="#{msg_aplic.prt_ContaPagar_valor}" />
+								</f:facet>
+								<h:outputText value="R$ " />
+								<h:outputText value="#{contaAPagarItens.valor}">
+									<f:converter converterId="FormatadorNumerico" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align: center !important" rendered="#{!RenegociacaoContaReceberAlunoControle.contaRecebida}">
+								<f:facet name="header">
+									<h:outputText value="#{msg_botoes.btn_opcoes}" />
+								</f:facet>
+								<h:panelGroup rendered="#{!contaAPagarItens.bloquearPagamentoVisaoAluno}">
+									<h:outputLink rendered="#{!contaAPagarItens.emissaoBloqueada and contaAPagarItens.permiteImprimirBoleto and contaAPagarItens.habilitarBotaoRecebimento}" value="../BoletoBancarioSV?codigoContaReceber=#{contaAPagarItens.codigo}&amp;titulo=matricula">
+										<span class="#{msg_botoes.btn_icon_imprimir} iconePequeno rounded" />
+									</h:outputLink>
+									<p:commandLink rendered="#{!contaAPagarItens.emissaoBloqueada and contaAPagarItens.permiteImprimirBoletoLinkBanco and contaAPagarItens.habilitarBotaoLinkBanco}" oncomplete="PF('panelLinkBanco').show()" process="@this" update="formLinkBanco" title="Imprimir Boleto">
+										<f:setPropertyActionListener value="#{contaAPagarItens}" target="#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno}" />
+										<span class="#{msg_botoes.btn_icon_imprimir} iconePequeno rounded" />
+									</p:commandLink>
+									<!-- Seria o Terceiro botao, Dialog Mensagem Bloqueio -->
+									<otm:commandButton id="emissaoBoletoBloqueada" rendered="#{contaAPagarItens.emissaoBloqueada and !contaAPagarItens.permiteImprimirBoletoLinkBanco}" action="#{RenegociacaoContaReceberAlunoControle.editarContaReceberVisaoAluno}" oncomplete="PF('panelEmissaoBloqueada').show()" update="formEmissaoBloqueada" icon="#{msg_botoes.btn_icon_bloqueado} iconePequeno" />
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center mt5">
+							<otm:commandButton id="imprimirTextoPadrao" rendered="#{RenegociacaoContaReceberAlunoControle.isApresentarBotaoTermoReconhecimentoDividaTextoPadrao}" update="panelGridMensagens2" oncomplete="#{RenegociacaoContaReceberAlunoControle.visualizarRelatorio}" action="#{RenegociacaoContaReceberAlunoControle.emitirTermoReconhecimentoDivida}" value="Gerar Relatório (PDF)" accesskey="2" icon="#{msg_botoes.btn_icon_pdf_embutido}" />
+							<!-- image="#{resource['/imagens/botaoImprimirTermoReconhecimentoDivida.png']}" -->
+							<otm:commandButton id="emitirTermoReconhecimentoDivida" rendered="#{RenegociacaoContaReceberAlunoControle.isApresentarBotaoTermoReconhecimentoDivida}" oncomplete="#{RenegociacaoContaReceberAlunoControle.termoReconhecimentoDividaRelControle.download}" action="#{RenegociacaoContaReceberAlunoControle.emitirTermoReconhecimentoDivida}" title="#{msg_aplic.prt_TermoReconhecimentoDivida_tituloRel}" value="Emitir Termo de Reconhecimento de Dívida" icon="#{msg_botoes.btn_icon_pdf_embutido}" render="form:panelGridMensagens" />
+							<!-- image="#{resource['/imagens/botaoImprimirTermoReconhecimentoDivida.png']}" -->
+							<otm:commandButton style="margin-left:10px" id="realizarPagamento" rendered="#{RenegociacaoContaReceberAlunoControle.permitirRecebimentoCartaoCreditoOnline and !RenegociacaoContaReceberAlunoControle.contaRecebida}" oncomplete="PF('panelPagamento').show()" value="Realizar Pagamento" update="formPagamento" icon="#{msg_botoes.btn_icon_dollar_embutido}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup id="panelGridMensagens2" layout="block" styleClass="row" rendered="#{RenegociacaoContaReceberAlunoControle.apresentarDadosRenegociacao  or RenegociacaoContaReceberAlunoControle.apresentarDadosOpcaoRenegociacao}">
+				<otm:mensagem bean="#{RenegociacaoContaReceberAlunoControle}"></otm:mensagem>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+	<ui:define name="modal">
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelConfirmacao" widgetVar="panelConfirmacao"  width="800" height="300">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmar Renegociação de Parcelas" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formConfirmacao">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<h:outputFormat styleClass="field control-label tituloCampos" style="text-align: left;" value="Você selecionou a opção #{RenegociacaoContaReceberAlunoControle.descricaoConfirmacao} , gostaria de confirmar esta renegociação?">
+						</h:outputFormat>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup id="paBotao">
+					<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+						<otm:commandButton id="btnSim" process="@this" styleClass="btn btn-info mr5" icon="#{msg_botoes.btn_icon_confirmar_embutido}" value="Confirmar" oncomplete="PF('panelConfirmacao').hide(), abrirModalPagamentoOnline()" update="form, formPagamento" action="#{RenegociacaoContaReceberAlunoControle.persistir}" alt="#{msg_botoes.btn_sim}" />
+						<otm:commandButton id="btnNao" process="@this" styleClass="btn btn-danger" icon="#{msg_botoes.btn_icon_cancelar_embutido}" value="Cancelar" oncomplete="PF('panelConfirmacao').hide()" alt="#{msg_botoes.btn_nao}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelTermo" widgetVar="panelTermo" visible="#{!empty RenegociacaoContaReceberAlunoControle.configuracaoFinanceiroVO.recomendacaoRenegociacaoVisaoAluno and !RenegociacaoContaReceberAlunoControle.alunoConcordouComTermosRenegociacaoOnLine and (RenegociacaoContaReceberAlunoControle.apresentarDadosRenegociacao or RenegociacaoContaReceberAlunoControle.apresentarDadosOpcaoRenegociacao)}"  width="800" height="600">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Termo/Orientações da Renegociação" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formTermo">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<h:outputText escape="false" styleClass="field control-label tituloCampos" value="#{RenegociacaoContaReceberAlunoControle.configuracaoFinanceiroPadraoSistema.recomendacaoRenegociacaoVisaoAluno}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{!RenegociacaoContaReceberAlunoControle.alunoConcordouComTermosRenegociacaoOnLine and (RenegociacaoContaReceberAlunoControle.apresentarDadosRenegociacao or RenegociacaoContaReceberAlunoControle.apresentarDadosOpcaoRenegociacao)}">
+					<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+						<otm:commandButton id="concordoTermosDesejoProsseguir" oncomplete="PF('panelTermo').hide()" action="#{RenegociacaoContaReceberAlunoControle.confirmarConcordaComTermosRenegociacaoContaReceber}" update="form, pgTermosRenegociacao" icon="#{msg_botoes.btn_icon_confirmar_embutido}" value="Concordo com os Termos e Desejo Prosseguir" styleClass="btn btn-info" />
+					</h:panelGroup>
+				</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelEmissaoBloqueada" widgetVar="panelEmissaoBloqueada"  width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Mensagem Bloqueio" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formEmissaoBloqueada">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<h:outputText styleClass="field control-label tituloCampos" escape="false" value="#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.contaCorrenteVO.mensagemBloqueioEmissaoBoleto}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<!-- 				<h:panelGroup layout="block" styleClass="row"> -->
+				<!-- 					<h:panelGroup layout="block" styleClass="col-md-12 text-center m5"> -->
+				<!-- 						<otm:commandButton id="btnPanelEmissaoBloqueada" process="@this" styleClass="btn btn-primary dark btn-fechar" value="Fechar" oncomplete="PF('panelEmissaoBloqueada').hide()" alt="Fechar" /> -->
+				<!-- 					</h:panelGroup> -->
+				<!-- 				</h:panelGroup> -->
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelLinkBanco" widgetVar="panelLinkBanco"  width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Link Banco" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false" id="formLinkBanco">
+				<h:panelGroup layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-12">
+						<h:outputText styleClass="field control-label tituloCampos" escape="false" value="#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.contaCorrenteVO.mensagemCarteiraRegistrada}" />
+						<otm:spacer height="5" />
+						<h:outputText styleClass="field control-label tituloCampos" escape="false" value="#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.contaCorrenteVO.agencia.numeroAgencia}#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.contaCorrenteVO.numero}#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.contaCorrenteVO.digito}#{RenegociacaoContaReceberAlunoControle.contaReceberVisaoAluno.nossoNumeroBanco}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup id="paBotao1" layout="block" styleClass="row">
+					<!-- 					<h:panelGroup layout="block" styleClass="col-md-12 text-center"> -->
+					<!-- 						<otm:commandButton process="@this" styleClass="btn btn-primary dark btn-fechar" value="Fechar" oncomplete="PF('panelLinkBanco').hide()" alt="Fechar" /> -->
+					<!-- 					</h:panelGroup> -->
+				</h:panelGroup>
+			<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+		</p:dialog>
+		<otm2:popupRecebimentoCartaoOnline bean="#{RenegociacaoContaReceberAlunoControle}" />		
+		<p:dialog modal="true" hideEffect="fade" closeOnEscape="true" showEffect="fade" styleClass="modalMaximizado" id="panelConfirmacaoPagamento" widgetVar="panelLinkBanco"  width="750" height="500">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmação de pagamento" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form prependId="false"  id="formConfirmacaoPagamento">
+				<h:panelGroup id="panelGridMensagens" layout="block" styleClass="row">
+					
+					<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+						<otm:commandIcon id="msgSucesso" disabled="true" style="color: green;position:relative;top:5px" icon="#{msg_botoes.btn_icon_ok_embutido} iconePequeno mr5" />
+						<h:outputText styleClass="field control-label tituloCampos" value="Pagamento Realizado com Sucesso!" />
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="row mt10">
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+							<otm:commandButton value="Imprimir Comprovante" action="#{RenegociacaoContaReceberAlunoControle.imprimirComprovanteRecebimento}" oncomplete="#{rich:component('panelConfirmacaoPagamento')}.hide(); #{RenegociacaoContaReceberAlunoControle.comprovanteRecebimentoRelControle.download}" render="form" icon="#{msg_botoes.btn_icon_imprimir_embutido}" styleClass="btn btn-info" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		    <p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+        </p:dialog>		
+	</ui:define>
+</ui:composition>
+</html>

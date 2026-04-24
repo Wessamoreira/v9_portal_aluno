@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+
+<h:head>
+	<title><h:outputText value="#{LoginControle.versaoSistema}" /></title>
+	<h:outputStylesheet name="otimize2.css" library="css" />
+	<h:outputStylesheet name="cssCliente.css" library="css" />
+	<h:outputStylesheet name="style.css" library="V2/css" />
+	<h:outputScript name="jquery.js" library="V2/script" />
+	<h:outputScript name="jquery.alphanumeric.js" library="V2/script" />
+	<h:outputScript name="jquery.maskedinput.js" library="V2/script" />
+	<h:outputScript name="jquery.maskMoney.js" library="V2/script" />
+	<h:outputScript name="jssor.js" library="script" />
+	<h:outputScript name="jssor.slider.js" library="script" />
+	<h:outputScript name="jquery.backSpace.js" library="V2/script" />
+	<h:outputScript name="script.js" library="script" />
+	<h:outputScript name="blockDblClick.js" library="V2/script" />
+	<h:outputScript name="spectrum.js" library="V2/script" />
+	<h:outputStylesheet name="spectrum.css" library="css" />
+	<f:loadBundle var="msg_botoes" basename="propriedades.Botoes" />
+	<f:loadBundle var="msg_aplic" basename="propriedades.Aplicacao" />
+	<f:loadBundle var="msg" basename="propriedades.Mensagens" />
+	<link rel="shortcut icon" href="#{resource['V2/icones/favicon.ico']}" type="image/x-icon" />
+
+</h:head>
+
+<h:body style=" background: url(#{resource['imagens/bg2.jpg']}) repeat-y top center #eaeaea">
+	<ui:insert name="topoVisao">
+		<h:panelGroup id="topVis" layout="block" style="width:100%" rendered="#{ConteudoControle.maximizarTelaGeralConteudo}">
+			<div id="header" class="cliente-bg">
+				<ui:include src="../../topoVisao.xhtml" />
+			</div>
+		</h:panelGroup>
+		<h:panelGroup id="topEstOnVis" layout="block" style="width:100%" rendered="#{ConteudoControle.maximizarTelaGeralConteudo}">
+			<div id="header2" class="container">
+				<h:form>
+					<h:panelGroup layout="block" rendered="#{!ConteudoControle.emularAcessoAluno and !ConteudoControle.emularAcessoProfessor}">
+						<ui:include src="../../visaoAluno/topoEstudoOnline.xhtml" />
+					</h:panelGroup>
+				<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+			</div>
+		</h:panelGroup>
+	</ui:insert>
+
+	<div class="container">
+		<table class="contentVisao">
+			<tbody>
+				<tr>
+					<ui:insert name="menu">
+					
+					</ui:insert>
+					<td style="width: 100%;">
+						<div id="conteudo" class="left" style="margin-left: 0px !important; position: relative; width: 100%">
+							<div class="padding">
+								<ui:insert name="conteudo" />
+								<p:growl id="msgFlutuante" life="5000" escape="false" redisplay="false" globalOnly="true" showDetail="true" showSummary="false" ></p:growl>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets"   xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br">
+<h:head>
+</h:head>
+<ui:composition template="/visaoAluno/template/visaoAluno.xhtml">
+	<ui:define name="tituloPagina">
+		<h:outputText value="#{msg_aplic.prt_ListaExercicio_tituloForm}" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<style type="text/css">
+.rich-dtascroller-table {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.rich-datascr-button {
+	border: none;
+}
+
+.rich-datascr-button-dsbld {
+	background-color: transparent;
+}
+
+.rich-list-item {
+	display: block;
+}
+</style>
+		<!-- 	<ui:include src="richPanelImagem.xhtml" /> -->
+		<h:form prependId="false" id="form">
+			<p:commandLink action="#{ListaExercicioControle.liberarBackingBeanMemoria}" id="idLiberarBackingBeanMemoria" style="display: none" />
+			<h:panelGroup id="panelGridForm" columns="1" styleClass="tabForm" width="100%">
+				<p:dataTable paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"  headerClass="consulta" width="100%" id="items" rowKeyVar="row" rendered="#{ListaExercicioControle.controleConsultaOtimizado.apresentarListaConsulta}" value="#{ListaExercicioControle.controleConsultaOtimizado}" rows="10" var="listaExercicioItem">
+					<p:column style="text-align:center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ListaExercicio_exercicios}" />
+						</f:facet>
+						<p:commandLink action="#{ListaExercicioControle.editarEstudoOnline}">
+							<h:outputText value="#{listaExercicioItem.descricao}" />
+						</p:commandLink>
+					</p:column>
+					<p:column style="text-align:center !important">
+						<f:facet name="header">
+							<h:outputText value="#{msg_aplic.prt_ListaExercicio_periodoDisponibilizacaoListaExercicio}" />
+						</f:facet>
+						<p:commandLink action="#{ListaExercicioControle.editarEstudoOnline}">
+							<h:outputText value="#{listaExercicioItem.periodoDisponibilizacaoApresentar}" />
+						</p:commandLink>
+					</p:column>
+					<p:column style="text-align:center !important">
+						<f:facet name="header">
+							<h:outputText value="Responder" />
+						</f:facet>
+						<otm:commandIcon action="#{ListaExercicioControle.editarEstudoOnline}" icon="#{msg_botoes.btn_icon_responder_embutido}" tooltip="Responder" />
+					</p:column>
+					<f:facet name="footer">
+						<div style="text-align: center !important">
+						</div>
+					</f:facet>
+				</p:dataTable>
+				<otm2:dataScroller id="scResultadoConsulta" dadosConsulta="controleConsultaOtimizado" scrollListener="scrollListener" bean="#{ListaExercicioControle}" />
+				<h:panelGroup id="panelGridMensagens" layout="block" styleClass="row">
+					<otm:mensagem bean="#{ListaExercicioControle}"></otm:mensagem>
+				</h:panelGroup>
+			</h:panelGroup>
+		<p:growl escape="false" showDetail="true" showSummary="false"  globalOnly="true" ></p:growl></h:form>
+	</ui:define>
+</ui:composition>
+</html>
