@@ -1,0 +1,1202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+ xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:otm="http://java.sun.com/jsf/composite/otm" xmlns:otm2="http://www.otimize-ti.com.br"> <p:dialog closeOnEscape="true" styleClass="modalMaximizado50" id="panelLiberarValidacao" widgetVar="panelLiberarValidacao" shadowOpacity="true" width="330" height="100" onshow="document.getElementById('formLiberarValidacao:usernameLiberar');">
+	<f:facet name="header">
+		<h:outputText value="Liberar Registro do Estágio" />
+	</f:facet>
+	<h:form prependId="false" id="formLiberarValidacao">
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Usuario_username}" />
+			<h:inputText id="usernameLiberar" size="20" styleClass="form-control camposObrigatorios" value="#{EstagioControle.nomeUsuarioLiberar}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_msg_senha}" />
+			<h:inputSecret id="senhaLiberar" size="20" styleClass="form-control camposObrigatorios" value="#{EstagioControle.senhaUsuarioLiberar}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-50">
+			<otm:commandButton update="form, formLiberarValidacao" process="formLiberarValidacao" action="#{EstagioControle.liberarGravarEstagioSemValidacaoDados}" oncomplete="PF('panelLiberarValidacao').hide()" value="Confirmar Liberação" icon="#{msg_botoes.btn_icon_confirmar_embutido}" styleClass="btn btn-info" title="Confirmar Liberação" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="row">
+			<otm:mensagem bean="#{EstagioControle}" />
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelErroCargaHorariaMaxima" id="panelErroCargaHorariaMaxima" shadowOpacity="true" width="750" height="500" onshow="document.getElementById('formErroCargaHorariaMaxima:valorConsultaErroCargaHorariaMaxima');">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Estágios Concomitantes do Aluno" />
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formErroCargaHorariaMaxima">
+		<h:panelGroup columns="1" width="100%">
+			<p:dataTable id="resultadoConsultaErroCargaHorariaMaxima" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" footerClass="colunaCentralizada" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaEstagioConcomitantes}" rows="5" var="erroCargaHorariaMaxima">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Estágio" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{erroCargaHorariaMaxima.codigo}" />
+					</h:panelGroup>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Empresa" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{erroCargaHorariaMaxima.empresaEstagio.nome}" />
+					</h:panelGroup>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Vigência" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{erroCargaHorariaMaxima.dataInicioVigencia_Apresentar} - #{erroCargaHorariaMaxima.dataFinalVigencia_Apresentar}" />
+					</h:panelGroup>
+					<f:facet name="footer">
+						<h:outputText styleClass="field control-label tituloCampos" value="Total" />
+					</f:facet>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="CH Diária" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{erroCargaHorariaMaxima.cargaHorariaDiaria}" />
+					</h:panelGroup>
+					<f:facet name="footer">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{EstagioControle.totalCargaHorariaDiaria}" />
+					</f:facet>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="CH Semanal" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{erroCargaHorariaMaxima.cargaHorariaSemanal}" />
+					</h:panelGroup>
+					<f:facet name="footer">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{EstagioControle.totalCargaHorariaSemanal}" />
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+			<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+				<otm:commandButton update="form" oncomplete="PF('panelErroCargaHorariaMaxima').hide()" value="Fechar" styleClass="btn btn-danger" icon="#{msg_botoes.btn_icon_fechar_embutido}" tooltip="Fechar" />
+			</h:panelGroup>
+			<h:panelGroup id="mensagemConsultaErroCargaHorariaMaxima" layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelDisciplinaMatricula" id="panelDisciplinaMatricula" shadowOpacity="true" width="750" height="500" onshow="document.getElementById('formDisciplinaMatricula:valorConsultaDisciplinaMatricula');">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="#{msg_aplic.prt_Disciplina_consultarDisciplina}" />
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formDisciplinaMatricula">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaDisciplinaMatricula" value="#{EstagioControle.campoConsultaDisciplinaMatricula}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaComboDisciplinaMatricula}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaDisciplinaMatricula" size="10" styleClass="form-control campos" value="#{EstagioControle.valorConsultaDisciplinaMatricula}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarDisciplinaMatricula" update="mensagemConsultaDisciplinaMatricula, resultadoConsultaDisciplinaMatricula" action="#{EstagioControle.consultarDisciplinaMatricula}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable id="resultadoConsultaDisciplinaMatricula" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaDisciplinaMatricula}" rows="5" var="disciplinaMatricula">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Disciplina_codigo}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarDisciplinaMatricula}" update="form" oncomplete="PF('panelDisciplinaMatricula').hide()" value="#{disciplinaMatricula.codigo}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Disciplina_nome}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarDisciplinaMatricula}" update="form" oncomplete="PF('panelDisciplinaMatricula').hide()" value="#{disciplinaMatricula.nomeDisciplinaGrade}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_bt.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarDisciplinaMatricula}" update="form" oncomplete="PF('panelDisciplinaMatricula').hide()" tooltip="#{msg_botoes.btn_selecionar}" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaDisciplinaMatricula" layout="block" styleClass="row">
+			<otm:mensagem bean="#{EstagioControle}" />
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelTextoPadrao" id="panelTextoPadrao" onshow="document.getElementById('formTextoPadrao:valorConsultaTextoPadrao');" shadowOpacity="true" width="750" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Imprimir Texto Padrão de Estágio"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formTextoPadrao">
+		<h:panelGroup columns="1" width="100%">
+			<p:dataTable id="resultadoConsultaTextoPadrao" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaContratosEstagio}" rows="5" var="textoPadraoItens">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText styleClass="field control-label tituloCampos" value="Descrição" />
+					</f:facet>
+					<h:panelGroup>
+						<h:outputText styleClass="field control-label tituloCampos" value="#{textoPadraoItens.descricao}" />
+					</h:panelGroup>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_bt.btn_opcoes}" />
+					</f:facet>
+					<otm:commandIcon id="emitirContrato" update="formTextoPadrao" action="#{EstagioControle.imprimirTextoPadraoEstagio}" icon="#{msg_botoes.btn_icon_pdf} iconePequeno" oncomplete="#{EstagioControle.download}" tooltip="Imprimir em Formato PDF" />
+					<otm:commandIcon id="emitirContratoDOC" update="formTextoPadrao" action="#{EstagioControle.imprimirTextoPadraoEstagioDOC}" icon="#{msg_botoes.btn_icon_download} iconePequeno" oncomplete="#{EstagioControle.download}" tooltip="Imprimir em Formato DOC" />
+				</p:column>
+			</p:dataTable>
+			<h:panelGroup id="mensagemConsultaTextoPadrao" columns="1" width="100%" styleClass="tabMensagens">
+				<h:panelGroup layout="block" styleClass="row">
+					<otm:mensagem bean="#{EstagioControle}" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelProfessor" id="panelProfessor" onshow="document.getElementById('formProfessor:valorConsultaProfessor');" shadowOpacity="true" width="750" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Consultar Professor Supervisor"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formProfessor">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaProfessor" value="#{EstagioControle.campoConsultaProfessor}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaComboProfessor}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaProfessor" size="10" styleClass="form-control campos" value="#{EstagioControle.valorConsultaProfessor}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarProfessor" update="mensagemConsultaProfessor, resultadoConsultaProfessor" action="#{EstagioControle.consultarProfessor}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable id="resultadoConsultaProfessor" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaProfessor}" rows="5" var="professorItens">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Nome" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarProfessor}" update="form, mensagemConsultaProfessor" oncomplete="PF('panelProfessor').hide();" value="#{professorItens.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="CPF" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarProfessor}" update="form, mensagemConsultaProfessor" oncomplete="PF('panelProfessor').hide();" value="#{professorItens.CPF}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_bt.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarProfessor}" update="form, mensagemConsultaProfessor" oncomplete="PF('panelProfessor').hide();" tooltip="#{msg_botoes.btn_selecionar}" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaProfessor" layout="block" styleClass="row">
+			<otm:mensagem bean="#{EstagioControle}" />
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelParceiro" id="panelParceiro" onshow="document.getElementById('formParceiro:valorConsultaParceiro');" shadowOpacity="true" width="750" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Consultar #{msg_aplic.prt_Parceiro_tituloForm}"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formParceiro">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaParceiro" value="#{EstagioControle.campoConsultaParceiro}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaComboParceiro}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaParceiro" size="10" styleClass="form-control campos" value="#{EstagioControle.valorConsultaParceiro}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarParceiro" update="formParceiro" action="#{EstagioControle.consultarParceiro}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable id="resultadoConsultaParceiro" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaParceiro}" rows="10" var="parceiroItens">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Parceiro_nome}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarParceiro}" update="form, mensagemConsultaParceiro" oncomplete="PF('panelParceiro').hide()" value="#{parceiroItens.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Parceiro_CPF} " />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarParceiro}" update="form, mensagemConsultaParceiro" oncomplete="PF('panelParceiro').hide()" value="#{parceiroItens.CPF}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Parceiro_CNPJ} " />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarParceiro}" update="form, mensagemConsultaParceiro" oncomplete="PF('panelParceiro').hide()" value="#{parceiroItens.CNPJ}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_bt.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarParceiro}" update="form, mensagemConsultaParceiro" oncomplete="PF('panelParceiro').hide()" tooltip="#{msg_botoes.btn_selecionar}" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaParceiro" columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelAreaProfissional" id="panelAreaProfissional" onshow="document.getElementById('formAreaProfissional:valorConsultaAreaProfissional');" shadowOpacity="true" width="750" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Selecionar Área Profissional"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formAreaProfissional">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaAreaProfissional" value="#{EstagioControle.campoConsultaAreaProfissional}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaComboAreaProfissional}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaAreaProfissional" size="10" styleClass="form-control campos" value="#{EstagioControle.valorConsultaAreaProfissional}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarAreaProfissional" update="mensagemConsultaAreaProfissional, resultadoConsultaAreaProfissional" action="#{EstagioControle.consultarAreaProfissional}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable id="resultadoConsultaAreaProfissional" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaAreaProfissional}" rows="5" var="areaProfissionalItens">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarAreaProfissional}" update="form" oncomplete="PF('panelAreaProfissional').hide();" value="#{areaProfissionalItens.descricaoAreaProfissional}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_bt.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarAreaProfissional}" update="form" oncomplete="PF('panelAreaProfissional').hide();" tooltip="#{msg_botoes.btn_selecionar}" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" alt="#{msg.msg_selecionar_dados}" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaAreaProfissional" columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" id="panelVisualizarTermoEstagio" widgetVar="panelVisualizarTermoEstagio" styleClass="modalMaximizado" shadowOpacity="true" top="0">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Termo Estágio Obrigatório"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formVisualizarTermoEstagio">
+		<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+			<h:outputText value="Você confirma que os dados referentes ao TERMO DE ESTÁGIO abaixo estão com as informações corretas?" rendered="true" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 text-center">
+			<object type="application/pdf" data="#{EstagioControle.caminhoPreview}" width="950" height="600"></object>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80" rendered="true">
+			<otm:commandButton id="btnGravaEstagioSemAssinatura" update="formVisualizarTermoEstagio, form" action="#{EstagioControle.persistirEstagioSemAssinatura}" oncomplete="PF('panelVisualizarTermoEstagio').hide()" value="#{msg_botoes.btn_gravar}" styleClass="btn btn-dark btn-gravar" rendered="#{EstagioControle.isVisaoAluno() and !EstagioControle.matriculaVO.curso.configuracaoEstagio.habilitarAssinatura or !EstagioControle.getEstagioVO().gradeCurricularEstagioVO.permiteAssinaturaDigitalTE or !EstagioControle.matriculaVO.curso.configuracaoEstagio.solicitarAssinaturaAlunoTermoEstagio}" />
+			<otm:assinaturaDigitalButton bean="#{EstagioControle}" id="btnGravarEstagioAssinatura" icon="#{msg_botoes.btn_icon_requerimento_deferido}" update="formVisualizarTermoEstagio, form" action="#{EstagioControle.persistirEstagioSolicitandoAssinatura}" oncomplete="PF('panelVisualizarTermoEstagio').hide()" value="Gravar e Solicitar Assinatura" styleClass="btn btn-success btn-gravar ml-2" rendered="#{EstagioControle.matriculaVO.curso.configuracaoEstagio.habilitarAssinatura and EstagioControle.estagioVO.gradeCurricularEstagioVO.permiteAssinaturaDigitalTE and EstagioControle.matriculaVO.curso.configuracaoEstagio.solicitarAssinaturaAlunoTermoEstagio}" />
+			<otm:assinaturaDigitalButton bean="#{EstagioControle}" id="btnGravaEstagioSemAssinatura2" icon="#{msg_botoes.btn_icon_requerimento_indeferido}" update="formVisualizarTermoEstagio, form" action="#{EstagioControle.persistirEstagioSemAssinatura}" oncomplete="PF('panelVisualizarTermoEstagio').hide()" value="#{msg_botoes.btn_gravar} sem solicitar assinaturas" styleClass="btn btn-danger btn-excluir ml-2" rendered="#{EstagioControle.isVisaoAluno() and EstagioControle.matriculaVO.curso.configuracaoEstagio.habilitarAssinatura and EstagioControle.estagioVO.gradeCurricularEstagioVO.permiteAssinaturaDigitalTE and EstagioControle.matriculaVO.curso.configuracaoEstagio.solicitarAssinaturaAlunoTermoEstagio}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<otm:mensagem bean="#{EstagioControle}"></otm:mensagem>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado50" widgetVar="panelUpload" id="panelUpload" zindex="2000" shadowOpacity="false" width="450" height="150">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Disciplina_uploadArquivos}" />
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formUplod">
+		<h:panelGroup id="panelArquivoUpload" columns="1" width="100%" headerClass="subordinado" columnClasses="colunaCentralizada">
+			<h:panelGroup id="arquivoUpload2" columns="2" width="100%">
+				<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UploadArquivos_escolherArquivo}" />
+				<p:fileUpload invalidFileMessage="#{EstagioControle.getMensagemArquivoInvalido('gif, png, jpg, jpeg, bmp, JPEG, JPG, PNG, GIF, BMP, pdf')}" invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido #{EstagioControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload}MB." auto="true" mode="advanced" update="formUplod, formularioDadosGerais" process="@this" id="uploadConteudoIndex" previewWidth="300" oncomplete="PF('panelUpload').hide()" listener="#{EstagioControle.upLoadArquivo}" label="Selecionar Arquivo" allowTypes="#{EstagioControle.getExtensaoUpload('gif, png, jpg, jpeg, bmp, JPEG, JPG, PNG, GIF, BMP, pdf')}" fileLimit="1" cancelLabel="Cancelar" sizeLimit="#{EstagioControle.limiteUpload}">
+				</p:fileUpload>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado50" widgetVar="panelUploadTermoEstagio" id="panelUploadTermoEstagio" zindex="2000" shadowOpacity="false" width="450" height="150">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Disciplina_uploadArquivos}" />
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formUploadTermoEstagio">
+		<h:panelGroup id="panelArquivoUploadTermoEstagio" columns="1" width="100%" headerClass="subordinado" columnClasses="colunaCentralizada">
+			<h:panelGroup id="arquivoUploadTermoEstagio" columns="2" width="100%">
+				<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UploadArquivos_escolherArquivo}" />
+				<p:fileUpload invalidFileMessage="#{EstagioControle.getMensagemArquivoInvalido('gif, png, jpg, jpeg, bmp, JPEG, JPG, PNG, GIF, BMP, pdf')}" invalidSizeMessage="Arquivo não Enviado. Tamanho Máximo Permitido #{EstagioControle.configuracaoGeralPadraoSistema.tamanhoMaximoUpload}MB." auto="true" mode="advanced" update="panelInf_UploadTermoEstagio, formUploadTermoEstagio" process="@this" id="uploadTermoEstagioIndex" previewWidth="300" oncomplete="PF('panelUploadTermoEstagio').hide()" listener="#{EstagioControle.upLoadArquivoTermoEstagio}" label="Selecionar Arquivo" allowTypes="#{EstagioControle.getExtensaoUpload('gif, png, jpg, jpeg, bmp, JPEG, JPG, PNG, GIF, BMP, pdf')}" fileLimit="1" cancelLabel="Cancelar" sizeLimit="#{EstagioControle.limiteUpload}">
+				</p:fileUpload>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelAluno" id="panelAluno" shadowOpacity="true" width="800" onshow="document.getElementById('formAluno:valorConsultaAluno');" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="#{msg_aplic.prt_HistoricoAlunoRel_consultarAluno}"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formAluno">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="field control-label tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaAluno" value="#{EstagioControle.campoConsultaAluno}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaComboAluno}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaAluno" size="30" onkeypress="modalKeyHandler('panelAluno', 'formAluno:btnConsultar')" styleClass="form-control campos" value="#{EstagioControle.valorConsultaAluno}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarPanelAluno" update="mensagemConsultaAluno, resultadoConsultaAluno" action="#{EstagioControle.consultarAluno}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" alt="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable lazy="true" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" id="resultadoConsultaAluno" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaAluno}" rows="5" var="matriculaItens">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Matricula_matricula}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarAluno}" update="form" oncomplete="PF('panelAluno').hide()" value="#{matriculaItens.matricula}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Matricula_nomeAluno}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarAluno}" update="form" oncomplete="PF('panelAluno').hide()" value="#{matriculaItens.aluno.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Matricula_curso}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarAluno}" update="form" oncomplete="PF('panelAluno').hide()" value="#{matriculaItens.curso.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Situação Atual Matrícula" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarAluno}" update="form" oncomplete="PF('panelAluno').hide()" value="#{matriculaItens.situacao_Apresentar}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_bt.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarAluno}" update="form" oncomplete="PF('panelAluno').hide()" tooltip="#{msg_botoes.btn_selecionar}" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaAluno" columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelAdicionarEmpresa" id="panelAdicionarEmpresa" onshow="document.getElementById('formParceiro:valorConsultaParceiro');" shadowOpacity="true" width="750" height="500">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Cadastrar Nova #{msg_aplic.prt_Parceiro_tituloForm}"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formAdicionarEmpresa">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<otm2:panel name="panelInformacoesNovaEmpresa" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+				<ui:define name="header">
+					<i class="fas fa-award tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Informações Básicas" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup layout="block" styleClass="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'JU' ? 'col-md-3' : 'col-md-2'} ">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UnidadeEnsino_tipoEmpresa}" />
+						<h:selectOneMenu styleClass="form-control camposObrigatorios" id="tipoEmpresa" value="#{EstagioControle.novoParceiroVO.tipoEmpresa}">
+							<f:selectItems value="#{EstagioControle.listaSelectItemTipoEmpresa}" />
+							<p:ajax event="change" update="formAdicionarEmpresa" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'JU'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Prospects_cnpj}" />
+						<h:inputText styleClass="form-control camposObrigatorios" onkeypress="return mascara(this.form,'cnpjNovaEmpresa','99.999.999/9999-99',event)" maxlength="20" id="cnpjNovaEmpresa" value="#{EstagioControle.novoParceiroVO.CNPJ}">
+							<p:ajax event="blur" update="form" oncomplete="#{EstagioControle.abrirModalParceiro}" process="@this" listener="#{EstagioControle.realizarVerificacaoUnicidadeCadastroNovaEmpresaVisaoAluno}" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'FI'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UnidadeEnsino_CPF}" />
+						<h:inputText styleClass="form-control camposObrigatorios" maxlength="20" id="cpfNovaEmpresa" onkeypress="return mascara(this.form,'cpfNovaEmpresa','999.999.999-99',event)" value="#{EstagioControle.novoParceiroVO.CPF}">
+							<p:ajax event="blur" update="form" oncomplete="#{EstagioControle.abrirModalParceiro}" process="@this" listener="#{EstagioControle.realizarVerificacaoUnicidadeCadastroNovaEmpresaVisaoAluno}" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_nome}" />
+						<h:inputText id="nomeNovaEmpresa" size="70" maxlength="100" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.nome}">
+							<p:ajax event="change" process="@this" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'JU'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Classificação da Empresa" />
+						<h:selectOneMenu id="classificacaoNovaEmpresa" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.tipoParceiro}">
+							<f:selectItems value="#{EstagioControle.listaSelectItemClassificacaoEmpresa}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'JU'}">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_razaoSocial}" />
+						<h:inputText id="razaoSocialNovaEmpresa" size="70" maxlength="100" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.razaoSocial}">
+							<p:ajax event="change" process="@this" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'JU'}">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_inscEstadual}" />
+						<h:inputText id="inscEstadualNovaEmpresa" size="26" maxlength="20" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.inscEstadual}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'FI'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_UnidadeEnsino_RG}" />
+						<h:inputText styleClass="form-control camposObrigatorios" maxlength="20" id="rgNovaEmpresa" value="#{EstagioControle.novoParceiroVO.RG}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'FI'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Registro Conselho" />
+						<h:inputText styleClass="form-control camposObrigatorios" maxlength="20" id="registroConselhoNovaEmpresa" value="#{EstagioControle.novoParceiroVO.registroConselho}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.novoParceiroVO.tipoEmpresa eq 'FI'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Órgão Registro Conselho" />
+						<h:inputText styleClass="form-control camposObrigatorios" maxlength="20" id="orgaoRegistroConselhoNovaEmpresa" value="#{EstagioControle.novoParceiroVO.orgaoRegistroConselho}" />
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+			<otm2:panel name="panelEnderecoNovaEmpresa" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+				<ui:define name="header">
+					<i class="fas fa-award tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados do Endereço" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup layout="block" styleClass="col-md-2">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_CEP}" />
+						<p:fragment id="regionCepNovaEmpresa">
+							<h:inputText id="CEPNovaEmpresa" onkeypress="return mascara(this.form, 'CEPNovaEmpresa', '99.999-999', event);" size="10" maxlength="10" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.CEP}">
+								<p:ajax event="change" listener="#{EstagioControle.carregarEnderecoPessoa}" update="enderecoNovaEmpresa, setorNovaEmpresa, cidadeNovaEmpresa, estadoNovaEmpresa" />
+							</h:inputText>
+						</p:fragment>
+					</h:panelGroup>
+					<p:ajaxStatus for="regionCepNovaEmpresa">
+						<f:facet name="start">
+							<h:panelGroup>
+								<h:graphicImage styleClass="icon-close-modal" width="15px" value="#{resource['/imagens/ajax.gif']}" />
+							</h:panelGroup>
+						</f:facet>
+					</p:ajaxStatus>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_endereco}" />
+						<h:inputText id="enderecoNovaEmpresa" size="44" maxlength="100" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.endereco}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_setor}" />
+						<h:inputText id="setorNovaEmpresa" size="41" maxlength="50" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.setor}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-2">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_numero}" />
+						<h:inputText id="numeroNovaEmpresa" size="16" maxlength="12" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.numero}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_complemento}" />
+						<h:inputText id="complementoNovaEmpresa" size="70" maxlength="100" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.complemento}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_cidade}" />
+						<h:panelGroup layout="block" styleClass="col-md-12 pn">
+							<h:inputText readonly="true" id="cidadeNovaEmpresa" size="34" maxlength="30" styleClass="form-control camposSomenteLeitura" value="#{EstagioControle.novoParceiroVO.cidade.nome}" />
+							<span class="append-icon right"> <otm:commandIcon id="consultaCidades" update="formCidade" oncomplete="PF('panelCidade').show()" icon="#{msg_botoes.btn_icon_lupa_embutido}" action="#{EstagioControle.limparCamposConsultaCidade}" /></span>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-2">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_estado}" />
+						<h:inputText id="estadoNovaEmpresa" readonly="true" size="21" maxlength="20" styleClass="form-control camposSomenteLeitura" value="#{EstagioControle.novoParceiroVO.cidade.estado.nome}" />
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+			<otm2:panel name="panelContatoNovaEmpresa" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+				<ui:define name="header">
+					<i class="fas fa-award tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados do Contato" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_email}" />
+						<h:inputText id="emailNovaEmpresa" size="70" maxlength="100" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.email}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-6">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_fax}" />
+						<h:inputText id="faxNovaEmpresa" size="18" maxlength="15" onkeyup="return maskTelefone('formAdicionarEmpresa:faxNovaEmpresa',event)" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.fax}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos camposObrigatorios" value="#{msg_aplic.prt_Parceiro_telComercial1}" />
+						<h:inputText id="telComercial1NovaEmpresa" onkeyup="return maskTelefone('formAdicionarEmpresa:telComercial1NovaEmpresa',event)" size="18" maxlength="15" styleClass="form-control camposObrigatorios" value="#{EstagioControle.novoParceiroVO.telComercial1}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_telComercial2}" />
+						<h:inputText id="telComercial2NovaEmpresa" size="18" maxlength="15" onkeyup="return maskTelefone('formAdicionarEmpresa:telComercial2NovaEmpresa',event)" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.telComercial2}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-4">
+						<h:outputText styleClass="tituloCampos" value="#{msg_aplic.prt_Parceiro_telComercial3}" />
+						<h:inputText id="telComercial3NovaEmpresa" size="18" maxlength="15" onkeyup="return maskTelefone('formAdicionarEmpresa:telComercial3NovaEmpresa',event)" styleClass="form-control campos" value="#{EstagioControle.novoParceiroVO.telComercial3}" />
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+		<h:panelGroup id="mensagemAdicionarEmpresa" columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="barra-btn-flutuante-modal-80">
+			<otm:commandButton id="adicionar" immediate="true" value="#{msg_botoes.btn_adicionar}" update="panelInf_empresa, formParceiro" oncomplete="#{EstagioControle.abrirModalParceiro}" action="#{EstagioControle.adicionarParceiro}" styleClass="btn btn-primary btn-fechar" icon="#{msg_botoes.btn_icon_adicionar_embutido}" />
+			<otm:commandButton id="fecharPanelEmpresa" immediate="true" value="#{msg_botoes.btn_fechar}" oncomplete="PF('panelAdicionarEmpresa').hide()" styleClass="btn btn-danger btn-fechar ml-2" icon="fas fa-times" />
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <p:dialog closeOnEscape="true" styleClass="modalMaximizado" widgetVar="panelCidade" id="panelCidade" shadowOpacity="true" width="750" height="500" onshow="document.getElementById('formCidade:valorConsultaCidade');">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="#{msg_aplic.prt_Cidade_consultarCidade}"></h:outputText>
+		</h:panelGroup>
+	</f:facet>
+	<h:form prependId="false" id="formCidade">
+		<h:panelGroup layout="block" styleClass="col-md-12">
+			<h:outputText styleClass="tituloCampos" value="#{msg.msg_consultar_por}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-4">
+			<h:selectOneMenu styleClass="form-control campos" id="consultaCidade" value="#{EstagioControle.campoConsultaCidade}">
+				<f:selectItems value="#{EstagioControle.tipoConsultaCidade}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-6">
+			<h:inputText id="valorConsultaCidade" size="10" styleClass="form-control campos" value="#{EstagioControle.valorConsultaCidade}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-2">
+			<otm:commandButton id="btnConsultarCidade" update="mensagemConsultaCidade, resultadoConsultaCidade" action="#{EstagioControle.consultarCidade}" icon="#{msg_botoes.btn_icon_lupa_embutido}" styleClass="btn btn-default" value="Consultar" tooltip="#{msg.msg_consultar_dados}" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="col-md-12 mt5" />
+		<p:dataTable id="resultadoConsultaCidade" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" value="#{EstagioControle.listaConsultaCidade}" rows="5" var="cidadeItens">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Cidade_codigo}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarCidade}" update="formAdicionarEmpresa" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.codigo}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Cidade_nome}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarCidade}" update="formAdicionarEmpresa" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_aplic.prt_Cidade_estado}" />
+				</f:facet>
+				<h:panelGroup>
+					<p:commandLink action="#{EstagioControle.selecionarCidade}" update="formAdicionarEmpresa" oncomplete="PF('panelCidade').hide()" value="#{cidadeItens.estado.nome}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg_botoes.btn_opcoes}" />
+				</f:facet>
+				<otm:commandIcon action="#{EstagioControle.selecionarCidade}" update="formAdicionarEmpresa" oncomplete="PF('panelCidade').hide()" icon="#{msg_botoes.btn_icon_selecionar} iconePequeno" tooltip="#{msg.msg_selecionar_dados}" />
+			</p:column>
+		</p:dataTable>
+		<h:panelGroup id="mensagemConsultaCidade" columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</p:dialog> <h:form prependId="false" id="form">
+	<h:commandLink action="#{EstagioControle.liberarBackingBeanMemoria}" immediate="true" id="idLiberarBackingBeanMemoria" style="display: none" />
+	<h:panelGroup layout="block" styleClass="row" rendered="#{!EstagioControle.aproveitamento}">
+		<otm2:panel name="panelInf_estagio" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+			<ui:define name="header">
+				<i class="fas fa-award tituloCampos mr5 fs16"></i>
+				<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados do Estágio" />
+			</ui:define>
+			<ui:define name="body">
+				<h:panelGroup id="formularioEstagio" layout="block" styleClass="row">
+					<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!empty EstagioControle.matriculaVO.matricula}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Tipo Estágio" />
+						<h:selectOneMenu disabled="#{EstagioControle.isVisaoAluno() or EstagioControle.disableTipoEstagio}" styleClass="form-control #{EstagioControle.styleClassTipoEstagio}" value="#{EstagioControle.estagioVO.tipoEstagio}">
+							<f:selectItems value="#{EstagioControle.listaSelectItemTipoEstagio}" />
+							<p:ajax event="change" listener="#{EstagioControle.alterarTipoEstagio}" process="form" update="form, bolsaAuxilioTransporte, bolsaComplementar"" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.permiteSolicitarAproveitamento}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Modalidade Estágio" />
+						<h:selectOneMenu styleClass="form-control camposObrigatorios" value="#{EstagioControle.estagioVO.modalidadeEstagioEnum}">
+							<f:selectItems value="#{EstagioControle.listaSelectItemModalidadeEstagio}" />
+							<p:ajax event="change" listener="#{EstagioControle.alterarModalidadeEstagio}" process="form" update="form" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{EstagioControle.apresentarAno or EstagioControle.apresentarSemestre ? 'col-md-4' : !empty EstagioControle.matriculaVO.matricula ? 'col-md-4' : 'col-md-6'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_UnidadeEnsino}" />
+						<h:selectOneMenu styleClass="form-control #{EstagioControle.cssCampoUnidadeEnsino}" disabled="#{EstagioControle.desabilitarCampoUnidadeEnsino}" id="unidadeEnsino" required="true" value="#{EstagioControle.unidadeEnsinoVO.codigo}">
+							<p:ajax event="change" update="form" process="form" />
+							<f:selectItems value="#{EstagioControle.listaSelectItemUnidadeEnsino}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{EstagioControle.apresentarAno or EstagioControle.apresentarSemestre ? 'col-md-4' : !empty EstagioControle.matriculaVO.matricula ? 'col-md-4' : 'col-md-6'}">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_matricula}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4">
+							<h:inputText id="alunoMatricula" styleClass="form-control campos camposObrigatorios" disabled="#{EstagioControle.isVisaoAluno()}" value="#{EstagioControle.matriculaVO.matricula}">
+								<p:ajax event="change" listener="#{EstagioControle.consultarAlunoPorMatriculaForm}" process="form" update="form, panelDisciplina, panelComponenteEstagio" />
+							</h:inputText>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-8">
+							<h:inputText id="alunoNome" size="42" styleClass="form-control camposSomenteLeitura" readonly="true" value="#{EstagioControle.matriculaVO.aluno.nome}" />
+							<span class="append-icon right"> <otm:commandIcon id="consultaDadosAluno" update="formAluno" rendered="#{!EstagioControle.isVisaoAluno()}" oncomplete="PF('panelAluno').show()" icon="#{msg_botoes.btn_icon_lupa_embutido}" tooltip="#{msg_botoes.btn_consultar}" action="#{EstagioControle.limparMensagem}" /> <otm:commandIcon id="limparDadosAluno" action="#{EstagioControle.limparDadosAluno}" update="form, formularioEstagio" icon="#{msg_botoes.btn_icon_limpar_embutido}" rendered="#{!EstagioControle.isVisaoAluno()}" tooltip="#{msg_botoes.btn_remover}" /> </span>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{EstagioControle.apresentarSemestre ? 'col-md-1' : 'col-md-2'}" rendered="#{EstagioControle.apresentarAno}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_ano}" />
+						<h:inputText id="ano" onkeydown="aceitarSomenteValorNumerico(this); if (event.keyCode == '186'){ return false }" styleClass="form-control camposObrigatorios" size="4" value="#{EstagioControle.estagioVO.ano}">
+							<p:ajax event="change" listener="#{EstagioControle.inicializarDadosListaDisciplina}" process="form" update="disciplina" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-1" rendered="#{EstagioControle.apresentarSemestre}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_semestre}" />
+						<h:selectOneMenu styleClass="form-control camposObrigatorios" id="semestre" value="#{EstagioControle.estagioVO.semestre}">
+							<p:ajax event="change" update="form" process="form" listener="#{EstagioControle.inicializarDadosListaDisciplina}" />
+							<f:selectItems value="#{EstagioControle.tipoConsultaComboSemestre}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+
+					<h:panelGroup id="panelComponenteEstagio" layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarComboComponenteEstagioAberturaEstagio}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Componente de Estágio" />
+						<h:selectOneMenu styleClass=" form-control camposObrigatorios" id="componenteEstagio" value="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.codigo}">
+							<p:ajax event="change" listener="#{EstagioControle.realizarValidacaoPermiteHorasFragmentadas}" process="form" update="form, horas, panelQuestionario" />
+							<f:selectItems value="#{EstagioControle.listaSelectItemComponenteEstagio}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup id="panelDisciplina" layout="block" styleClass="col-md-4" rendered="#{!EstagioControle.apresentarComboComponenteEstagioAberturaEstagio and !EstagioControle.isVisaoAluno()}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Disciplina" />
+						<h:selectOneMenu styleClass=" form-control #{EstagioControle.styleClassAreaAtuacao}" id="disciplina" value="#{EstagioControle.estagioVO.disciplina.codigo}">
+							<f:selectItems value="#{EstagioControle.listaSelectItemDisciplina}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.permiteSolicitarAproveitamento ? 'col-md-3' : 'col-md-2'}">
+						<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_horas}" />
+						<h:inputText id="horas" disabled="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.codigo ne 0 and !EstagioControle.estagioVO.gradeCurricularEstagioVO.permiteTermoEstagioHorasFragmentadas}" onkeydown="aceitarSomenteValorNumerico(this); if (event.keyCode == '186'){ return false }" styleClass="form-control camposObrigatorios" size="6" value="#{EstagioControle.estagioVO.cargaHoraria}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoCargaHorariaDiaria}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Carga Horária Diária" />
+						<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeCargaHorariaDiaria}" id="cargaHorariaDiaria" onkeydown="aceitarSomenteValorNumerico(this); if (event.keyCode == '186'){ return false }" size="6" maxlength="3" value="#{EstagioControle.estagioVO.cargaHorariaDiaria}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoCargaHorariaSemanal}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Carga Horária Semanal" />
+						<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeCargaHorariaSemanal}" onkeydown="aceitarSomenteValorNumerico(this); if (event.keyCode == '186'){ return false }" size="5" maxlength="3" value="#{EstagioControle.estagioVO.cargaHorariaSemanal}" />
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoProfessorOrientador}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Professor Orientador" />
+						<h:panelGroup layout="block" styleClass="pn col-md-12">
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeProfessorOrientador}" readonly="true" maxlength="100" value="#{EstagioControle.estagioVO.professorResponsavelEstagio.nome}" />
+							<span class="append-icon right"> <otm:commandIcon id="consultarProfessor" update="form" action="#{EstagioControle.limparMensagem}" icon="#{msg_botoes.btn_icon_lupa_embutido}" oncomplete="PF('panelProfessor').show()" tooltip="#{msg_botoes.btn_consultar}" /> <otm:commandIcon id="limparProfessor" update="form" action="#{EstagioControle.limparProfessor}" icon="#{msg_botoes.btn_icon_limpar_embutido}" tooltip="#{msg_botoes.btn_remover}" /> </span>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoPeriodoVigencia}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Período Vigência" />
+						<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadePeriodoVigencia}" id="dataInicioVigencia" value="#{EstagioControle.estagioVO.dataInicioVigencia}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoPeriodoVigencia}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Período Fim" />
+						<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadePeriodoVigencia}" id="dataFinalVigencia" value="#{EstagioControle.estagioVO.dataFinalVigencia}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoPeriodoVigenciaRenovacao}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Período Vigência Renovação" />
+						<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadePeriodoVigenciaRenovacao}" id="dataInicioRenovacaoVigencia" value="#{EstagioControle.estagioVO.dataInicioRenovacaoVigencia}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoPeriodoVigenciaRenovacao}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Período Fim" />
+						<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadePeriodoVigenciaRenovacao}" id="dataFinalRenovacaoVigencia" value="#{EstagioControle.estagioVO.dataFinalRenovacaoVigencia}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+					</h:panelGroup>
+
+
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.isExisteConfiguracaoEstagio ? EstagioControle.matriculaVO.curso.configuracaoEstagio.apresentarCampoBolsaComplementar : true}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Bolsa Complementação Educacional" />
+						<h:inputText id="bolsaComplementar" styleClass=" form-control #{EstagioControle.matriculaVO.curso.configuracaoEstagio.campoBolsaComplementarObrigatorio || EstagioControle.estagioVO.tipoEstagio eq 'NAO_OBRIGATORIO' ?  '' : 'camposObrigatorios'}" size="6" maxlength="15" value="#{EstagioControle.estagioVO.valorBolsaEstagio}" onkeydown="aceitarSomenteValorDecimal(this)">
+							<f:converter converterId="FormatadorNumericoPermitindoValoresNulos" />
+							<f:attribute name="quantidadeCasasDecimaisPermitirAposVirgula" value="2" />
+							<p:ajax event="blur" update="bolsaComplementar" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoBolsaComplementarAnterior}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Bolsa Complementação Educacional Anterior" />
+						<h:inputText id="bolsaComplementarAnterior" styleClass="#{EstagioControle.cssObrigatoriedadeBolsaComplementarAnterior}" size="6" maxlength="15" value="#{EstagioControle.estagioVO.valorBolsaEstagioAnterior}" onkeydown="aceitarSomenteValorDecimal(this)">
+							<f:converter converterId="FormatadorNumericoPermitindoValoresNulos" />
+							<f:attribute name="quantidadeCasasDecimaisPermitirAposVirgula" value="2" />
+							<p:ajax event="blur" update="bolsaComplementarAnterior" />
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.isExisteConfiguracaoEstagio ? EstagioControle.matriculaVO.curso.configuracaoEstagio.apresentarCampoAuxilioTransporte : true}">
+						<h:outputText styleClass="field control-label tituloCampos" value="Auxílio Transporte" />
+						<h:inputText  id="bolsaAuxilioTransporte" styleClass=" form-control #{EstagioControle.matriculaVO.curso.configuracaoEstagio.campoAuxilioTransporteObrigatorio || EstagioControle.estagioVO.tipoEstagio eq 'NAO_OBRIGATORIO' ?  '' : 'camposObrigatorios' }"  size="7" maxlength="30" value="#{EstagioControle.estagioVO.auxilioTransporte}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</ui:define>
+		</otm2:panel>
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel name="panelInf_supervisor" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{EstagioControle.apresentarDadosSupervisor}">
+				<ui:define name="header">
+					<i class="fas fa-handshake tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados do Supervisor" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup id="formularioSupervisor" layout="block" styleClass="row mn">
+						<h:panelGroup layout="block" styleClass="col-md-4">
+							<h:outputText styleClass="field control-label tituloCampos" value="Nome Supervisor Estágio" />
+							<h:inputText styleClass="form-control camposObrigatorios" maxlength="200" value="#{EstagioControle.estagioVO.nomeSupervidorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoCpfSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="CPF Supervisor" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeCpfSupervisor}" maxlength="100" id="cpfSupervisorEstagio" onkeypress="return mascara(this.form,'form:cpfSupervisorEstagio','999.999.999-99',event)" value="#{EstagioControle.estagioVO.cpfSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoEmailSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Email Supervisor Estágio" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeEmailSupervisor}" maxlength="100" value="#{EstagioControle.estagioVO.emailSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoFormacaoAcademicaSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Formação Acadêmica Supervisor" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeFormacaoAcademicaSupervisor}" size="20" maxlength="200" value="#{EstagioControle.estagioVO.formacaoAcademicaSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoTelefoneSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Telefone Supervisor Estágio" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeTelefoneSupervisor}" id="telefoneSupervisorEstagio" size="20" maxlength="15" onkeyup="return maskTelefone('form:telefoneSupervisorEstagio',event)" value="#{EstagioControle.estagioVO.telefoneSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoCelularSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Celular Supervisor Estágio" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeCelularSupervisor}" id="celularSupervisorEstagio" size="20" maxlength="15" onkeyup="return maskTelefone('form:celularSupervisorEstagio',event)" value="#{EstagioControle.estagioVO.celularSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoRegistroConselhoSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Registro Conselho Supervisor" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeRegistroConselhoSupervisor}" size="20" maxlength="20" value="#{EstagioControle.estagioVO.registroConselhoSupervisorEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.apresentarCampoOrgaoEmissorSupervisor}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Órgão Emissor" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeOrgaoEmissorSupervisor}" size="10" maxlength="100" value="#{EstagioControle.estagioVO.orgaoRegistroConselhoSupervisorEstagio}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel name="panelInf_empresa" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{EstagioControle.apresentarDadosEmpresa}">
+				<ui:define name="header">
+					<i class="fas fa-building tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados da Empresa" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup id="formularioEmpresa" layout="block" styleClass="row mn">
+						<h:panelGroup id="panelEmpresa" layout="block" styleClass="col-md-4">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_empresa}" />
+							<h:panelGroup layout="block" styleClass="pn col-md-12">
+								<h:inputText id="empresa" styleClass="form-control camposSomenteLeitura" readonly="true" size="65" rendered="#{EstagioControle.estagioVO.empresa != ''}" value="#{EstagioControle.estagioVO.empresa}" />
+								<h:inputText id="empresaParceira" styleClass="form-control camposSomenteLeituraObrigatorio" readonly="true" size="65" rendered="#{EstagioControle.estagioVO.empresa == ''}" value="#{EstagioControle.estagioVO.empresaEstagio.nome}" />
+								<span class="append-icon right"> <otm:commandIcon id="adicionarParceiro" update="form, panelAdicionarEmpresa, formAdicionarEmpresa" action="#{EstagioControle.limparMensagem}" icon="#{msg_botoes.btn_icon_adicionar_embutido}" rendered="#{EstagioControle.permiteCadastrarEmpresaVisaoAluno and EstagioControle.isVisaoAluno()}" oncomplete="PF('panelAdicionarEmpresa').show()" tooltip="Adicionar Nova Empresa" /> <otm:commandIcon id="consultarParceiro" update="form, formParceiro" action="#{EstagioControle.limparMensagem}" icon="#{msg_botoes.btn_icon_lupa_embutido}" oncomplete="PF('panelParceiro').show()" tooltip="#{msg_botoes.btn_consultar}" /> <otm:commandIcon id="limparParceiro" update="form" action="#{EstagioControle.limparParceiro}" icon="#{msg_botoes.btn_icon_limpar_embutido}" tooltip="#{msg_botoes.btn_remover}" /> </span>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoAreaProfissionalEmpresa}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_area_profissional}" />
+							<h:selectOneMenu styleClass="#{EstagioControle.cssObrigatoriedadeAreaProfissionalEmpresa}" id="areaProfissional" value="#{EstagioControle.estagioVO.areaProfissionalVO.codigo}">
+								<f:selectItems value="#{EstagioControle.listaSelectItemAreaProfissional}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoOutraContaprestacaoEmpresa}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Outra Contraprestação" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeOutraContaprestacaoEmpresa}" maxlength="100" value="#{EstagioControle.estagioVO.outraContraprestacao}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoAreaAtuacaoEmpresa}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_area_Atuacao}" />
+							<h:inputTextarea styleClass="#{EstagioControle.cssObrigatoriedadeAreaAtuacaoEmpresa}" rows="3" cols="70" value="#{EstagioControle.estagioVO.areaAtuacao}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoPrincipaisAtividadesEmpresa}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Principais Atividades Estágio" />
+							<h:inputTextarea styleClass="#{EstagioControle.cssObrigatoriedadePrincipaisAtividadesEmpresa}" rows="3" cols="71" value="#{EstagioControle.estagioVO.principalAtividadeEstagio}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoLocalEmpresa}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Local do Campo do Estágio" />
+							<h:inputTextarea styleClass="#{EstagioControle.cssObrigatoriedadeLocalEmpresa}" rows="3" cols="70" value="#{EstagioControle.estagioVO.localCampoEstagio}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel name="panelInf_seguradora" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{EstagioControle.apresentarDadosSeguradora}">
+				<ui:define name="header">
+					<i class="fas fa-user-injured tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados da Seguradora" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup id="formularioSeguradora" layout="block" styleClass="row mn">
+						<h:panelGroup layout="block" styleClass="col-md-6">
+							<h:outputText styleClass="field control-label tituloCampos" value="Nome Seguradora" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeNomeSeguradora}" size="20" maxlength="100" value="#{EstagioControle.estagioVO.nomeSeguradora}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.apresentarCampoNumeroApoliceSeguradora}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Nr. Apólice Seguro" />
+							<h:inputText styleClass="#{EstagioControle.cssObrigatoriedadeNumeroApoliceSeguradora}" size="20" maxlength="100" value="#{EstagioControle.estagioVO.apoliceSeguro}" onkeydown="aceitarSomenteValorNumerico(this)" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.apresentarCampoCNPJSeguradora}">
+							<h:outputText styleClass="field control-label tituloCampos" value="CNPJ Seguradora" />
+							<h:inputText id="cnpjSeguradora" styleClass="#{EstagioControle.cssObrigatoriedadeCNPJSeguradora}" size="18" maxlength="18" onkeypress="return mascara(this.form, this.id, '99.999.999/9999-99', event);" value="#{EstagioControle.estagioVO.cnpjSeguradora}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.apresentarCampoTelefoneSeguradora}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Telefone Seguradora" />
+							<h:inputText id="telefoneSeguradora" styleClass="#{EstagioControle.cssObrigatoriedadeTelefoneSeguradora}" size="20" maxlength="14" value="#{EstagioControle.estagioVO.telefoneSeguradora}" onkeyup="return maskTelefone('form:telefoneSeguradora',event)" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}">
+							<h:outputText styleClass="field control-label tituloCampos" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}" value="#{msg_aplic.prt_Estagio_dataEnviadoSeguradora}" />
+							<otm:calendar styleClass="form-control campos" id="dataEnvioSeguradora" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}" value="#{EstagioControle.estagioVO.dataEnvioSeguradora}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value, this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="12" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-3" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}">
+							<h:outputText styleClass="field control-label tituloCampos" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}" value="#{msg_aplic.prt_Estagio_usuarioEnviadoSeguradora}" />
+							<h:inputText readonly="true" disabled="true" size="20" rendered="#{EstagioControle.estagioVO.enviadoSeguradora}" styleClass="form-control camposSomenteLeitura" value="#{EstagioControle.estagioVO.usuarioEnvioSeguradora.nome}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{!EstagioControle.isVisaoAluno()}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_enviadoSeguradora}" />
+							<h:panelGroup layout="block" styleClass="pn col-md-12">
+								<otm:selectBooleanCheckbox id="id_EnviadoParaRegistroSeguradora" value="#{EstagioControle.estagioVO.enviadoSeguradora}">
+									<p:ajax event="change" process="formularioSeguradora" update="formularioSeguradora" listener="#{EstagioControle.registrarEnvioSeguradora}" />
+								</otm:selectBooleanCheckbox>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel name="panelInf_dadosAtividadeProfissional" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{EstagioControle.isExisteConfiguracaoEstagio ? EstagioControle.matriculaVO.curso.configuracaoEstagio.apresentarDadosAtividadeProfissionalExercicio : true}">
+				<ui:define name="header">
+					<i class="fas fa-briefcase tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados Atividade Profissional em Exercício" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup id="formularioDadosAtividadeProfissional" style="display: flex; flex-wrap: wrap;" layout="block" styleClass="col-md-12">
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.apresentarCampoDataInicioTerminoAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_dataInicioEmpresa}" />
+							<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadeDataInicioTerminoAtividadeProfissional}" id="dataInicioEmpresa" value="#{EstagioControle.estagioVO.dataInicioEmpresa}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2" rendered="#{EstagioControle.apresentarCampoDataInicioTerminoAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_dataTerminoEmpresa}" />
+							<otm:calendar inputClass="#{EstagioControle.cssObrigatoriedadeDataInicioTerminoAtividadeProfissional}" id="dataTerminoEmpresa" value="#{EstagioControle.estagioVO.dataTerminoEmpresa}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoJornadaSemanalTrabalhoAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_jornadaSemanalTrabalho}" />
+							<h:inputText id="jornadaSemanalTrabalho" onkeydown="aceitarSomenteValorNumerico(this); if (event.keyCode == '186'){ return false }" maxlength="3" styleClass="#{EstagioControle.cssObrigatoriedadeJornadaSemanalTrabalhoAtividadeProfissional}" size="9" value="#{EstagioControle.estagioVO.jornadaSemanalTrabalho}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoAtividadeProfissionalExercicioAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="Atividade Profissional em Exercício" />
+							<h:selectOneMenu styleClass="#{EstagioControle.cssObrigatoriedadeAtividadeProfissionalExercicioAtividadeProfissional}" id="atividadeProfissionalExcercicio" value="#{EstagioControle.estagioVO.atividadeProfissionalExercicio}">
+								<f:selectItems value="#{EstagioControle.listaSelectItemAtividadeProfissionalExcercicio}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCampoDepartamentoOrgaoAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_departamentoOrgao}" />
+							<h:inputText id="departamentoOrgao" styleClass="#{EstagioControle.cssObrigatoriedadeDepartamentoOrgaoAtividadeProfissional}" size="9" value="#{EstagioControle.estagioVO.departamentoOrgao}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-4" rendered="#{EstagioControle.apresentarCargoFuncaoAtividadeProfissional}">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_cargoFuncao}" />
+							<h:inputText id="cargoFuncao" styleClass="#{EstagioControle.cssObrigatoriedadeCargoFuncaoAtividadeProfissional}" size="9" value="#{EstagioControle.estagioVO.cargoFuncao}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel name="panelInf_dadosGerais" styleClassFooter="dn" rendered="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.codigo eq 0}" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+				<ui:define name="header">
+					<i class="fas fa-file tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Dados Gerais" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup id="formularioDadosGerais" layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-12">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_responsavel}" />
+							<h:inputText id="responsavel" size="23" maxlength="50" styleClass="form-control camposSomenteLeitura" readonly="true" value="#{EstagioControle.estagioVO.responsavel.nome}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_dataAssinaturaEstagio}" />
+							<otm:calendar inputClass="form-control camposObrigatorios" id="dataAssinaturaEstagio" value="#{EstagioControle.estagioVO.dataAssinaturaEstagio}" oninputkeypress="return mascara(this.form, this.id, '99/99/9999', event);" onchanged="return renderData(this.id)" oninputchange="validarData(this.value,this.id)" enableManualInput="true" datePattern="dd/MM/yyyy" inputSize="15" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_dataCadastro}" />
+							<h:inputText id="dataCadastro" styleClass="form-control camposSomenteLeitura" size="9" readonly="true" value="#{EstagioControle.estagioVO.dataCadastro}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:inputText>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<otm:outputHelp id="help_estagio" tooltip="#{msg.help_Estagio_horasObrigatorias} #{msg.help_Estagio_horasCumpridas} #{msg.help_Estagio_horasRestantes}" styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_horasObrigatorias}" />
+							<h:inputText id="totalHorasObrigatorias" styleClass="form-control camposSomenteLeitura" readonly="true" size="4" value="#{EstagioControle.estagioVO.horasObrigatorias}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_horasCumpridas}" />
+							<h:inputText id="totalHorasCumpridas" styleClass="form-control camposSomenteLeitura" readonly="true" size="4" value="#{EstagioControle.estagioVO.horasCumpridas}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-2">
+							<h:outputText styleClass="field control-label tituloCampos" value="#{msg_aplic.prt_Estagio_horasRestantes}" />
+							<h:inputText id="totalHorasPendentes" styleClass="form-control camposSomenteLeitura" readonly="true" size="4" value="#{EstagioControle.estagioVO.horasRestantes}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+							<h:panelGroup layout="block" styleClass="col-md-12 title">
+								<p:commandLink rendered="#{EstagioControle.apresentarNomeArquivo}" id="remover" action="#{EstagioControle.removerArquivo}">
+									<h:outputText styleClass="field control-label tituloCampos" id="nomeArquivo" value="Nome Arquivo: #{EstagioControle.estagioVO.arquivo.descricao}" />
+									<p:tooltip value="Remover Arquivo"></p:tooltip>
+								</p:commandLink>
+								<h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+									<p:commandLink rendered="#{EstagioControle.apresentarNomeArquivo}" update="formularioDadosGerais" id="remover2" action="#{EstagioControle.removerArquivo}">
+										<span class="#{msg_botoes.btn_icon_remover_embutido}"></span>
+										<p:tooltip value="Remover Arquivo"></p:tooltip>
+									</p:commandLink>
+									<otm:commandButton rendered="#{!EstagioControle.apresentarNomeArquivo}" update="formUplod" oncomplete="PF('panelUpload').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="Upload" styleClass="btn btn-primary" accesskey="2" icon="#{msg_botoes.btn_icon_upload_embutido}" />
+									<otm:commandIcon rendered="#{EstagioControle.apresentarNomeArquivo}" update="formUplod" oncomplete="PF('panelUpload').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" accesskey="2" icon="#{msg_botoes.btn_icon_upload_embutido}" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel id="panelQuestionario" name="panelInf_Questionario" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5" rendered="#{EstagioControle.estagioVO.gradeCurricularEstagioVO.formularioAberturaEstagio.codigo ne 0}">
+				<ui:define name="header">
+					<i class="fas fa-file tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="#{EstagioControle.estagioVO.questionarioRespostaOrigemVO.questionarioVO.descricao}" />
+				</ui:define>
+				<ui:define name="body">
+					<otm2:questionarioResposta permiteDeletarArquivo="true" bean="#{EstagioControle}" objetoOrigem="#{EstagioControle.estagioVO.questionarioRespostaOrigemVO}" />
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="row mt5">
+			<otm2:panel id="panelTermoEstagioUpload" rendered="#{EstagioControle.mostrarTermoEstagio and EstagioControle.estagioVO.gradeCurricularEstagioVO.codigo ne 0}" name="panelInf_UploadTermoEstagio" styleClassFooter="dn" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel="" styleClassBody="mn p5">
+				<ui:define name="header">
+					<i class="fas fa-file tituloCampos mr5 fs16"></i>
+					<h:outputText styleClass="tituloCampos font-weight-bold" value="Upload Termo Estágio" />
+				</ui:define>
+				<ui:define name="body">
+					<h:panelGroup layout="block" styleClass="row">
+						<h:panelGroup layout="block" styleClass="col-md-12 text-center m5">
+							<h:panelGroup layout="block" styleClass="col-md-12 title" style="border: none!important;">
+								<p:commandLink rendered="#{EstagioControle.apresentarNomeArquivoTermoEstagio}" update="panelInf_UploadTermoEstagio" id="removerTermoEstagio" action="#{EstagioControle.removerArquivoTermoEstagio}">
+									<h:outputText styleClass="field control-label tituloCampos" id="nomeTermoEstagio" value="Nome Arquivo: #{EstagioControle.estagioVO.termoEstagio.descricao}" />
+									<p:tooltip value="Remover Termo Estágio" />
+								</p:commandLink>
+								<h:panelGroup style="#{EstagioControle.apresentarNomeArquivo ? 'float: right' : ''}">
+									<p:commandLink rendered="#{EstagioControle.apresentarNomeArquivoTermoEstagio}" update="panelInf_UploadTermoEstagio" id="remover23" action="#{EstagioControle.removerArquivoTermoEstagio}">
+										<span class="#{msg_botoes.btn_icon_remover_embutido}"></span>
+										<p:tooltip value="Remover Termo Estágio" />
+									</p:commandLink>
+									<otm:commandIcon rendered="#{!EstagioControle.apresentarNomeArquivoTermoEstagio}" update="formUploadTermoEstagio" oncomplete="PF('panelUploadTermoEstagio').show()" tooltip="Upload #{msg_aplic.prt_Estagio_arquivo}" value="#{msg_botoes.btn_estagioSubirTermoEstagio}" styleClass="uploadArquivoBtn" accesskey="2" icon="#{msg_botoes.btn_icon_upload_embutido}" id="btnUploadTermoEstagio" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</ui:define>
+			</otm2:panel>
+		</h:panelGroup>
+
+		<!--        <h:panelGroup layout="block" styleClass="row">-->
+		<!--            <otm:spacer width="100%"/>-->
+		<!--            <h:panelGroup layout="block" styleClass="col-md-12 text-center">-->
+		<!--                -->
+		<!--            </h:panelGroup>-->
+		<!--        </h:panelGroup>-->
+		<h:panelGroup id="panelListaEstagios" layout="block" styleClass="row mt10" rendered="#{!EstagioControle.isVisaoAluno()}">
+			<p:dataTable id="items" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" width="100%" headerClass="consulta" styleClass="tabConsulta" rowClasses="linhaImpar, linhaPar" columnClasses="colunaAlinhamento" rendered="#{!empty EstagioControle.listaEstagios}" value="#{EstagioControle.listaEstagios}" rows="10" var="estagioItens">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_aplic.prt_Estagio_empresa}" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText rendered="#{estagioItens.empresa != ''}" value="#{estagioItens.empresa}" />
+						<h:outputText rendered="#{estagioItens.empresa == ''}" value="#{estagioItens.empresaEstagio.nome}" />
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Componente" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="componente" value="#{estagioItens.gradeCurricularEstagioVO.nome}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_aplic.prt_Estagio_ano}" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="aluno" value="#{estagioItens.ano}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_aplic.prt_Estagio_semestre}" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="curso" value="#{estagioItens.semestre}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_aplic.prt_Estagio_horas}" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="horas2" value="#{estagioItens.cargaHoraria}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Carga Horária Diária" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="horasDiaria" value="#{estagioItens.cargaHorariaDiaria}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Carga Horária Semanal" />
+					</f:facet>
+					<h:commandLink action="#{EstagioControle.editarLista}">
+						<h:outputText id="horasSemanal" value="#{estagioItens.cargaHorariaSemanal}">
+						</h:outputText>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_aplic.prt_Estagio_arquivo}" />
+					</f:facet>
+					<h:outputLink target="_blank" rendered="#{estagioItens.arquivo.apresentarNomeArquivo}" title="Download" value="#{EstagioControle.caminhoServidorDownload}">
+						<i class="#{msg_botoes.btn_icon_download} iconePequeno border-radius-all" />
+					</h:outputLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg_bt.btn_opcoes}" />
+					</f:facet>
+					<otm:commandIcon id="editar" update="form" style="border:none;" action="#{EstagioControle.editarLista}" tooltip="#{msg_botoes.btn_editar}" rendered="#{estagioItens.gradeCurricularEstagioVO.codigo eq 0 or estagioItens.situacaoEstagioEnum eq 'AGUARDANDO_SOLICITACAO_ASSINATURA'}" icon="#{msg_botoes.btn_icon_editar} iconePequeno" />
+					<otm:commandIcon update="form" id="removerLista" style="border:none;" onclick="confirmOtm('#{msg.msg_confirmacao_excluxao}')" action="#{EstagioControle.removerEstagioLista}" tooltip="#{msg_botoes.btn_remover}" icon="#{msg_botoes.btn_icon_remover} iconePequeno" rendered="#{!EstagioControle.isVisaoAluno()}" />
+					<otm:commandIcon rendered="#{estagioItens.codigo != 0}" style="border:none;" id="imprimirContrato" update="formTextoPadrao" action="#{EstagioControle.consultarTextoPadraoEstagio}" tooltip="#{msg_botoes.btn_Imprimir}" icon="#{msg_botoes.btn_icon_imprimir} iconePequeno" oncomplete="PF('panelTextoPadrao').show()">
+					</otm:commandIcon>
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+		<h:panelGroup columns="1" width="100%" styleClass="tabMensagens">
+			<h:panelGroup layout="block" styleClass="row">
+				<otm:mensagem bean="#{EstagioControle}" />
+			</h:panelGroup>
+			<h:panelGroup styleClass="barraFlutuanteInferior " layout="block">
+				<otm:commandButton id="novo" action="#{EstagioControle.novo}" styleClass="btn btn-info" icon="#{msg_botoes.btn_icon_novoArquivo_embutido}" value="Novo" title="#{msg.msg_novo_dados}" accesskey="1" rendered="#{!EstagioControle.isVisaoAluno()}" />
+				<otm:commandButton style="margin-left:5px" id="consultar" immediate="true" action="#{EstagioControle.inicializarConsultar}" value="#{msg_botoes.btn_consultar}" styleClass="btn btn-default btn-consultar" title="#{msg.msg_consultar_dados}" accesskey="4" rendered="#{!EstagioControle.isVisaoAluno()}" />
+				<otm:commandButton icon="#{msg_botoes.btn_icon_voltar}" rendered="#{EstagioControle.isExisteConfiguracaoEstagio and EstagioControle.isVisaoAluno()}" styleClass="btn btn-info" update="form" process="form" value="Voltar para Meus Estágios" action="#{EstagioControle.realizarNavegacaoTelaMeusEstagios}" id="navegarMeusEstagios" />
+				<otm:commandButton id="adicionarEstagio" action="#{EstagioControle.gravarEstagio}" accesskey="1" update="form, panelVisualizarTermoEstagio, formVisualizarTermoEstagio" oncomplete="#{EstagioControle.mostrarModalTermoEstagio}" icon="#{msg_botoes.btn_icon_gravar_embutido}" value="#{msg_botoes.btn_gravar}" styleClass="btn btn-dark btn-gravar ml-2" />
+				<otm:commandButton style="margin-left:5px" id="liberarValidacao" action="#{EstagioControle.prepararUsuarioSenhaLiberarValidacaoDados}" update="form" value="liberar Validação" accesskey="1" rendered="#{EstagioControle.estagioVO.existeRestricaoValidacaoEstagio and !EstagioControle.isVisaoAluno()}" icon="#{msg_botoes.btn_icon_desbloqueado_embutido}" oncomplete="PF('panelLiberarValidacao').show()" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="row mt5" rendered="#{EstagioControle.aproveitamento}">
+		<otm2:panel name="panelInf_empresaAproveitamento" styleClassHeader="mn bg-gray-100 rounded-top p10" stylePanel=" " styleClassBody="mn p5">
+			<ui:define name="header">
+				<i class="fas fa-building tituloCampos mr5 fs16"></i>
+				<h:outputText styleClass="tituloCampos font-weight-bold" value="Solicitar Aproveitamento" />
+			</ui:define>
+			<ui:define name="body">
+				<h:panelGroup id="panelGroupTextAreaAproveitamento" layout="block" styleClass="col-md-12" rendered="#{EstagioControle.estagioVO.modalidadeEstagioEnum eq 'APROVEITAMENTO' and !empty EstagioControle.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoAproveitamentoEstagio}" style="padding-top: 1%">
+					<h:outputText styleClass="field control-label tituloCampos" value="Orientações de Abertura do Aproveitamento" />
+					<h:inputTextarea id="textAreaAproveitamento" rows="4" cols="40" value="#{EstagioControle.matriculaVO.curso.configuracaoEstagio.textoOrientacaoSolicitacaoAproveitamentoEstagio}" disabled="true" style="width: 100%; height: 100%; border-radius: 5px; resize: none;" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="col-md-12">
+					<h:outputText styleClass="field control-label tituloCampos" value="Modalidade Estágio" />
+					<h:selectOneMenu styleClass="form-control camposObrigatorios" value="#{EstagioControle.estagioVO.modalidadeEstagioEnum}">
+						<f:selectItems value="#{EstagioControle.listaSelectItemModalidadeEstagio}" />
+						<p:ajax event="change" listener="#{EstagioControle.alterarModalidadeEstagio}" process="form" update="form, panelGroupTextArea, panelGroupTextAreaAproveitamento" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup styleClass="col-md-12">
+					<otm2:questionarioResposta styleAdicionalUpload="uploadArquivoBtn" renderedControlPanel="true" renderedListaAnexos="true" renderedAnexoPergunta="true" bean="#{EstagioControle}" objetoOrigem="#{EstagioControle.estagioVO.questionarioAproveitamento}" />
+				</h:panelGroup>
+			</ui:define>
+			<ui:define name="footer">
+				<h:panelGroup styleClass="col-md-12 d-flex justify-content-center">
+					<otm:commandButton action="#{EstagioControle.cancelarSolicitacaoAproveitamento}" value="#{msg_botoes.btn_cancelarSolicitacao}" accesskey="1" update="form, panelVisualizarTermoEstagio, formVisualizarTermoEstagio" oncomplete="#{EstagioControle.mostrarModalTermoEstagio}" icon="#{msg_botoes.btn_icon_fechar_embutido}" styleClass="btn btn-danger mr-2" />
+					<otm:commandButton action="#{EstagioControle.solicitarAproveitamento}" value="#{msg_botoes.btn_solicitarAproveitamento}" accesskey="1" update="form, panelVisualizarTermoEstagio, formVisualizarTermoEstagio" oncomplete="#{EstagioControle.mostrarModalTermoEstagio}" icon="#{msg_botoes.btn_icon_gravar_embutido}" styleClass="btn btn-primary" />
+				</h:panelGroup>
+			</ui:define>
+		</otm2:panel>
+	</h:panelGroup>
+</h:form> </html>
+
